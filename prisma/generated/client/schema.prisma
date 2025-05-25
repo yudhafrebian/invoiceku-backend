@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model clients {
+  id          Int        @id @default(autoincrement())
+  user_id     Int
+  name        String     @db.VarChar(255)
+  email       String     @db.VarChar(255)
+  phone       String     @db.VarChar(255)
+  address     String     @db.VarChar(255)
+  payment_ref String     @db.VarChar(255)
+  users       users      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "clients_fk1")
+  invoices    invoices[]
+}
+
+model invoice_items {
+  id                Int               @id @default(autoincrement())
+  invoice_id        Int
+  product_id        Int
+  name_snapshot     String            @db.VarChar(255)
+  price_snapshot    Int
+  quantity          Int
+  total             Int
+  invoices          invoices          @relation(fields: [invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoice_items_fk1")
+  products_services products_services @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoice_items_fk2")
+}
+
+model invoices {
+  id             Int             @id @default(autoincrement())
+  user_id        Int
+  client_id      Int
+  invoice_number String          @unique @db.VarChar(255)
+  issue_date     DateTime        @db.Date
+  due_date       DateTime        @db.Date
+  notes          String          @db.VarChar(255)
+  is_recurring   Boolean         @default(false)
+  status         Status          @default(PENDING)
+  recurrence     Recurrence
+  invoice_items  invoice_items[]
+  users          users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk1")
+  clients        clients         @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk2")
+}
+
+model products_services {
+  id            Int             @id @default(autoincrement())
+  user_id       Int
+  name          String          @db.VarChar(255)
+  description   String          @db.VarChar(255)
+  price         Int
+  is_deleted    Boolean         @default(false)
+  type          Type
+  unit          Unit
+  invoice_items invoice_items[]
+  users         users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_services_fk1")
+}
+
+model user_profiles {
+  id          Int    @id @default(autoincrement())
+  user_id     Int
+  first_name  String @db.VarChar(255)
+  last_name   String @db.VarChar(255)
+  phone       String @db.VarChar(255)
+  profile_img BigInt
+  users       users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_profiles_fk1")
+}
+
+model users {
+  id                Int                 @id @default(autoincrement())
+  email             String              @unique @db.VarChar(255)
+  password_hash     String              @db.VarChar(255)
+  is_verified       Boolean             @default(false)
+  clients           clients[]
+  invoices          invoices[]
+  products_services products_services[]
+  user_profiles     user_profiles[]
+}
+
+enum Status {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+enum Type {
+  SERVICE
+  PRODUCT
+}
+
+enum Recurrence {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum Unit {
+  PCS
+  HOUR
+  DAY
+}
