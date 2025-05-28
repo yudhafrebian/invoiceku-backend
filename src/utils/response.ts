@@ -12,9 +12,10 @@ export const successResponse = (
 export const createResponse = (
   res: Response,
   message: string = "Success",
+  data?: object,
   statusCode: number = 201
 ) => {
-  return res.status(statusCode).send({ success: true, message });
+  return res.status(statusCode).send({ success: true, message, data });
 };
 
 export const errorResponse = (

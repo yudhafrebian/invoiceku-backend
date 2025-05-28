@@ -189,6 +189,11 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
 exports.Status = exports.$Enums.Status = {
   PENDING: 'PENDING',
   PAID: 'PAID',
