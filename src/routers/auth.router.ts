@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  forgotPasswordValidation,
   signInValidation,
   signUpValidation,
 } from "../middleware/validation/auth";
@@ -24,12 +25,11 @@ class AuthRouter {
       this.authController.createUser
     );
     this.route.post("/signin", signInValidation, this.authController.login);
-    this.route.get("/verify", this.authController.verifyEmail);
-    this.route.get(
-      "/keep-login",
-      this.verify.verifyToken,
-      this.authController.keepLogin
-    );
+    this.route.post("/forgot-password",forgotPasswordValidation, this.authController.forgotPassword);
+    this.route.use(this.verify.verifyToken);
+    this.route.patch("/verify", this.authController.verifyEmail);
+    this.route.patch("/reset-password", this.authController.resetPassword);
+    this.route.get("/keep-login", this.authController.keepLogin);
   }
 
   public getRouter(): Router {

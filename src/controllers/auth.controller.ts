@@ -7,7 +7,7 @@ import {
 } from "../utils/response";
 import { hashPassword } from "../utils/hashPassword";
 import { createToken } from "../utils/createToken";
-import { sendVerifyEmail, transporter } from "../configs/nodemailer";
+import { sendResetLinkEmail, sendVerifyEmail } from "../utils/email/sendEmail";
 import { compare } from "bcrypt";
 
 class AuthController {
@@ -72,7 +72,7 @@ class AuthController {
       });
 
       if (!account) {
-        throw "Account not found";
+        throw "Invalid email or password";
       }
 
       const comparePassword = await compare(
@@ -80,7 +80,7 @@ class AuthController {
         account.password_hash
       );
       if (!comparePassword) {
-        throw "Invalid password";
+        throw "Invalid email or password";
       }
 
       const user = await prisma.user_profiles.findFirst({
@@ -176,6 +176,56 @@ class AuthController {
       });
 
       successResponse(res, "Your email has been verified");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { email } = req.body;
+      const account = await prisma.users.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (!account) {
+        throw "Account not found";
+      }
+
+      const token = createToken({
+        id: account.id,
+        password: account.password_hash,
+      });
+
+      await sendResetLinkEmail(email, "Reset Password", null, {
+        email,
+        token,
+      })
+
+      successResponse(res, "Please check your email");
+
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { password } = req.body;
+      const userId = res.locals.data.id;
+      const newPassword = await hashPassword(password);
+      const account = await prisma.users.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password_hash: newPassword,
+        },
+      });
+
+      successResponse(res, "Password has been reset");
     } catch (error) {
       next(error);
     }
