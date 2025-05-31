@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 import express, { Request, Response, NextFunction, Application } from "express";
-import UserController from "./controllers/auth.controller";
 import AuthRouter from "./routers/auth.router";
+import UserRouter from "./routers/user.router";
 
 const PORT = process.env.PORT || 4000;
 
@@ -24,11 +24,13 @@ class App {
 
   private route(): void {
     const authRouter = new AuthRouter()
+    const userRouter = new UserRouter();
     this.app.get("/", (req: Request, res: Response) => {
       res.status(200).send("BASE API");
     });
 
     this.app.use("/auth", authRouter.getRouter());
+    this.app.use("/user", userRouter.getRouter());
   }
 
   private errorHandler():void {

@@ -6,7 +6,7 @@ export const successResponse = (
   data?: object,
   statusCode: number = 200
 ):Response => {
-  return res.status(statusCode).json({ success: true, message, data });
+  return res.status(statusCode).send({ success: true, message, data });
 };
 
 export const createResponse = (
