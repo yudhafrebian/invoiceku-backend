@@ -49,35 +49,35 @@ export type users = $Result.DefaultSelection<Prisma.$usersPayload>
  */
 export namespace $Enums {
   export const Status: {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
-  OVERDUE: 'OVERDUE'
+  Pending: 'Pending',
+  Paid: 'Paid',
+  Overdue: 'Overdue'
 };
 
 export type Status = (typeof Status)[keyof typeof Status]
 
 
 export const Type: {
-  SERVICE: 'SERVICE',
-  PRODUCT: 'PRODUCT'
+  Service: 'Service',
+  Product: 'Product'
 };
 
 export type Type = (typeof Type)[keyof typeof Type]
 
 
 export const Recurrence: {
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY'
+  Daily: 'Daily',
+  Weekly: 'Weekly',
+  Monthly: 'Monthly'
 };
 
 export type Recurrence = (typeof Recurrence)[keyof typeof Recurrence]
 
 
 export const Unit: {
-  PCS: 'PCS',
-  HOUR: 'HOUR',
-  DAY: 'DAY'
+  Pcs: 'Pcs',
+  Hour: 'Hour',
+  Day: 'Day'
 };
 
 export type Unit = (typeof Unit)[keyof typeof Unit]

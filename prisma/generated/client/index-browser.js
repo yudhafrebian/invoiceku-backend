@@ -195,26 +195,26 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 exports.Status = exports.$Enums.Status = {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
-  OVERDUE: 'OVERDUE'
+  Pending: 'Pending',
+  Paid: 'Paid',
+  Overdue: 'Overdue'
 };
 
 exports.Recurrence = exports.$Enums.Recurrence = {
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY'
+  Daily: 'Daily',
+  Weekly: 'Weekly',
+  Monthly: 'Monthly'
 };
 
 exports.Type = exports.$Enums.Type = {
-  SERVICE: 'SERVICE',
-  PRODUCT: 'PRODUCT'
+  Service: 'Service',
+  Product: 'Product'
 };
 
 exports.Unit = exports.$Enums.Unit = {
-  PCS: 'PCS',
-  HOUR: 'HOUR',
-  DAY: 'DAY'
+  Pcs: 'Pcs',
+  Hour: 'Hour',
+  Day: 'Day'
 };
 
 exports.Prisma.ModelName = {

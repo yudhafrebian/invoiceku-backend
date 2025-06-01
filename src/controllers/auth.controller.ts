@@ -105,7 +105,7 @@ class AuthController {
             id: account.id,
             is_verified: account.is_verified,
           },
-          "1h"
+          "24h"
         ),
       });
     } catch (error) {

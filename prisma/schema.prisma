@@ -42,7 +42,7 @@ model invoices {
   due_date       DateTime        @db.Date
   notes          String          @db.VarChar(255)
   is_recurring   Boolean         @default(false)
-  status         Status          @default(PENDING)
+  status         Status          @default(Pending)
   recurrence     Recurrence
   invoice_items  invoice_items[]
   users          users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk1")
@@ -53,7 +53,7 @@ model products_services {
   id            Int             @id @default(autoincrement())
   user_id       Int
   name          String          @db.VarChar(255)
-  description   String          @db.VarChar(255)
+  description   String
   price         Int
   is_deleted    Boolean         @default(false)
   type          Type
@@ -84,24 +84,24 @@ model users {
 }
 
 enum Status {
-  PENDING
-  PAID
-  OVERDUE
+  Pending
+  Paid
+  Overdue
 }
 
 enum Type {
-  SERVICE
-  PRODUCT
+  Service
+  Product
 }
 
 enum Recurrence {
-  DAILY
-  WEEKLY
-  MONTHLY
+  Daily
+  Weekly
+  Monthly
 }
 
 enum Unit {
-  PCS
-  HOUR
-  DAY
+  Pcs
+  Hour
+  Day
 }
