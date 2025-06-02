@@ -127,7 +127,7 @@ exports.Prisma.ClientsScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   address: 'address',
-  payment_ref: 'payment_ref'
+  is_deleted: 'is_deleted'
 };
 
 exports.Prisma.Invoice_itemsScalarFieldEnum = {

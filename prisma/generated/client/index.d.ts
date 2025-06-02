@@ -1559,7 +1559,7 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
-    payment_ref: string | null
+    is_deleted: boolean | null
   }
 
   export type ClientsMaxAggregateOutputType = {
@@ -1569,7 +1569,7 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
-    payment_ref: string | null
+    is_deleted: boolean | null
   }
 
   export type ClientsCountAggregateOutputType = {
@@ -1579,7 +1579,7 @@ export namespace Prisma {
     email: number
     phone: number
     address: number
-    payment_ref: number
+    is_deleted: number
     _all: number
   }
 
@@ -1601,7 +1601,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
-    payment_ref?: true
+    is_deleted?: true
   }
 
   export type ClientsMaxAggregateInputType = {
@@ -1611,7 +1611,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
-    payment_ref?: true
+    is_deleted?: true
   }
 
   export type ClientsCountAggregateInputType = {
@@ -1621,7 +1621,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
-    payment_ref?: true
+    is_deleted?: true
     _all?: true
   }
 
@@ -1718,7 +1718,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted: boolean
     _count: ClientsCountAggregateOutputType | null
     _avg: ClientsAvgAggregateOutputType | null
     _sum: ClientsSumAggregateOutputType | null
@@ -1747,7 +1747,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    payment_ref?: boolean
+    is_deleted?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
     invoices?: boolean | clients$invoicesArgs<ExtArgs>
     _count?: boolean | ClientsCountOutputTypeDefaultArgs<ExtArgs>
@@ -1760,7 +1760,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    payment_ref?: boolean
+    is_deleted?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clients"]>
 
@@ -1771,7 +1771,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    payment_ref?: boolean
+    is_deleted?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clients"]>
 
@@ -1782,10 +1782,10 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    payment_ref?: boolean
+    is_deleted?: boolean
   }
 
-  export type clientsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "email" | "phone" | "address" | "payment_ref", ExtArgs["result"]["clients"]>
+  export type clientsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "email" | "phone" | "address" | "is_deleted", ExtArgs["result"]["clients"]>
   export type clientsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
     invoices?: boolean | clients$invoicesArgs<ExtArgs>
@@ -1811,7 +1811,7 @@ export namespace Prisma {
       email: string
       phone: string
       address: string
-      payment_ref: string
+      is_deleted: boolean
     }, ExtArgs["result"]["clients"]>
     composites: {}
   }
@@ -2243,7 +2243,7 @@ export namespace Prisma {
     readonly email: FieldRef<"clients", 'String'>
     readonly phone: FieldRef<"clients", 'String'>
     readonly address: FieldRef<"clients", 'String'>
-    readonly payment_ref: FieldRef<"clients", 'String'>
+    readonly is_deleted: FieldRef<"clients", 'Boolean'>
   }
     
 
@@ -8505,7 +8505,7 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     address: 'address',
-    payment_ref: 'payment_ref'
+    is_deleted: 'is_deleted'
   };
 
   export type ClientsScalarFieldEnum = (typeof ClientsScalarFieldEnum)[keyof typeof ClientsScalarFieldEnum]
@@ -8634,6 +8634,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -8644,13 +8651,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -8737,7 +8737,7 @@ export namespace Prisma {
     email?: StringFilter<"clients"> | string
     phone?: StringFilter<"clients"> | string
     address?: StringFilter<"clients"> | string
-    payment_ref?: StringFilter<"clients"> | string
+    is_deleted?: BoolFilter<"clients"> | boolean
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     invoices?: InvoicesListRelationFilter
   }
@@ -8749,25 +8749,25 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    payment_ref?: SortOrder
+    is_deleted?: SortOrder
     users?: usersOrderByWithRelationInput
     invoices?: invoicesOrderByRelationAggregateInput
   }
 
   export type clientsWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    email?: string
     AND?: clientsWhereInput | clientsWhereInput[]
     OR?: clientsWhereInput[]
     NOT?: clientsWhereInput | clientsWhereInput[]
     user_id?: IntFilter<"clients"> | number
     name?: StringFilter<"clients"> | string
-    email?: StringFilter<"clients"> | string
     phone?: StringFilter<"clients"> | string
     address?: StringFilter<"clients"> | string
-    payment_ref?: StringFilter<"clients"> | string
+    is_deleted?: BoolFilter<"clients"> | boolean
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     invoices?: InvoicesListRelationFilter
-  }, "id">
+  }, "id" | "email">
 
   export type clientsOrderByWithAggregationInput = {
     id?: SortOrder
@@ -8776,7 +8776,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    payment_ref?: SortOrder
+    is_deleted?: SortOrder
     _count?: clientsCountOrderByAggregateInput
     _avg?: clientsAvgOrderByAggregateInput
     _max?: clientsMaxOrderByAggregateInput
@@ -8794,7 +8794,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"clients"> | string
     phone?: StringWithAggregatesFilter<"clients"> | string
     address?: StringWithAggregatesFilter<"clients"> | string
-    payment_ref?: StringWithAggregatesFilter<"clients"> | string
+    is_deleted?: BoolWithAggregatesFilter<"clients"> | boolean
   }
 
   export type invoice_itemsWhereInput = {
@@ -9158,7 +9158,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
     users: usersCreateNestedOneWithoutClientsInput
     invoices?: invoicesCreateNestedManyWithoutClientsInput
   }
@@ -9170,7 +9170,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
     invoices?: invoicesUncheckedCreateNestedManyWithoutClientsInput
   }
 
@@ -9179,7 +9179,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     users?: usersUpdateOneRequiredWithoutClientsNestedInput
     invoices?: invoicesUpdateManyWithoutClientsNestedInput
   }
@@ -9191,7 +9191,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     invoices?: invoicesUncheckedUpdateManyWithoutClientsNestedInput
   }
 
@@ -9202,7 +9202,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
   }
 
   export type clientsUpdateManyMutationInput = {
@@ -9210,7 +9210,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type clientsUncheckedUpdateManyInput = {
@@ -9220,7 +9220,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type invoice_itemsCreateInput = {
@@ -9602,6 +9602,11 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UsersScalarRelationFilter = {
     is?: usersWhereInput
     isNot?: usersWhereInput
@@ -9624,7 +9629,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    payment_ref?: SortOrder
+    is_deleted?: SortOrder
   }
 
   export type clientsAvgOrderByAggregateInput = {
@@ -9639,7 +9644,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    payment_ref?: SortOrder
+    is_deleted?: SortOrder
   }
 
   export type clientsMinOrderByAggregateInput = {
@@ -9649,7 +9654,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    payment_ref?: SortOrder
+    is_deleted?: SortOrder
   }
 
   export type clientsSumOrderByAggregateInput = {
@@ -9689,6 +9694,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type InvoicesScalarRelationFilter = {
@@ -9758,11 +9771,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type EnumStatusFilter<$PrismaModel = never> = {
@@ -9857,14 +9865,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -10124,6 +10124,10 @@ export namespace Prisma {
     set?: string
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type usersUpdateOneRequiredWithoutClientsNestedInput = {
     create?: XOR<usersCreateWithoutClientsInput, usersUncheckedCreateWithoutClientsInput>
     connectOrCreate?: usersCreateOrConnectWithoutClientsInput
@@ -10224,10 +10228,6 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type EnumStatusFieldUpdateOperationsInput = {
@@ -10557,6 +10557,11 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -10601,6 +10606,14 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -10610,11 +10623,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedEnumStatusFilter<$PrismaModel = never> = {
@@ -10643,14 +10651,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -11050,7 +11050,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
     users: usersCreateNestedOneWithoutClientsInput
   }
 
@@ -11061,7 +11061,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
   }
 
   export type clientsCreateOrConnectWithoutInvoicesInput = {
@@ -11144,7 +11144,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     users?: usersUpdateOneRequiredWithoutClientsNestedInput
   }
 
@@ -11155,7 +11155,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type invoice_itemsCreateWithoutProducts_servicesInput = {
@@ -11314,7 +11314,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
     invoices?: invoicesCreateNestedManyWithoutClientsInput
   }
 
@@ -11324,7 +11324,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
     invoices?: invoicesUncheckedCreateNestedManyWithoutClientsInput
   }
 
@@ -11455,7 +11455,7 @@ export namespace Prisma {
     email?: StringFilter<"clients"> | string
     phone?: StringFilter<"clients"> | string
     address?: StringFilter<"clients"> | string
-    payment_ref?: StringFilter<"clients"> | string
+    is_deleted?: BoolFilter<"clients"> | boolean
   }
 
   export type invoicesUpsertWithWhereUniqueWithoutUsersInput = {
@@ -11657,7 +11657,7 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
-    payment_ref: string
+    is_deleted?: boolean
   }
 
   export type invoicesCreateManyUsersInput = {
@@ -11695,7 +11695,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     invoices?: invoicesUpdateManyWithoutClientsNestedInput
   }
 
@@ -11705,7 +11705,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     invoices?: invoicesUncheckedUpdateManyWithoutClientsNestedInput
   }
 
@@ -11715,7 +11715,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    payment_ref?: StringFieldUpdateOperationsInput | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type invoicesUpdateWithoutUsersInput = {

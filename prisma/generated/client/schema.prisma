@@ -10,15 +10,15 @@ datasource db {
 }
 
 model clients {
-  id          Int        @id @default(autoincrement())
-  user_id     Int
-  name        String     @db.VarChar(255)
-  email       String     @db.VarChar(255)
-  phone       String     @db.VarChar(255)
-  address     String     @db.VarChar(255)
-  payment_ref String     @db.VarChar(255)
-  users       users      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "clients_fk1")
-  invoices    invoices[]
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  name       String     @db.VarChar(255)
+  email      String     @unique @db.VarChar(255)
+  phone      String     @db.VarChar
+  address    String     @db.VarChar(255)
+  is_deleted Boolean    @default(false)
+  users      users      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "clients_fk1")
+  invoices   invoices[]
 }
 
 model invoice_items {

@@ -5,6 +5,7 @@ import express, { Request, Response, NextFunction, Application } from "express";
 import AuthRouter from "./routers/auth.router";
 import UserRouter from "./routers/user.router";
 import ProductRouter from "./routers/product.router";
+import ClientRouter from "./routers/client.router";
 
 const PORT = process.env.PORT || 4000;
 
@@ -27,6 +28,7 @@ class App {
     const authRouter = new AuthRouter()
     const userRouter = new UserRouter();
     const productRouter = new ProductRouter();
+    const clientRouter = new ClientRouter();
     this.app.get("/", (req: Request, res: Response) => {
       res.status(200).send("BASE API");
     });
@@ -34,6 +36,7 @@ class App {
     this.app.use("/auth", authRouter.getRouter());
     this.app.use("/user", userRouter.getRouter());
     this.app.use("/product", productRouter.getRouter());
+    this.app.use("/client", clientRouter.getRouter());
   }
 
   private errorHandler():void {
