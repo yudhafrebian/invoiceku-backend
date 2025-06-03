@@ -82,6 +82,17 @@ export const Unit: {
 
 export type Unit = (typeof Unit)[keyof typeof Unit]
 
+
+export const PaymentMethod: {
+  Bank_Transfer: 'Bank_Transfer',
+  Dana: 'Dana',
+  Gopay: 'Gopay',
+  Shopeepay: 'Shopeepay',
+  Qris: 'Qris'
+};
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
 }
 
 export type Status = $Enums.Status
@@ -99,6 +110,10 @@ export const Recurrence: typeof $Enums.Recurrence
 export type Unit = $Enums.Unit
 
 export const Unit: typeof $Enums.Unit
+
+export type PaymentMethod = $Enums.PaymentMethod
+
+export const PaymentMethod: typeof $Enums.PaymentMethod
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1560,6 +1575,7 @@ export namespace Prisma {
     phone: string | null
     address: string | null
     is_deleted: boolean | null
+    payment_ref: $Enums.PaymentMethod | null
   }
 
   export type ClientsMaxAggregateOutputType = {
@@ -1570,6 +1586,7 @@ export namespace Prisma {
     phone: string | null
     address: string | null
     is_deleted: boolean | null
+    payment_ref: $Enums.PaymentMethod | null
   }
 
   export type ClientsCountAggregateOutputType = {
@@ -1580,6 +1597,7 @@ export namespace Prisma {
     phone: number
     address: number
     is_deleted: number
+    payment_ref: number
     _all: number
   }
 
@@ -1602,6 +1620,7 @@ export namespace Prisma {
     phone?: true
     address?: true
     is_deleted?: true
+    payment_ref?: true
   }
 
   export type ClientsMaxAggregateInputType = {
@@ -1612,6 +1631,7 @@ export namespace Prisma {
     phone?: true
     address?: true
     is_deleted?: true
+    payment_ref?: true
   }
 
   export type ClientsCountAggregateInputType = {
@@ -1622,6 +1642,7 @@ export namespace Prisma {
     phone?: true
     address?: true
     is_deleted?: true
+    payment_ref?: true
     _all?: true
   }
 
@@ -1719,6 +1740,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted: boolean
+    payment_ref: $Enums.PaymentMethod
     _count: ClientsCountAggregateOutputType | null
     _avg: ClientsAvgAggregateOutputType | null
     _sum: ClientsSumAggregateOutputType | null
@@ -1748,6 +1770,7 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     is_deleted?: boolean
+    payment_ref?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
     invoices?: boolean | clients$invoicesArgs<ExtArgs>
     _count?: boolean | ClientsCountOutputTypeDefaultArgs<ExtArgs>
@@ -1761,6 +1784,7 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     is_deleted?: boolean
+    payment_ref?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clients"]>
 
@@ -1772,6 +1796,7 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     is_deleted?: boolean
+    payment_ref?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clients"]>
 
@@ -1783,9 +1808,10 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     is_deleted?: boolean
+    payment_ref?: boolean
   }
 
-  export type clientsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "email" | "phone" | "address" | "is_deleted", ExtArgs["result"]["clients"]>
+  export type clientsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "email" | "phone" | "address" | "is_deleted" | "payment_ref", ExtArgs["result"]["clients"]>
   export type clientsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
     invoices?: boolean | clients$invoicesArgs<ExtArgs>
@@ -1812,6 +1838,7 @@ export namespace Prisma {
       phone: string
       address: string
       is_deleted: boolean
+      payment_ref: $Enums.PaymentMethod
     }, ExtArgs["result"]["clients"]>
     composites: {}
   }
@@ -2244,6 +2271,7 @@ export namespace Prisma {
     readonly phone: FieldRef<"clients", 'String'>
     readonly address: FieldRef<"clients", 'String'>
     readonly is_deleted: FieldRef<"clients", 'Boolean'>
+    readonly payment_ref: FieldRef<"clients", 'PaymentMethod'>
   }
     
 
@@ -8505,7 +8533,8 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     address: 'address',
-    is_deleted: 'is_deleted'
+    is_deleted: 'is_deleted',
+    payment_ref: 'payment_ref'
   };
 
   export type ClientsScalarFieldEnum = (typeof ClientsScalarFieldEnum)[keyof typeof ClientsScalarFieldEnum]
@@ -8641,6 +8670,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PaymentMethod'
+   */
+  export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentMethod[]'
+   */
+  export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -8738,6 +8781,7 @@ export namespace Prisma {
     phone?: StringFilter<"clients"> | string
     address?: StringFilter<"clients"> | string
     is_deleted?: BoolFilter<"clients"> | boolean
+    payment_ref?: EnumPaymentMethodFilter<"clients"> | $Enums.PaymentMethod
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     invoices?: InvoicesListRelationFilter
   }
@@ -8750,24 +8794,26 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     is_deleted?: SortOrder
+    payment_ref?: SortOrder
     users?: usersOrderByWithRelationInput
     invoices?: invoicesOrderByRelationAggregateInput
   }
 
   export type clientsWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    email?: string
     AND?: clientsWhereInput | clientsWhereInput[]
     OR?: clientsWhereInput[]
     NOT?: clientsWhereInput | clientsWhereInput[]
     user_id?: IntFilter<"clients"> | number
     name?: StringFilter<"clients"> | string
+    email?: StringFilter<"clients"> | string
     phone?: StringFilter<"clients"> | string
     address?: StringFilter<"clients"> | string
     is_deleted?: BoolFilter<"clients"> | boolean
+    payment_ref?: EnumPaymentMethodFilter<"clients"> | $Enums.PaymentMethod
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     invoices?: InvoicesListRelationFilter
-  }, "id" | "email">
+  }, "id">
 
   export type clientsOrderByWithAggregationInput = {
     id?: SortOrder
@@ -8777,6 +8823,7 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     is_deleted?: SortOrder
+    payment_ref?: SortOrder
     _count?: clientsCountOrderByAggregateInput
     _avg?: clientsAvgOrderByAggregateInput
     _max?: clientsMaxOrderByAggregateInput
@@ -8795,6 +8842,7 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"clients"> | string
     address?: StringWithAggregatesFilter<"clients"> | string
     is_deleted?: BoolWithAggregatesFilter<"clients"> | boolean
+    payment_ref?: EnumPaymentMethodWithAggregatesFilter<"clients"> | $Enums.PaymentMethod
   }
 
   export type invoice_itemsWhereInput = {
@@ -9159,6 +9207,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
     users: usersCreateNestedOneWithoutClientsInput
     invoices?: invoicesCreateNestedManyWithoutClientsInput
   }
@@ -9171,6 +9220,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
     invoices?: invoicesUncheckedCreateNestedManyWithoutClientsInput
   }
 
@@ -9180,6 +9230,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     users?: usersUpdateOneRequiredWithoutClientsNestedInput
     invoices?: invoicesUpdateManyWithoutClientsNestedInput
   }
@@ -9192,6 +9243,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     invoices?: invoicesUncheckedUpdateManyWithoutClientsNestedInput
   }
 
@@ -9203,6 +9255,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
   }
 
   export type clientsUpdateManyMutationInput = {
@@ -9211,6 +9264,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   }
 
   export type clientsUncheckedUpdateManyInput = {
@@ -9221,6 +9275,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   }
 
   export type invoice_itemsCreateInput = {
@@ -9607,6 +9662,13 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type EnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
   export type UsersScalarRelationFilter = {
     is?: usersWhereInput
     isNot?: usersWhereInput
@@ -9630,6 +9692,7 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     is_deleted?: SortOrder
+    payment_ref?: SortOrder
   }
 
   export type clientsAvgOrderByAggregateInput = {
@@ -9645,6 +9708,7 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     is_deleted?: SortOrder
+    payment_ref?: SortOrder
   }
 
   export type clientsMinOrderByAggregateInput = {
@@ -9655,6 +9719,7 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     is_deleted?: SortOrder
+    payment_ref?: SortOrder
   }
 
   export type clientsSumOrderByAggregateInput = {
@@ -9702,6 +9767,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type EnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
   }
 
   export type InvoicesScalarRelationFilter = {
@@ -10126,6 +10201,10 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type EnumPaymentMethodFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMethod
   }
 
   export type usersUpdateOneRequiredWithoutClientsNestedInput = {
@@ -10562,6 +10641,13 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -10612,6 +10698,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -11051,6 +11147,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
     users: usersCreateNestedOneWithoutClientsInput
   }
 
@@ -11062,6 +11159,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
   }
 
   export type clientsCreateOrConnectWithoutInvoicesInput = {
@@ -11145,6 +11243,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     users?: usersUpdateOneRequiredWithoutClientsNestedInput
   }
 
@@ -11156,6 +11255,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   }
 
   export type invoice_itemsCreateWithoutProducts_servicesInput = {
@@ -11315,6 +11415,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
     invoices?: invoicesCreateNestedManyWithoutClientsInput
   }
 
@@ -11325,6 +11426,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
     invoices?: invoicesUncheckedCreateNestedManyWithoutClientsInput
   }
 
@@ -11456,6 +11558,7 @@ export namespace Prisma {
     phone?: StringFilter<"clients"> | string
     address?: StringFilter<"clients"> | string
     is_deleted?: BoolFilter<"clients"> | boolean
+    payment_ref?: EnumPaymentMethodFilter<"clients"> | $Enums.PaymentMethod
   }
 
   export type invoicesUpsertWithWhereUniqueWithoutUsersInput = {
@@ -11658,6 +11761,7 @@ export namespace Prisma {
     phone: string
     address: string
     is_deleted?: boolean
+    payment_ref: $Enums.PaymentMethod
   }
 
   export type invoicesCreateManyUsersInput = {
@@ -11696,6 +11800,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     invoices?: invoicesUpdateManyWithoutClientsNestedInput
   }
 
@@ -11706,6 +11811,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     invoices?: invoicesUncheckedUpdateManyWithoutClientsNestedInput
   }
 
@@ -11716,6 +11822,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   }
 
   export type invoicesUpdateWithoutUsersInput = {

@@ -24,6 +24,7 @@ export const updateClientValidation = [
     body("email").notEmpty().isEmail().withMessage("Email is Required"),
     body("phone").notEmpty().withMessage("Phone is Required"),
     body("address").notEmpty().withMessage("Address is Required"),
+    body("payment_ref").notEmpty().withMessage("Payment Reference is Required"),
     (req:Request, res:Response, next:NextFunction):any => {
         const errorValidation = validationResult(req);
         if (!errorValidation.isEmpty()) {

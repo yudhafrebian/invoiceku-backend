@@ -11,26 +11,83 @@ class ProductController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
-      const products = await prisma.products_services.findMany({
-        where: {
-          user_id: userId,
-          is_deleted: false,
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
+
+      const search = req.query.search as string;
+      const type = req.query.type as string;
+      const unit = req.query.unit as string;
+
+      const whereClause: any = {
+        user_id: userId,
+        is_deleted: false,
+      };
+      
+      if (search) {
+        whereClause.OR = [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ];
+      }
+      
+      
+      if (type) {
+        whereClause.type = type;
+      }
+      if (unit) {
+        whereClause.unit = unit;
+      }
+
+      const [products, total] = await Promise.all([
+        prisma.products_services.findMany({
+          where: whereClause,
+          skip,
+          take: limit,
+          orderBy: {
+            name: "asc",
+          },
+        }),
+        prisma.products_services.count({
+          where: whereClause,
+        }),
+      ]);
+
+      successResponse(res, "Success", {
+        products,
+        pagination: {
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+          totalItems: total,
         },
       });
-
-      successResponse(res, "Success", products);
     } catch (error) {
       next(error);
     }
   }
-  async getSingleProduct(req: Request, res: Response, next: NextFunction):Promise<void> {
+  async getSingleProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const productId = parseInt(req.params.id);
       const product = await prisma.products_services.findUnique({
         where: {
           id: productId,
-        }
-      })
+        },
+      });
 
       successResponse(res, "Success", { product });
     } catch (error) {
@@ -57,7 +114,11 @@ class ProductController {
       next(error);
     }
   }
-  async updateProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async updateProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const productId = parseInt(req.params.id);
       const updateProduct = await prisma.products_services.update({
@@ -70,12 +131,15 @@ class ProductController {
       });
 
       successResponse(res, "Product & Service has been updated", updateProduct);
-
     } catch (error) {
       next(error);
     }
   }
-  async deleteProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async deleteProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const productId = parseInt(req.params.id);
       const deleteProduct = await prisma.products_services.update({
@@ -84,8 +148,8 @@ class ProductController {
         },
         data: {
           is_deleted: true,
-        }
-      })
+        },
+      });
 
       successResponse(res, "Product & Service has been deleted", deleteProduct);
     } catch (error) {
@@ -112,10 +176,10 @@ class ProductController {
     next: NextFunction
   ): Promise<void> {
     try {
-        const unit = Object.values(Unit);
-        successResponse(res, "Success", unit);
+      const unit = Object.values(Unit);
+      successResponse(res, "Success", unit);
     } catch (error) {
-        next(error);
+      next(error);
     }
   }
 }

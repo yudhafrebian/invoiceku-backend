@@ -16,6 +16,7 @@ class ClientRouter{
     }
 
     private initializeRoutes(): void {
+        this.route.get("/payment-method", this.clientController.getPaymentMethod)
         this.route.use(this.verify.verifyToken);
         this.route.get("/all-client", this.clientController.getAllClient);
         this.route.get("/single-client/:id", this.clientController.getSingleClient);

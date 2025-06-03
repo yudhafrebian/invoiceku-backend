@@ -127,7 +127,8 @@ exports.Prisma.ClientsScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   address: 'address',
-  is_deleted: 'is_deleted'
+  is_deleted: 'is_deleted',
+  payment_ref: 'payment_ref'
 };
 
 exports.Prisma.Invoice_itemsScalarFieldEnum = {
@@ -194,6 +195,14 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  Bank_Transfer: 'Bank_Transfer',
+  Dana: 'Dana',
+  Gopay: 'Gopay',
+  Shopeepay: 'Shopeepay',
+  Qris: 'Qris'
+};
+
 exports.Status = exports.$Enums.Status = {
   Pending: 'Pending',
   Paid: 'Paid',
