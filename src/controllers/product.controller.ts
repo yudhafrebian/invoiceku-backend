@@ -18,12 +18,24 @@ class ProductController {
       const search = req.query.search as string;
       const type = req.query.type as string;
       const unit = req.query.unit as string;
+      const sort = req.query.sort as string;
+
+      let orderByClause: any = { name: "asc" };
+
+      if (sort === "name_asc") orderByClause = { name: "asc" };
+      else if (sort === "name_desc") orderByClause = { name: "desc" };
+      else if (sort === "price_asc") orderByClause = { price: "asc" };
+      else if (sort === "price_desc") orderByClause = { price: "desc" };
+      else if (sort === "type_asc") orderByClause = { type: "asc" };
+      else if (sort === "type_desc") orderByClause = { type: "desc" };
+      else if (sort === "unit_asc") orderByClause = { unit: "asc" };
+      else if (sort === "unit_desc") orderByClause = { unit: "desc" };
 
       const whereClause: any = {
         user_id: userId,
         is_deleted: false,
       };
-      
+
       if (search) {
         whereClause.OR = [
           {
@@ -40,8 +52,7 @@ class ProductController {
           },
         ];
       }
-      
-      
+
       if (type) {
         whereClause.type = type;
       }
@@ -54,9 +65,7 @@ class ProductController {
           where: whereClause,
           skip,
           take: limit,
-          orderBy: {
-            name: "asc",
-          },
+          orderBy: orderByClause,
         }),
         prisma.products_services.count({
           where: whereClause,

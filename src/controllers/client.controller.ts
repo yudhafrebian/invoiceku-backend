@@ -15,6 +15,19 @@ class ClientController {
       const limit = parseInt(req.query.limit as string) || 10;
       const skip = (page - 1) * limit;
       const search = req.query.search as string;
+      const payment = req.query.payment as string;
+      const sort = req.query.sort as string;
+
+      let orderByClause: any = { name: "asc" };
+
+      if (sort === "name_asc") orderByClause = { name: "asc" };
+      else if (sort === "name_desc") orderByClause = { name: "desc" };
+      else if (sort === "email_asc") orderByClause = { email: "asc" };
+      else if (sort === "email_desc") orderByClause = { email: "desc" };
+      else if (sort === "phone_asc") orderByClause = { phone: "asc" };
+      else if (sort === "phone_desc") orderByClause = { phone: "desc" };
+      else if (sort === "address_asc") orderByClause = { address: "asc" };
+      else if (sort === "address_desc") orderByClause = { address: "desc" };
 
       const whereClause: any = {
         user_id: userId,
@@ -50,14 +63,16 @@ class ClientController {
         ];
       }
 
+      if (payment) {
+        whereClause.payment_ref = payment;
+      }
+
       const [clients, total] = await Promise.all([
         prisma.clients.findMany({
           where: whereClause,
           skip,
           take: limit,
-          orderBy: {
-            name: "asc",
-          },
+          orderBy: orderByClause,
         }),
         prisma.clients.count({
           where: whereClause,
@@ -177,7 +192,7 @@ class ClientController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const payment_ref = Object.values(PaymentMethod)
+      const payment_ref = Object.values(PaymentMethod);
       successResponse(res, "Success", payment_ref);
     } catch (error) {
       next(error);
