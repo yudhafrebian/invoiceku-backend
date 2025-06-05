@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import prisma from "../configs/prisma";
-import { successResponse } from "../utils/response";
+import { createResponse, successResponse } from "../utils/response";
 import { cloudUpload } from "../configs/cloudinary";
 
 class UserController {
@@ -82,6 +82,46 @@ class UserController {
         updateUser,
         updateUserProfile,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async userPaymentMethod(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const userId = res.locals.data.id;
+
+      const userPaymentMethod = await prisma.user_payment_method.findMany({
+        where: {
+          user_id: userId
+        }
+      })
+
+      successResponse(res, "Success", userPaymentMethod);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createPaymentMethod(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const userId = res.locals.data.id;
+      const create = await prisma.user_payment_method.create({
+        data: {
+          user_id: userId,
+          ...req.body
+        }
+      })
+
+      createResponse(res, "Your payment method has been created", create);
     } catch (error) {
       next(error);
     }

@@ -6,6 +6,7 @@ import AuthRouter from "./routers/auth.router";
 import UserRouter from "./routers/user.router";
 import ProductRouter from "./routers/product.router";
 import ClientRouter from "./routers/client.router";
+import InvoiceRouter from "./routers/invoice.router";
 
 const PORT = process.env.PORT || 4000;
 
@@ -29,6 +30,7 @@ class App {
     const userRouter = new UserRouter();
     const productRouter = new ProductRouter();
     const clientRouter = new ClientRouter();
+    const invoiceRouter = new InvoiceRouter();
     this.app.get("/", (req: Request, res: Response) => {
       res.status(200).send("BASE API");
     });
@@ -37,6 +39,7 @@ class App {
     this.app.use("/user", userRouter.getRouter());
     this.app.use("/product", productRouter.getRouter());
     this.app.use("/client", clientRouter.getRouter());
+    this.app.use("/invoice", invoiceRouter.getRouter());
   }
 
   private errorHandler():void {

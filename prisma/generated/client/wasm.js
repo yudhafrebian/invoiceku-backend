@@ -146,12 +146,13 @@ exports.Prisma.InvoicesScalarFieldEnum = {
   user_id: 'user_id',
   client_id: 'client_id',
   invoice_number: 'invoice_number',
-  issue_date: 'issue_date',
+  start_date: 'start_date',
   due_date: 'due_date',
   notes: 'notes',
-  is_recurring: 'is_recurring',
   status: 'status',
-  recurrence: 'recurrence'
+  total: 'total',
+  is_deleted: 'is_deleted',
+  payment_method: 'payment_method'
 };
 
 exports.Prisma.Products_servicesScalarFieldEnum = {
@@ -179,6 +180,41 @@ exports.Prisma.UsersScalarFieldEnum = {
   email: 'email',
   password_hash: 'password_hash',
   is_verified: 'is_verified'
+};
+
+exports.Prisma.Recurring_invoiceScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  client_id: 'client_id',
+  invoice_number: 'invoice_number',
+  start_date: 'start_date',
+  due_date: 'due_date',
+  recurrence: 'recurrence',
+  notes: 'notes',
+  next_run: 'next_run',
+  is_active: 'is_active',
+  is_deleted: 'is_deleted',
+  total: 'total'
+};
+
+exports.Prisma.Recurring_invoice_itemScalarFieldEnum = {
+  id: 'id',
+  recurring_invoice_id: 'recurring_invoice_id',
+  product_id: 'product_id',
+  name_snapshot: 'name_snapshot',
+  price_snapshot: 'price_snapshot',
+  quantity: 'quantity',
+  total: 'total'
+};
+
+exports.Prisma.User_payment_methodScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  payment_method: 'payment_method',
+  account_name: 'account_name',
+  account_number: 'account_number',
+  qris_image_url: 'qris_image_url',
+  is_active: 'is_active'
 };
 
 exports.Prisma.SortOrder = {
@@ -209,12 +245,6 @@ exports.Status = exports.$Enums.Status = {
   Overdue: 'Overdue'
 };
 
-exports.Recurrence = exports.$Enums.Recurrence = {
-  Daily: 'Daily',
-  Weekly: 'Weekly',
-  Monthly: 'Monthly'
-};
-
 exports.Type = exports.$Enums.Type = {
   Service: 'Service',
   Product: 'Product'
@@ -232,7 +262,10 @@ exports.Prisma.ModelName = {
   invoices: 'invoices',
   products_services: 'products_services',
   user_profiles: 'user_profiles',
-  users: 'users'
+  users: 'users',
+  recurring_invoice: 'recurring_invoice',
+  recurring_invoice_item: 'recurring_invoice_item',
+  user_payment_method: 'user_payment_method'
 };
 
 /**

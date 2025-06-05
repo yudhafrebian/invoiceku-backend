@@ -10,16 +10,17 @@ datasource db {
 }
 
 model clients {
-  id          Int           @id @default(autoincrement())
-  user_id     Int
-  name        String        @db.VarChar(255)
-  email       String        @db.VarChar(255)
-  phone       String        @db.VarChar
-  address     String        @db.VarChar(255)
-  is_deleted  Boolean       @default(false)
-  payment_ref PaymentMethod
-  users       users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "clients_fk1")
-  invoices    invoices[]
+  id                Int                 @id @default(autoincrement())
+  user_id           Int
+  name              String              @db.VarChar(255)
+  email             String              @db.VarChar(255)
+  phone             String              @db.VarChar
+  address           String              @db.VarChar(255)
+  is_deleted        Boolean             @default(false)
+  payment_ref       PaymentMethod
+  users             users               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "clients_fk1")
+  invoices          invoices[]
+  recurring_invoice recurring_invoice[]
 }
 
 model invoice_items {
@@ -39,28 +40,30 @@ model invoices {
   user_id        Int
   client_id      Int
   invoice_number String          @unique @db.VarChar(255)
-  issue_date     DateTime        @db.Date
+  start_date     DateTime        @db.Date
   due_date       DateTime        @db.Date
-  notes          String          @db.VarChar(255)
-  is_recurring   Boolean         @default(false)
+  notes          String?         @db.VarChar(255)
   status         Status          @default(Pending)
-  recurrence     Recurrence
+  total          Int
+  is_deleted     Boolean         @default(false)
+  payment_method PaymentMethod
   invoice_items  invoice_items[]
   users          users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk1")
   clients        clients         @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk2")
 }
 
 model products_services {
-  id            Int             @id @default(autoincrement())
-  user_id       Int
-  name          String          @db.VarChar(255)
-  description   String
-  price         Int
-  is_deleted    Boolean         @default(false)
-  type          Type
-  unit          Unit
-  invoice_items invoice_items[]
-  users         users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_services_fk1")
+  id                     Int                      @id @default(autoincrement())
+  user_id                Int
+  name                   String                   @db.VarChar(255)
+  description            String
+  price                  Int
+  is_deleted             Boolean                  @default(false)
+  type                   Type
+  unit                   Unit
+  invoice_items          invoice_items[]
+  users                  users                    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_services_fk1")
+  recurring_invoice_item recurring_invoice_item[]
 }
 
 model user_profiles {
@@ -74,14 +77,60 @@ model user_profiles {
 }
 
 model users {
-  id                Int                 @id @default(autoincrement())
-  email             String              @unique @db.VarChar(255)
-  password_hash     String              @db.VarChar(255)
-  is_verified       Boolean             @default(false)
-  clients           clients[]
-  invoices          invoices[]
-  products_services products_services[]
-  user_profiles     user_profiles[]
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique @db.VarChar(255)
+  password_hash       String                @db.VarChar(255)
+  is_verified         Boolean               @default(false)
+  clients             clients[]
+  invoices            invoices[]
+  products_services   products_services[]
+  recurring_invoice   recurring_invoice[]
+  user_payment_method user_payment_method[]
+  user_profiles       user_profiles[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model recurring_invoice {
+  id                     Int                      @id @default(autoincrement())
+  user_id                Int
+  client_id              Int
+  invoice_number         String                   @unique @db.VarChar
+  start_date             DateTime                 @db.Date
+  due_date               DateTime?                @db.Date
+  recurrence             String                   @default("yes") @db.VarChar
+  notes                  String?
+  next_run               DateTime                 @db.Date
+  is_active              Boolean                  @default(true)
+  is_deleted             Boolean                  @default(false)
+  total                  Int
+  clients                clients                  @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                  users                    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  recurring_invoice_item recurring_invoice_item[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model recurring_invoice_item {
+  id                   Int               @id @default(autoincrement())
+  recurring_invoice_id Int
+  product_id           Int
+  name_snapshot        String            @db.VarChar
+  price_snapshot       String            @db.VarChar
+  quantity             Int
+  total                Int
+  products_services    products_services @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  recurring_invoice    recurring_invoice @relation(fields: [recurring_invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model user_payment_method {
+  id             Int           @id @default(autoincrement())
+  user_id        Int
+  payment_method PaymentMethod
+  account_name   String        @db.VarChar
+  account_number String        @db.VarChar
+  qris_image_url String?       @db.VarChar
+  is_active      Boolean       @default(true)
+  users          users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum Status {
