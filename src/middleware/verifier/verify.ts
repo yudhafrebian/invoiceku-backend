@@ -28,7 +28,7 @@ class Verify {
     next: NextFunction
   ): Promise<any> {
     try {
-      if (res.locals.data.isVerified) {
+      if (res.locals.data.is_verified) {
         next();
       } else {
         throw "Please Verify Your Account First";

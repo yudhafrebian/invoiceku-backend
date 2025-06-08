@@ -17,7 +17,7 @@ class InvoiceController {
         },
         include: {
           clients: true,
-        }
+        },
       });
       successResponse(res, "Success", invoice);
     } catch (error) {

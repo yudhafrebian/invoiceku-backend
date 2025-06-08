@@ -18,6 +18,7 @@ class InvoiceRouter {
     private initializeRoutes():void{
         this.route.use(this.verify.verifyToken);
         this.route.get("/all-invoice", this.InvoiceController.getAllInvoice);
+        this.route.use(this.verify.verifyStatus)
         this.route.post("/create-invoice", this.InvoiceController.createInvoice);
     }
     public getRouter():Router{
