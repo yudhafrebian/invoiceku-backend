@@ -114,6 +114,18 @@ class UserController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
+
+      const isExist = await prisma.user_payment_method.findFirst({
+        where: {
+          user_id: userId,
+          payment_method: req.body.payment_method
+        }
+      })
+
+      if (isExist) {
+        throw `Payment method ${req.body.payment_method} already exist`;
+      }
+
       const create = await prisma.user_payment_method.create({
         data: {
           user_id: userId,
@@ -126,6 +138,37 @@ class UserController {
       next(error);
     }
   }
+
+  async paymentMethodSwitchStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const id = parseInt(req.params.id);
+
+    const current = await prisma.user_payment_method.findUnique({
+      where: { id },
+    });
+
+    if (!current) {
+      res.status(404).json({ message: "Payment method not found" });
+      return;
+    }
+
+    const switchStatus = await prisma.user_payment_method.update({
+      where: { id },
+      data: {
+        is_active: !current.is_active,
+      },
+    });
+
+    successResponse(res, "Success", switchStatus);
+  } catch (error) {
+    next(error);
+  }
+}
+
 }
 
 export default UserController;

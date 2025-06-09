@@ -69,9 +69,22 @@ class InvoiceController {
         },
       });
 
+      const userPaymentMethodData = await prisma.user_payment_method.findFirst({
+        where: {
+          user_id: userId,
+          is_active: true,
+          payment_method: payment_method as PaymentMethod
+        },
+      });
+
+      if (!userPaymentMethodData) {
+        throw `You have not activated the selected payment method: ${payment_method}`;
+      }
+
       if (userPaymentMethod === 0) {
         throw "You need to add payment method atleast one to create invoice";
       }
+
 
       const isExist = await prisma.invoices.findUnique({
         where: {

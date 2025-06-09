@@ -21,6 +21,7 @@ class userRouter {
     this.route.get("/payment-method", this.userController.userPaymentMethod);
     this.route.post("/create-payment-method", userPaymentValidation, this.userController.createPaymentMethod);
     this.route.patch("/update-profile", uploaderMemory().single("profile_img"), this.userController.updateUser);
+    this.route.patch("/switch-status/:id", this.userController.paymentMethodSwitchStatus);
   }
 
   public getRouter(): Router {
