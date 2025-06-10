@@ -38,14 +38,14 @@ class UserController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
-      console.log(req.body);
       const { first_name, last_name, phone, email } = req.body;
 
-      if (!req.file) {
-        throw "File not found";
-      }
+      let profileImage: string | undefined;
 
-      const upload = await cloudUpload(req.file);
+      if (req.file) {
+        const upload = await cloudUpload(req.file);
+        profileImage = upload.secure_url;
+      }
 
       const userProfile = await prisma.user_profiles.findFirst({
         where: { user_id: userId },
@@ -75,7 +75,7 @@ class UserController {
           first_name,
           last_name,
           phone,
-          profile_img: upload.secure_url,
+          ...(profileImage && { profile_img: profileImage }),
         },
       });
       successResponse(res, "Profile has been updated", {
@@ -97,9 +97,9 @@ class UserController {
 
       const userPaymentMethod = await prisma.user_payment_method.findMany({
         where: {
-          user_id: userId
-        }
-      })
+          user_id: userId,
+        },
+      });
 
       successResponse(res, "Success", userPaymentMethod);
     } catch (error) {
@@ -114,24 +114,36 @@ class UserController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
+      const { payment_method, account_name, account_number } = req.body;
+      console.log(req.body);
 
       const isExist = await prisma.user_payment_method.findFirst({
         where: {
           user_id: userId,
-          payment_method: req.body.payment_method
-        }
-      })
+          payment_method,
+        },
+      });
 
       if (isExist) {
         throw `Payment method ${req.body.payment_method} already exist`;
       }
 
+      let paymentMethodImage: string | undefined;
+
+      if (req.file) {
+        const upload = await cloudUpload(req.file);
+        paymentMethodImage = upload.secure_url;
+      }
+
       const create = await prisma.user_payment_method.create({
         data: {
           user_id: userId,
-          ...req.body
-        }
-      })
+          account_name,
+          account_number,
+          payment_method,
+          ...(paymentMethodImage && { qris_image_url: paymentMethodImage }),
+        },
+      });
 
       createResponse(res, "Your payment method has been created", create);
     } catch (error) {
@@ -139,36 +151,97 @@ class UserController {
     }
   }
 
-  async paymentMethodSwitchStatus(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const id = parseInt(req.params.id);
+  async getSinglePaymentMethod(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const id = parseInt(req.params.id);
+      const paymentMethod = await prisma.user_payment_method.findUnique({
+        where: { id },
+      });
 
-    const current = await prisma.user_payment_method.findUnique({
-      where: { id },
-    });
+      if (!paymentMethod) {
+        throw "Payment method not found";
+      }
 
-    if (!current) {
-      res.status(404).json({ message: "Payment method not found" });
-      return;
+      successResponse(res, "Success", paymentMethod);
+    } catch (error) {
+      next(error);
     }
-
-    const switchStatus = await prisma.user_payment_method.update({
-      where: { id },
-      data: {
-        is_active: !current.is_active,
-      },
-    });
-
-    successResponse(res, "Success", switchStatus);
-  } catch (error) {
-    next(error);
   }
-}
 
+  async updatePaymentMethod(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const id = parseInt(req.params.id);
+
+      const current = await prisma.user_payment_method.findUnique({
+        where: { id },
+      });
+
+      if (!current) {
+        throw "Payment method not found";
+      }
+
+      const { payment_method, account_name, account_number } = req.body;
+
+      let paymentMethodImage: string | undefined;
+
+      if (req.file) {
+        const upload = await cloudUpload(req.file);
+        paymentMethodImage = upload.secure_url;
+      }
+
+      const update = await prisma.user_payment_method.update({
+        where: { id },
+        data: {
+          account_name,
+          account_number,
+          payment_method,
+          ...(paymentMethodImage && { qris_image_url: paymentMethodImage }),
+        },
+      });
+
+      successResponse(res, "Payment method has been updated", update);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async paymentMethodSwitchStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const id = parseInt(req.params.id);
+
+      const current = await prisma.user_payment_method.findUnique({
+        where: { id },
+      });
+
+      if (!current) {
+        res.status(404).json({ message: "Payment method not found" });
+        return;
+      }
+
+      const switchStatus = await prisma.user_payment_method.update({
+        where: { id },
+        data: {
+          is_active: !current.is_active,
+        },
+      });
+
+      successResponse(res, "Payment method has been updated", switchStatus);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default UserController;
