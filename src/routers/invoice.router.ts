@@ -16,6 +16,7 @@ class InvoiceRouter {
     }
 
     private initializeRoutes():void{
+        this.route.post("/preview", this.InvoiceController.previewInvoicePDF)
         this.route.use(this.verify.verifyToken);
         this.route.get("/all-invoice", this.InvoiceController.getAllInvoice);
         this.route.use(this.verify.verifyStatus)

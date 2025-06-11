@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import prisma from "../configs/prisma";
 import { createResponse, successResponse } from "../utils/response";
 import { PaymentMethod, Status } from "../../prisma/generated/client";
+import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 
 class InvoiceController {
   async getAllInvoice(
@@ -42,7 +43,7 @@ class InvoiceController {
         total,
         is_deleted,
         invoice_items,
-        payment_method
+        payment_method,
       }: {
         client_id: number;
         start_date: Date;
@@ -73,7 +74,7 @@ class InvoiceController {
         where: {
           user_id: userId,
           is_active: true,
-          payment_method: payment_method as PaymentMethod
+          payment_method: payment_method as PaymentMethod,
         },
       });
 
@@ -85,16 +86,15 @@ class InvoiceController {
         throw "You need to add payment method atleast one to create invoice";
       }
 
-
       const isExist = await prisma.invoices.findUnique({
         where: {
           invoice_number,
-          is_deleted: false
-        }
-      })
+          is_deleted: false,
+        },
+      });
 
       if (isExist) {
-        throw "Invoice number already exist"
+        throw "Invoice number already exist";
       }
 
       const createInvoice = await prisma.invoices.create({
@@ -123,6 +123,81 @@ class InvoiceController {
         })),
       });
       createResponse(res, "Invoice has been created", createInvoice);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async InvoicePdfReview(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const id = parseInt(req.params.id);
+      const invoice = await prisma.invoices.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          invoice_items: true,
+          clients: true,
+        },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      generateInvoicePDF(
+        { 
+          ...invoice, 
+          client: { name: invoice.clients.name }, 
+          due_date: invoice.due_date.toISOString()
+        },
+        res
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async previewInvoicePDF(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); 
+    try {
+      const {
+        client_id,
+        invoice_date,
+        due_date,
+        invoice_items,
+        clients,
+        invoice_number 
+      } = req.body;
+
+      const total = invoice_items.reduce(
+        (acc: number, item: any) => acc + item.quantity * item.price_snapshot,
+        0
+      );
+
+      const clientData = await prisma.clients.findUnique({
+        where: { id: client_id },
+      });
+
+      const invoiceData = {
+        invoice_number,
+        client_id,
+        invoice_date,
+        due_date,
+        invoice_items,
+        client: { name: clientData?.name || "Unknown Client" },
+        total,
+      };
+
+      generateInvoicePDF(invoiceData, res);
     } catch (error) {
       next(error);
     }
