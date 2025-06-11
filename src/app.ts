@@ -22,7 +22,6 @@ class App {
 
   private configure(): void {
     this.app.use(cors());
-
     this.app.use(express.json());
   }
   

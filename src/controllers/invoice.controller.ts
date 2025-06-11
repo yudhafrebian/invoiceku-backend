@@ -128,46 +128,11 @@ class InvoiceController {
     }
   }
 
-  async InvoicePdfReview(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      const id = parseInt(req.params.id);
-      const invoice = await prisma.invoices.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          invoice_items: true,
-          clients: true,
-        },
-      });
-
-      if (!invoice) {
-        throw "Invoice not found";
-      }
-
-      generateInvoicePDF(
-        { 
-          ...invoice, 
-          client: { name: invoice.clients.name }, 
-          due_date: invoice.due_date.toISOString()
-        },
-        res
-      );
-    } catch (error) {
-      next(error);
-    }
-  }
-
   async previewInvoicePDF(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); 
     try {
       const {
         client_id,
@@ -175,6 +140,7 @@ class InvoiceController {
         due_date,
         invoice_items,
         clients,
+        start_date,
         invoice_number 
       } = req.body;
 
@@ -192,6 +158,7 @@ class InvoiceController {
         client_id,
         invoice_date,
         due_date,
+        start_date,
         invoice_items,
         client: { name: clientData?.name || "Unknown Client" },
         total,
