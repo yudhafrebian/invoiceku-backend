@@ -16,9 +16,14 @@ class InvoiceRouter {
     }
 
     private initializeRoutes():void{
+        this.route.get("/status", this.InvoiceController.getInvoiceStatus);
         this.route.post("/preview", this.InvoiceController.previewInvoicePDF)
+        this.route.get("/download/:id", this.InvoiceController.downloadPdf);
+        this.route.get("/detail/:invoice_number", this.InvoiceController.DetailInvoice);
         this.route.use(this.verify.verifyToken);
         this.route.get("/all-invoice", this.InvoiceController.getAllInvoice);
+        this.route.get("/detail-payment/:invoice_number", this.InvoiceController.detailPayment);
+        this.route.post("/send-email-payment/:invoice_number", this.InvoiceController.sendInvoiceEmail);
         this.route.use(this.verify.verifyStatus)
         this.route.post("/create-invoice", this.InvoiceController.createInvoice);
     }

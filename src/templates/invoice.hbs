@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Payment</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f7;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        background-color: #ffffff;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        color: #333333;
+      }
+      .header {
+        background-color: #3b82f6;
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+        color: #ffffff;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 20px 0;
+        background-color: #3b82f6;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+      .footer {
+        font-size: 12px;
+        color: #888888;
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Invoice Payment</h1>
+      </div>
+
+      <p>Hello, {{name}} 👋</p>
+      <p>Your Invoice is ready to be paid. Click the button below to go to the payment page:</p>
+
+      <a target="_blank" href="http://localhost:3000/{{invoice_number}}-payment" class="button">Go to Payment Page</a>
+
+      <p>If you didn’t request a payment, please ignore this email.</p>
+
+      <div class="footer">
+        <p>&copy; 2025 InvoiceKu. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>

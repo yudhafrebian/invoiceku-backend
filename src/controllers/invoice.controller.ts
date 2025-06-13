@@ -3,6 +3,8 @@ import prisma from "../configs/prisma";
 import { createResponse, successResponse } from "../utils/response";
 import { PaymentMethod, Status } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
+import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
+import { sendInvoiceEmail } from "../utils/email/sendEmail";
 
 class InvoiceController {
   async getAllInvoice(
@@ -12,15 +14,71 @@ class InvoiceController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
+      const search = req.query.search as string;
+      const payment = req.query.payment as string;
+      const status = req.query.status as string;
+      const sort = req.query.sort as string;
+
+      let orderByClause: any = { invoice_number: "asc" };
+      if (sort === "invoice_number_asc")
+        orderByClause = { invoice_number: "asc" };
+      else if (sort === "invoice_number_desc")
+        orderByClause = { invoice_number: "desc" };
+      else if (sort === "client_name_asc")
+        orderByClause = { clients: { name: "asc" } };
+      else if (sort === "client_name_desc")
+        orderByClause = { clients: { name: "desc" } };
+      else if (sort === "start_date_asc") orderByClause = { start_date: "asc" };
+      else if (sort === "start_date_desc")
+        orderByClause = { start_date: "desc" };
+      else if (sort === "due_date_asc") orderByClause = { due_date: "asc" };
+      else if (sort === "due_date_desc") orderByClause = { due_date: "desc" };
+      else if (sort === "total_asc") orderByClause = { total: "asc" };
+      else if (sort === "total_desc") orderByClause = { total: "desc" };
+
+      const whereClause: any = {
+        user_id: userId,
+        is_deleted: false,
+      };
+
+      if (search) {
+        whereClause.OR = [
+          { invoice_number: { contains: search, mode: "insensitive" } },
+          { clients: { name: { contains: search, mode: "insensitive" } } },
+        ];
+      }
+      if (payment) {
+        whereClause.payment_method = payment;
+      }
+      if (status) {
+        whereClause.status = status;
+      }
+
       const invoice = await prisma.invoices.findMany({
-        where: {
-          user_id: userId,
-        },
+        where: whereClause,
+        orderBy: orderByClause,
+        take: limit,
+        skip,
         include: {
           clients: true,
         },
       });
-      successResponse(res, "Success", invoice);
+
+      const total = await prisma.invoices.count({
+        where: whereClause,
+      });
+      successResponse(res, "Success", {
+        invoice,
+        pagination: {
+          page,
+          limit,
+          totalPage: Math.ceil(total / limit),
+          totalItems: total,
+        },
+      });
     } catch (error) {
       next(error);
     }
@@ -139,9 +197,9 @@ class InvoiceController {
         invoice_date,
         due_date,
         invoice_items,
-        clients,
+        notes,
         start_date,
-        invoice_number 
+        invoice_number,
       } = req.body;
 
       const total = invoice_items.reduce(
@@ -160,11 +218,196 @@ class InvoiceController {
         due_date,
         start_date,
         invoice_items,
+        notes,
         client: { name: clientData?.name || "Unknown Client" },
         total,
       };
 
-      generateInvoicePDF(invoiceData, res);
+      generateInvoicePDF(invoiceData, res, false);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.invoices.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          invoice_items: true,
+          clients: true,
+        },
+      })
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      successResponse(res, "Success", invoice);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async DetailInvoice(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.invoices.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          invoice_items: true,
+          clients: true,
+        },
+      });
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+      generateInvoicePDF(
+        {
+          invoice_number: invoice.invoice_number,
+          client: { name: invoice.clients.name },
+          due_date: invoice.due_date.toISOString(),
+          start_date: invoice.start_date.toISOString(),
+          invoice_items: invoice.invoice_items,
+          total: invoice.total,
+          notes: invoice.notes || undefined,
+        },
+        res,
+        false
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async downloadPdf(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceId = parseInt(req.params.id);
+      const invoice = await prisma.invoices.findUnique({
+        where: { id: invoiceId },
+        include: {
+          invoice_items: true,
+          clients: true,
+        },
+      });
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+      generateInvoicePDF(
+        {
+          invoice_number: invoice.invoice_number,
+          client: { name: invoice.clients.name },
+          due_date: invoice.due_date.toISOString(),
+          start_date: invoice.start_date.toISOString(),
+          invoice_items: invoice.invoice_items,
+          total: invoice.total,
+          notes: invoice.notes || undefined,
+        },
+        res,
+        true
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async sendInvoice(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.invoices.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          invoice_items: true,
+          clients: true,
+        },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      generateInvoicePDF(
+        {
+          invoice_number: invoice.invoice_number,
+          client: { name: invoice.clients.name },
+          due_date: invoice.due_date.toISOString(),
+          start_date: invoice.start_date.toISOString(),
+          invoice_items: invoice.invoice_items,
+          total: invoice.total,
+          notes: invoice.notes || undefined,
+        },
+        res,
+        false
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async sendInvoiceEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.invoices.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          invoice_items: true,
+          clients: true,
+        },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      const pdfBuffer = await generateInvoicePDFBuffer({
+        invoice_number: invoice.invoice_number,
+        client: { name: invoice.clients.name },
+        due_date: invoice.due_date.toISOString(),
+        start_date: invoice.start_date.toISOString(),
+        invoice_items: invoice.invoice_items,
+        total: invoice.total,
+        notes: invoice.notes || undefined,
+      });
+
+      await sendInvoiceEmail(
+        invoice.clients.email,
+        "Invoice Payment",
+        null,
+        { name: invoice.clients.name, invoice_number: invoice.invoice_number },
+        pdfBuffer
+      );
+
+      successResponse(res, "Email sent successfully");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getInvoiceStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const status = Object.values(Status);
+      successResponse(res, "Success", status);
     } catch (error) {
       next(error);
     }
