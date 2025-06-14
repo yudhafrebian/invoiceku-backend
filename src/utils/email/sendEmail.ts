@@ -54,7 +54,7 @@ export const sendInvoiceEmail = async (
   emailTo: string,
   subject: string,
   content?: string | null,
-  data?: { name: string; invoice_number: string },
+  data?: { name: string; invoice_number: string, token: string },
   pdfBuffer?: Buffer
 ) => {
   try {

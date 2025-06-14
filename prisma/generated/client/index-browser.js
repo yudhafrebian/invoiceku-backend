@@ -217,6 +217,14 @@ exports.Prisma.User_payment_methodScalarFieldEnum = {
   is_active: 'is_active'
 };
 
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  invoice_id: 'invoice_id',
+  payment_method: 'payment_method',
+  payment_proof: 'payment_proof'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -241,6 +249,7 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
 
 exports.Status = exports.$Enums.Status = {
   Pending: 'Pending',
+  Confirmating: 'Confirmating',
   Paid: 'Paid',
   Overdue: 'Overdue'
 };
@@ -265,7 +274,8 @@ exports.Prisma.ModelName = {
   users: 'users',
   recurring_invoice: 'recurring_invoice',
   recurring_invoice_item: 'recurring_invoice_item',
-  user_payment_method: 'user_payment_method'
+  user_payment_method: 'user_payment_method',
+  transaction: 'transaction'
 };
 
 /**

@@ -23,8 +23,6 @@ export async function generateInvoicePDF(invoice: Invoice, res: Response, isDown
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
 
-  console.log(invoice)
-
   doc.on("data", buffers.push.bind(buffers));
   doc.on("end", () => {
     const pdfData = Buffer.concat(buffers);

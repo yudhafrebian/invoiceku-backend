@@ -5,6 +5,7 @@ import { PaymentMethod, Status } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail } from "../utils/email/sendEmail";
+import { createToken } from "../utils/createToken";
 
 class InvoiceController {
   async getAllInvoice(
@@ -376,6 +377,26 @@ class InvoiceController {
         throw "Invoice not found";
       }
 
+      const user = await prisma.users.findUnique({
+        where: { id: invoice.user_id },
+      });
+
+      if (!user) {
+        throw "User not found";
+      }
+      const userProfile = await prisma.user_profiles.findFirst({
+        where: { user_id: user.id },
+      })
+
+      if (!userProfile) {
+        throw "User profile not found";
+      }
+
+      const token = createToken({
+        id: invoice.client_id,
+        email: invoice.clients.email
+      })
+
       const pdfBuffer = await generateInvoicePDFBuffer({
         invoice_number: invoice.invoice_number,
         client: { name: invoice.clients.name },
@@ -388,9 +409,9 @@ class InvoiceController {
 
       await sendInvoiceEmail(
         invoice.clients.email,
-        "Invoice Payment",
+        `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
         null,
-        { name: invoice.clients.name, invoice_number: invoice.invoice_number },
+        { name: invoice.clients.name, invoice_number: invoice.invoice_number , token},
         pdfBuffer
       );
 

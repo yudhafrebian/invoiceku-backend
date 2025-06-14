@@ -15,7 +15,7 @@
         background-color: #ffffff;
         max-width: 600px;
         margin: 40px auto;
-        padding: 30px;
+        padding-bottom: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         color: #333333;
@@ -55,12 +55,25 @@
         <h1>Invoice Payment</h1>
       </div>
 
-      <p>Hello, {{name}} 👋</p>
-      <p>Your Invoice is ready to be paid. Click the button below to go to the payment page:</p>
+      <div style="padding: 20px;">
+        <p>Hello, {{name}} 👋</p>
+        <p>
+          Your Invoice is ready to be paid. Click the button below to go to the
+          payment page:
+        </p>
+      </div>
+      <div style="text-align: center">
+        <a
+          target="_blank"
+          href="http://localhost:3000/payment/{{invoice_number}}?tkn={{token}}"
+          class="button"
+          >Go to Payment Page</a
+        >
+      </div>
 
-      <a target="_blank" href="http://localhost:3000/{{invoice_number}}-payment" class="button">Go to Payment Page</a>
-
-      <p>If you didn’t request a payment, please ignore this email.</p>
+      <p style="text-align: center">
+        If you didn’t request a payment, please ignore this email.
+      </p>
 
       <div class="footer">
         <p>&copy; 2025 InvoiceKu. All rights reserved.</p>
