@@ -70,9 +70,9 @@ export type transaction = $Result.DefaultSelection<Prisma.$transactionPayload>
 export namespace $Enums {
   export const Status: {
   Pending: 'Pending',
-  Confirmating: 'Confirmating',
   Paid: 'Paid',
-  Overdue: 'Overdue'
+  Overdue: 'Overdue',
+  Confirmating: 'Confirmating'
 };
 
 export type Status = (typeof Status)[keyof typeof Status]

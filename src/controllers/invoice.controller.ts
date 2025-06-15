@@ -395,7 +395,7 @@ class InvoiceController {
       const token = createToken({
         id: invoice.client_id,
         email: invoice.clients.email
-      })
+      },"30d")
 
       const pdfBuffer = await generateInvoicePDFBuffer({
         invoice_number: invoice.invoice_number,

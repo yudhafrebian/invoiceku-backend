@@ -249,9 +249,9 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
 
 exports.Status = exports.$Enums.Status = {
   Pending: 'Pending',
-  Confirmating: 'Confirmating',
   Paid: 'Paid',
-  Overdue: 'Overdue'
+  Overdue: 'Overdue',
+  Confirmating: 'Confirmating'
 };
 
 exports.Type = exports.$Enums.Type = {

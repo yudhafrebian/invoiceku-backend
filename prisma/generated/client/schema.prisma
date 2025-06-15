@@ -140,15 +140,15 @@ model transaction {
   created_at     DateTime      @default(now()) @db.Timestamptz(6)
   invoice_id     Int
   payment_method PaymentMethod
-  payment_proof  String
+  payment_proof  String        @db.VarChar
   invoices       invoices      @relation(fields: [invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum Status {
   Pending
-  Confirmating
   Paid
   Overdue
+  Confirmating
 }
 
 enum Type {
