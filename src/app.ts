@@ -8,7 +8,8 @@ import ProductRouter from "./routers/product.router";
 import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
-import "./cronJob"
+import "./cronJob";
+import prisma from "./configs/prisma";
 
 const PORT = process.env.PORT || 4000;
 
@@ -26,10 +27,9 @@ class App {
     this.app.use(cors());
     this.app.use(express.json());
   }
-  
 
   private route(): void {
-    const authRouter = new AuthRouter()
+    const authRouter = new AuthRouter();
     const userRouter = new UserRouter();
     const productRouter = new ProductRouter();
     const clientRouter = new ClientRouter();
@@ -47,24 +47,30 @@ class App {
     this.app.use("/transaction", transactionRouter.getRouter());
   }
 
-  private errorHandler():void {
-    this.app.use((error:any, req:Request, res:Response, next:NextFunction) => {
-      console.log(error)
-      res.status(500).send({
-        success: false,
-        message: "Server Error",
-        error
-      })
-    })
+  private errorHandler(): void {
+    this.app.use(
+      (error: any, req: Request, res: Response, next: NextFunction) => {
+        console.log(error);
+        res.status(500).send({
+          success: false,
+          message: "Server Error",
+          error,
+        });
+      }
+    );
   }
 
-  public async start():Promise<void> {
-    this.app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
+  public async start(): Promise<void> {
+    try {
+      await prisma.$connect();
+      this.app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+      });
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
   }
-
-
 }
 
 export default App;

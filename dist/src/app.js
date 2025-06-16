@@ -14,6 +14,7 @@ const client_router_1 = __importDefault(require("./routers/client.router"));
 const invoice_router_1 = __importDefault(require("./routers/invoice.router"));
 const transaction_router_1 = __importDefault(require("./routers/transaction.router"));
 require("./cronJob");
+const prisma_1 = __importDefault(require("./configs/prisma"));
 const PORT = process.env.PORT || 4000;
 class App {
     constructor() {
@@ -49,14 +50,21 @@ class App {
             res.status(500).send({
                 success: false,
                 message: "Server Error",
-                error
+                error,
             });
         });
     }
     async start() {
-        this.app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
+        try {
+            await prisma_1.default.$connect();
+            this.app.listen(PORT, () => {
+                console.log(`Server is running on port ${PORT}`);
+            });
+        }
+        catch (error) {
+            console.log(error);
+            process.exit(1);
+        }
     }
 }
 exports.default = App;
