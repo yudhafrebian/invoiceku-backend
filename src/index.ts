@@ -1,8 +1,10 @@
 import App from "./app";
 
-const main = () => {
+const main = async () => {
   const server = new App();
-  server.start();
+  await server.start();
 };
 
-main();
+main().catch((err) => {
+  console.error("Failed to start server:", err);
+});
