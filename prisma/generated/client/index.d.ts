@@ -72,7 +72,8 @@ export namespace $Enums {
   Pending: 'Pending',
   Paid: 'Paid',
   Overdue: 'Overdue',
-  Confirmating: 'Confirmating'
+  Confirmating: 'Confirmating',
+  Rejected: 'Rejected'
 };
 
 export type Status = (typeof Status)[keyof typeof Status]

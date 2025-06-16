@@ -149,6 +149,7 @@ enum Status {
   Paid
   Overdue
   Confirmating
+  Rejected
 }
 
 enum Type {

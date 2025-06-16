@@ -16,13 +16,13 @@ class TransactionRouter {
   }
 
   private initializeRoutes(): void {
+    this.route.use(this.verify.verifyToken);
     this.route.post(
         "/create-transaction/:invoice_number",
-        this.verify.verifyToken,
         uploaderMemory().single("payment_proof"),
         this.transactionController.createTransaction
       );
-      
+      this.route.get("/payment-proof/:invoice_number", this.transactionController.getPaymentProof);
   }
 
   public getRouter(): Router {

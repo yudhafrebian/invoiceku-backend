@@ -6,6 +6,7 @@ import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail } from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
+import { scheduledEmailLogic } from "../utils/scheduledEmailLogic";
 
 class InvoiceController {
   async getAllInvoice(
@@ -182,6 +183,43 @@ class InvoiceController {
         })),
       });
       createResponse(res, "Invoice has been created", createInvoice);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateInvoiceStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const status = req.body.status;
+
+      const invoice = await prisma.invoices.findUnique({
+        where: { invoice_number: invoiceNumber },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      const updateStatus = await prisma.invoices.update({
+        where: {
+          invoice_number: invoiceNumber,
+        },
+        data: {
+          status: status as Status,
+        },
+      });
+
+      successResponse(res, "Status has been updated successfully", updateStatus);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async scheduledEmailInvoice(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      await scheduledEmailLogic();
+      successResponse(res, "Email has been sent successfully");
     } catch (error) {
       next(error);
     }

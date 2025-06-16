@@ -8,6 +8,7 @@ import ProductRouter from "./routers/product.router";
 import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
+import "./cronJob"
 
 const PORT = process.env.PORT || 4000;
 

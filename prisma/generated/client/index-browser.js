@@ -251,7 +251,8 @@ exports.Status = exports.$Enums.Status = {
   Pending: 'Pending',
   Paid: 'Paid',
   Overdue: 'Overdue',
-  Confirmating: 'Confirmating'
+  Confirmating: 'Confirmating',
+  Rejected: 'Rejected'
 };
 
 exports.Type = exports.$Enums.Type = {

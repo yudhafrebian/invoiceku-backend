@@ -50,6 +50,37 @@ class TransactionController {
             next(error);
         }
     }
+
+    async getPaymentProof(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const invoiceNumber = req.params.invoice_number;
+
+            const invoice = await prisma.invoices.findUnique({
+                where: { invoice_number: invoiceNumber },
+                include: {
+                    invoice_items: true,
+                    clients: true,
+                    users: true
+                },
+            })
+
+            if (!invoice) {
+                throw "Invoice not found";
+            }
+
+            const transaction = await prisma.transaction.findFirst({
+                where: { invoice_id: invoice.id }
+            })
+
+            if (!transaction) {
+                throw "Payment proof not found";
+            }
+
+            successResponse(res, "Success", transaction);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default TransactionController;
