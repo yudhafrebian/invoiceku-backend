@@ -11,6 +11,7 @@ const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
 const createToken_1 = require("../utils/createToken");
 const scheduledEmailLogic_1 = require("../utils/scheduledEmailLogic");
+const dayjs_1 = __importDefault(require("dayjs"));
 class InvoiceController {
     async getAllInvoice(req, res, next) {
         try {
@@ -141,6 +142,37 @@ class InvoiceController {
                     total: item.total,
                 })),
             });
+            const today = (0, dayjs_1.default)().format("YYYY-MM-DD");
+            const startDateFormatted = (0, dayjs_1.default)(start_date).format("YYYY-MM-DD");
+            if (today === startDateFormatted) {
+                const user = await prisma_1.default.users.findUnique({ where: { id: userId } });
+                const userProfile = await prisma_1.default.user_profiles.findFirst({
+                    where: { user_id: userId },
+                });
+                const client = await prisma_1.default.clients.findUnique({
+                    where: { id: client_id },
+                });
+                if (user && userProfile && client) {
+                    const token = (0, createToken_1.createToken)({
+                        id: client.id,
+                        email: client.email,
+                    }, "30d");
+                    const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+                        invoice_number: invoice_number,
+                        client: { name: client.name },
+                        due_date: due_date.toISOString(),
+                        start_date: start_date.toISOString(),
+                        invoice_items,
+                        total,
+                        notes: notes || undefined,
+                    });
+                    await (0, sendEmail_1.sendInvoiceEmail)(client.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
+                        name: client.name,
+                        invoice_number: invoice_number,
+                        token,
+                    }, pdfBuffer);
+                }
+            }
             (0, response_1.createResponse)(res, "Invoice has been created", createInvoice);
         }
         catch (error) {
@@ -157,7 +189,7 @@ class InvoiceController {
                     clients: true,
                     users: true,
                     invoice_items: true,
-                }
+                },
             });
             if (!invoice) {
                 throw "Invoice not found";
@@ -183,14 +215,14 @@ class InvoiceController {
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
                 template: "payment-paid-client",
-                status: status
+                status: status,
             });
             const sendEmailToUser = await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Updated", null, {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
                 template: "payment-paid-user",
-                status: status
+                status: status,
             });
             (0, response_1.successResponse)(res, "Status has been updated successfully", updateStatus);
         }
@@ -358,7 +390,7 @@ class InvoiceController {
             }
             const token = (0, createToken_1.createToken)({
                 id: invoice.client_id,
-                email: invoice.clients.email
+                email: invoice.clients.email,
             }, "30d");
             const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
                 invoice_number: invoice.invoice_number,
@@ -369,7 +401,11 @@ class InvoiceController {
                 total: invoice.total,
                 notes: invoice.notes || undefined,
             });
-            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, { name: invoice.clients.name, invoice_number: invoice.invoice_number, token }, pdfBuffer);
+            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
+                name: invoice.clients.name,
+                invoice_number: invoice.invoice_number,
+                token,
+            }, pdfBuffer);
             (0, response_1.successResponse)(res, "Email sent successfully");
         }
         catch (error) {
