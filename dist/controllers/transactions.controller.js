@@ -42,7 +42,8 @@ class TransactionController {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
-                template: "payment-confirmating"
+                template: "payment-confirmating",
+                status: "Confirmating",
             });
             const createTransaction = await prisma_1.default.transaction.create({
                 data: {

@@ -80,7 +80,7 @@ export const sendStatusEmail = async (
   emailTo: string,
   subject: string,
   content?: string | null,
-  data?: { name: string; invoice_number: string, client_name: string,  template: string },
+  data?: { name: string; invoice_number: string, client_name: string, status: string, template: string },
   pdfBuffer?: Buffer
 ) => {
   try {

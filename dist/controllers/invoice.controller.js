@@ -182,13 +182,15 @@ class InvoiceController {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
-                template: "payment-paid-client"
+                template: "payment-paid-client",
+                status: status
             });
             const sendEmailToUser = await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Updated", null, {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
-                template: "payment-paid-user"
+                template: "payment-paid-user",
+                status: status
             });
             (0, response_1.successResponse)(res, "Status has been updated successfully", updateStatus);
         }
