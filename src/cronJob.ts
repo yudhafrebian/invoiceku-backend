@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import { scheduledEmailLogic } from "./utils/scheduledEmailLogic";
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/2 * * * *", async () => {
   try {
     console.log("Cron running: sending scheduled email invoice...");
     const count = await scheduledEmailLogic();
