@@ -124,6 +124,9 @@ class InvoiceController {
         }[];
       } = req.body;
 
+      const parsedStartDate = new Date(start_date);
+      const parsedDueDate = new Date(due_date);
+
       const userPaymentMethod = await prisma.user_payment_method.count({
         where: {
           user_id: userId,
@@ -162,8 +165,8 @@ class InvoiceController {
         data: {
           user_id: userId,
           client_id,
-          start_date,
-          due_date,
+          start_date: parsedStartDate,
+          due_date: parsedDueDate,
           invoice_number,
           status: status as Status,
           notes,
@@ -185,7 +188,7 @@ class InvoiceController {
       });
 
       const today = dayjs().format("YYYY-MM-DD");
-      const startDateFormatted = dayjs(start_date).format("YYYY-MM-DD");
+      const startDateFormatted = dayjs(parsedStartDate).format("YYYY-MM-DD");
 
       if (today === startDateFormatted) {
         const user = await prisma.users.findUnique({ where: { id: userId } });

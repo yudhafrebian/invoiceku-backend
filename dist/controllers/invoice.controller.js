@@ -90,6 +90,8 @@ class InvoiceController {
         try {
             const userId = res.locals.data.id;
             const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, } = req.body;
+            const parsedStartDate = new Date(start_date);
+            const parsedDueDate = new Date(due_date);
             const userPaymentMethod = await prisma_1.default.user_payment_method.count({
                 where: {
                     user_id: userId,
@@ -122,8 +124,8 @@ class InvoiceController {
                 data: {
                     user_id: userId,
                     client_id,
-                    start_date,
-                    due_date,
+                    start_date: parsedStartDate,
+                    due_date: parsedDueDate,
                     invoice_number,
                     status: status,
                     notes,
@@ -143,7 +145,7 @@ class InvoiceController {
                 })),
             });
             const today = (0, dayjs_1.default)().format("YYYY-MM-DD");
-            const startDateFormatted = (0, dayjs_1.default)(start_date).format("YYYY-MM-DD");
+            const startDateFormatted = (0, dayjs_1.default)(parsedStartDate).format("YYYY-MM-DD");
             if (today === startDateFormatted) {
                 const user = await prisma_1.default.users.findUnique({ where: { id: userId } });
                 const userProfile = await prisma_1.default.user_profiles.findFirst({
