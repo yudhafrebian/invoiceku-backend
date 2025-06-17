@@ -59,9 +59,10 @@ class App {
     configure() {
         this.app.use((0, cors_1.default)({
             origin: ["http://localhost:3000", "https://invoiceku.vercel.app"],
-            methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+            methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
             credentials: true,
         }));
+        this.app.options("*", (0, cors_1.default)());
         this.app.use(express_1.default.json());
     }
     route() {
@@ -100,7 +101,8 @@ class App {
                 console.log(`🚀 Server is running on port ${PORT}`);
             });
             // Import cronJob setelah DB dan server sudah ready
-            await Promise.resolve().then(() => __importStar(require("./cronJob"))).then(() => console.log("✅ CronJob started")).catch((err) => console.error("❌ Failed to start CronJob:", err));
+            await Promise.resolve().then(() => __importStar(require("./cronJob"))).then(() => console.log("✅ CronJob started"))
+                .catch((err) => console.error("❌ Failed to start CronJob:", err));
         }
         catch (error) {
             console.error("❌ Server failed to start:", error);

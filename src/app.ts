@@ -25,12 +25,14 @@ class App {
 
   private configure(): void {
     this.app.use(
-  cors({
-    origin: ["http://localhost:3000", "https://invoiceku.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
-  })
-);
+      cors({
+        origin: ["http://localhost:3000", "https://invoiceku.vercel.app"],
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        credentials: true,
+      })
+    );
+
+    this.app.options("*", cors());
 
     this.app.use(express.json());
   }
@@ -68,28 +70,24 @@ class App {
   }
 
   public async start(): Promise<void> {
-  try {
-    await prisma.$connect();
-    console.log("✅ Connected to DB");
+    try {
+      await prisma.$connect();
+      console.log("✅ Connected to DB");
 
-    // Mulai listen setelah DB connect
-    this.app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-    });
+      // Mulai listen setelah DB connect
+      this.app.listen(PORT, () => {
+        console.log(`🚀 Server is running on port ${PORT}`);
+      });
 
-    // Import cronJob setelah DB dan server sudah ready
-    await import("./cronJob").then(() =>
-      console.log("✅ CronJob started")
-    ).catch((err) =>
-      console.error("❌ Failed to start CronJob:", err)
-    );
-    
-  } catch (error) {
-    console.error("❌ Server failed to start:", error);
-    process.exit(1);
+      // Import cronJob setelah DB dan server sudah ready
+      await import("./cronJob")
+        .then(() => console.log("✅ CronJob started"))
+        .catch((err) => console.error("❌ Failed to start CronJob:", err));
+    } catch (error) {
+      console.error("❌ Server failed to start:", error);
+      process.exit(1);
+    }
   }
-}
-
 }
 
 export default App;
