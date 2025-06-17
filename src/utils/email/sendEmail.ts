@@ -84,7 +84,7 @@ export const sendStatusEmail = async (
   pdfBuffer?: Buffer
 ) => {
   try {
-    const templatePath = path.join(__dirname, "../../templates/status.hbs");
+    const templatePath = path.join(__dirname, "../../templates/payment-confirmating.hbs");
     const templateSource = fs.readFileSync(templatePath, "utf-8");
     const templateCompile = handlebars.compile(templateSource);
     const generateHtml = templateCompile(data);
