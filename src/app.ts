@@ -9,6 +9,7 @@ import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
 import prisma from "./configs/prisma";
+import CronRouter from "./routers/cron.router";
 // import "./cronJob";
 
 const PORT = process.env.PORT || 4000;
@@ -64,6 +65,7 @@ class App {
     const clientRouter = new ClientRouter();
     const invoiceRouter = new InvoiceRouter();
     const transactionRouter = new TransactionRouter();
+    const cronRouter = new CronRouter();
     this.app.get("/", (req: Request, res: Response) => {
       res.status(200).send("BASE API");
     });
@@ -71,7 +73,7 @@ class App {
     this.app.get("/healthz", (req: Request, res: Response) => {
       res.status(200).json({ status: "ok" });
     });
-
+    this.app.use("/cron", cronRouter.getRouter());
     this.app.use("/auth", authRouter.getRouter());
     this.app.use("/user", userRouter.getRouter());
     this.app.use("/product", productRouter.getRouter());
