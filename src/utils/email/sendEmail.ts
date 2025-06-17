@@ -76,4 +76,30 @@ export const sendInvoiceEmail = async (
   }
 };
 
+export const sendStatusEmail = async (
+  emailTo: string,
+  subject: string,
+  content?: string | null,
+  data?: { name: string; invoice_number: string, client_name: string, status: string },
+  pdfBuffer?: Buffer
+) => {
+  try {
+    const templatePath = path.join(__dirname, "../../templates/status.hbs");
+    const templateSource = fs.readFileSync(templatePath, "utf-8");
+    const templateCompile = handlebars.compile(templateSource);
+    const generateHtml = templateCompile(data);
+
+
+    await transporter.sendMail({
+      from: process.env.MAIL_SENDER,
+      to: emailTo,
+      subject,
+      html: content || generateHtml,
+      attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 

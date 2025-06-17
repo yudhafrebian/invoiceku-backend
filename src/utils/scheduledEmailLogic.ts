@@ -1,4 +1,3 @@
-// utils/scheduledEmailLogic.ts
 import prisma from "../configs/prisma";
 import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail } from "../utils/email/sendEmail";
