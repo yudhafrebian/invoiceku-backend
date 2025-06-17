@@ -52,8 +52,8 @@ class TransactionController {
         {
           name: `${userProfile.first_name} ${userProfile.last_name}`,
           invoice_number: invoice.invoice_number,
-          status: invoice.status,
           client_name: invoice.clients.name,
+          template: "payment-confirmating"
         }
       );
 

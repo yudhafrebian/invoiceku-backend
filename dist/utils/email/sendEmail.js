@@ -65,7 +65,7 @@ const sendInvoiceEmail = async (emailTo, subject, content, data, pdfBuffer) => {
 exports.sendInvoiceEmail = sendInvoiceEmail;
 const sendStatusEmail = async (emailTo, subject, content, data, pdfBuffer) => {
     try {
-        const templatePath = path_1.default.join(__dirname, "../../templates/payment-confirmating.hbs");
+        const templatePath = path_1.default.join(__dirname, `../../templates/${data?.template}.hbs`);
         const templateSource = fs_1.default.readFileSync(templatePath, "utf-8");
         const templateCompile = handlebars_1.default.compile(templateSource);
         const generateHtml = templateCompile(data);

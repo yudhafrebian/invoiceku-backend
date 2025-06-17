@@ -153,9 +153,22 @@ class InvoiceController {
             const status = req.body.status;
             const invoice = await prisma_1.default.invoices.findUnique({
                 where: { invoice_number: invoiceNumber },
+                include: {
+                    clients: true,
+                    users: true,
+                    invoice_items: true,
+                }
             });
             if (!invoice) {
                 throw "Invoice not found";
+            }
+            const userProfile = await prisma_1.default.user_profiles.findFirst({
+                where: {
+                    user_id: invoice.users.id,
+                },
+            });
+            if (!userProfile) {
+                throw "User profile not found";
             }
             const updateStatus = await prisma_1.default.invoices.update({
                 where: {
@@ -164,6 +177,18 @@ class InvoiceController {
                 data: {
                     status: status,
                 },
+            });
+            const sendEmailToClient = await (0, sendEmail_1.sendStatusEmail)(invoice.clients.email, "Payment Status Updated", null, {
+                name: `${userProfile.first_name} ${userProfile.last_name}`,
+                invoice_number: invoice.invoice_number,
+                client_name: invoice.clients.name,
+                template: "payment-paid-client"
+            });
+            const sendEmailToUser = await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Updated", null, {
+                name: `${userProfile.first_name} ${userProfile.last_name}`,
+                invoice_number: invoice.invoice_number,
+                client_name: invoice.clients.name,
+                template: "payment-paid-user"
             });
             (0, response_1.successResponse)(res, "Status has been updated successfully", updateStatus);
         }

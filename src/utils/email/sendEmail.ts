@@ -80,11 +80,11 @@ export const sendStatusEmail = async (
   emailTo: string,
   subject: string,
   content?: string | null,
-  data?: { name: string; invoice_number: string, client_name: string, status: string },
+  data?: { name: string; invoice_number: string, client_name: string,  template: string },
   pdfBuffer?: Buffer
 ) => {
   try {
-    const templatePath = path.join(__dirname, "../../templates/payment-confirmating.hbs");
+    const templatePath = path.join(__dirname, `../../templates/${data?.template}.hbs`);
     const templateSource = fs.readFileSync(templatePath, "utf-8");
     const templateCompile = handlebars.compile(templateSource);
     const generateHtml = templateCompile(data);

@@ -4,7 +4,7 @@ import { createResponse, successResponse } from "../utils/response";
 import { PaymentMethod, Status } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
-import { sendInvoiceEmail } from "../utils/email/sendEmail";
+import { sendInvoiceEmail, sendStatusEmail } from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
 import { scheduledEmailLogic } from "../utils/scheduledEmailLogic";
 
@@ -195,10 +195,25 @@ class InvoiceController {
 
       const invoice = await prisma.invoices.findUnique({
         where: { invoice_number: invoiceNumber },
+        include: {
+          clients: true,
+          users: true,
+          invoice_items: true,
+        }
       });
 
-      if (!invoice) {
+      if (!invoice) { 
         throw "Invoice not found";
+      }
+
+      const userProfile = await prisma.user_profiles.findFirst({
+        where: {
+          user_id: invoice.users.id,
+        },
+      })
+
+      if (!userProfile) {
+        throw "User profile not found";
       }
 
       const updateStatus = await prisma.invoices.update({
@@ -209,6 +224,30 @@ class InvoiceController {
           status: status as Status,
         },
       });
+
+      const sendEmailToClient = await sendStatusEmail(
+        invoice.clients.email,
+        "Payment Status Updated",
+        null,
+        {
+          name: `${userProfile.first_name} ${userProfile.last_name}`,
+          invoice_number: invoice.invoice_number,
+          client_name: invoice.clients.name,
+          template: "payment-paid-client"
+        }
+      )
+
+      const sendEmailToUser = await sendStatusEmail(
+        invoice.users.email,
+        "Payment Status Updated",
+        null,
+        {
+          name: `${userProfile.first_name} ${userProfile.last_name}`,
+          invoice_number: invoice.invoice_number,
+          client_name: invoice.clients.name,
+          template: "payment-paid-user"
+        }
+      )
 
       successResponse(res, "Status has been updated successfully", updateStatus);
     } catch (error) {

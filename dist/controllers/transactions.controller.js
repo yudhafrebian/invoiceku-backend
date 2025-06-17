@@ -41,8 +41,8 @@ class TransactionController {
             await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Update", null, {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
-                status: invoice.status,
                 client_name: invoice.clients.name,
+                template: "payment-confirmating"
             });
             const createTransaction = await prisma_1.default.transaction.create({
                 data: {
