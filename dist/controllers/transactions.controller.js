@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const response_1 = require("../utils/response");
 const cloudinary_1 = require("../configs/cloudinary");
+const sendEmail_1 = require("../utils/email/sendEmail");
 class TransactionController {
     async createTransaction(req, res, next) {
         try {
@@ -15,7 +16,7 @@ class TransactionController {
                 include: {
                     invoice_items: true,
                     clients: true,
-                    users: true
+                    users: true,
                 },
             });
             let paymentProofImage;
@@ -29,18 +30,32 @@ class TransactionController {
             if (!invoice) {
                 throw "Invoice not found";
             }
+            const userProfile = await prisma_1.default.user_profiles.findFirst({
+                where: {
+                    user_id: invoice.user_id,
+                },
+            });
+            if (!userProfile) {
+                throw "User profile not found";
+            }
+            await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Update", null, {
+                name: `${userProfile.first_name} ${userProfile.last_name}`,
+                invoice_number: invoice.invoice_number,
+                status: invoice.status,
+                client_name: invoice.clients.name,
+            });
             const createTransaction = await prisma_1.default.transaction.create({
                 data: {
                     invoice_id: invoice.id,
                     payment_method: invoice.payment_method,
-                    payment_proof: paymentProofImage
-                }
+                    payment_proof: paymentProofImage,
+                },
             });
             const updateInvoiceStatus = await prisma_1.default.invoices.update({
                 where: { id: invoice.id },
                 data: {
-                    status: "Confirmating"
-                }
+                    status: "Confirmating",
+                },
             });
             (0, response_1.createResponse)(res, "Transaction has been created", createTransaction);
         }
@@ -56,14 +71,14 @@ class TransactionController {
                 include: {
                     invoice_items: true,
                     clients: true,
-                    users: true
+                    users: true,
                 },
             });
             if (!invoice) {
                 throw "Invoice not found";
             }
             const transaction = await prisma_1.default.transaction.findFirst({
-                where: { invoice_id: invoice.id }
+                where: { invoice_id: invoice.id },
             });
             if (!transaction) {
                 throw "Payment proof not found";

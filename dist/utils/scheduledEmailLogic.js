@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.scheduledEmailLogic = void 0;
-// utils/scheduledEmailLogic.ts
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");

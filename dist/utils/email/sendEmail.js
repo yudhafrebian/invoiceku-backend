@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendInvoiceEmail = exports.sendResetLinkEmail = exports.sendVerifyEmail = void 0;
+exports.sendStatusEmail = exports.sendInvoiceEmail = exports.sendResetLinkEmail = exports.sendVerifyEmail = void 0;
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const handlebars_1 = __importDefault(require("handlebars"));
@@ -63,3 +63,22 @@ const sendInvoiceEmail = async (emailTo, subject, content, data, pdfBuffer) => {
     }
 };
 exports.sendInvoiceEmail = sendInvoiceEmail;
+const sendStatusEmail = async (emailTo, subject, content, data, pdfBuffer) => {
+    try {
+        const templatePath = path_1.default.join(__dirname, "../../templates/status.hbs");
+        const templateSource = fs_1.default.readFileSync(templatePath, "utf-8");
+        const templateCompile = handlebars_1.default.compile(templateSource);
+        const generateHtml = templateCompile(data);
+        await nodemailer_1.transporter.sendMail({
+            from: process.env.MAIL_SENDER,
+            to: emailTo,
+            subject,
+            html: content || generateHtml,
+            attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+        });
+    }
+    catch (error) {
+        throw error;
+    }
+};
+exports.sendStatusEmail = sendStatusEmail;
