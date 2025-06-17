@@ -9,7 +9,7 @@ import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
 import prisma from "./configs/prisma";
-import "./cronJob";
+// import "./cronJob";
 
 const PORT = process.env.PORT || 4000;
 
@@ -68,6 +68,10 @@ class App {
       res.status(200).send("BASE API");
     });
 
+    this.app.get("/healthz", (req: Request, res: Response) => {
+      res.status(200).json({ status: "ok" });
+    });
+
     this.app.use("/auth", authRouter.getRouter());
     this.app.use("/user", userRouter.getRouter());
     this.app.use("/product", productRouter.getRouter());
@@ -100,9 +104,9 @@ class App {
       });
 
       // Import cronJob setelah DB dan server sudah ready
-      await import("./cronJob")
-        .then(() => console.log("✅ CronJob started"))
-        .catch((err) => console.error("❌ Failed to start CronJob:", err));
+      // await import("./cronJob")
+      //   .then(() => console.log("✅ CronJob started"))
+      //   .catch((err) => console.error("❌ Failed to start CronJob:", err));
     } catch (error) {
       console.error("❌ Server failed to start:", error);
       process.exit(1);
