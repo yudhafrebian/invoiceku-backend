@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scheduledEmailLogic = void 0;
+exports.markOverdueInvoices = exports.scheduledEmailLogic = void 0;
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
@@ -57,3 +57,46 @@ const scheduledEmailLogic = async () => {
     return invoices.length;
 };
 exports.scheduledEmailLogic = scheduledEmailLogic;
+const markOverdueInvoices = async () => {
+    const now = new Date();
+    const overdueInvoices = await prisma_1.default.invoices.findMany({
+        where: {
+            due_date: {
+                lt: now,
+            },
+            status: "Pending",
+            is_deleted: false,
+        },
+        include: {
+            clients: true,
+            invoice_items: true,
+            users: true
+        },
+    });
+    for (const invoice of overdueInvoices) {
+        await prisma_1.default.invoices.update({
+            where: { id: invoice.id },
+            data: {
+                status: "Overdue",
+            },
+        });
+        const token = (0, createToken_1.createToken)({ id: invoice.clients.id, email: invoice.clients.email }, "30d");
+        const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+            invoice_number: invoice.invoice_number,
+            client: { name: invoice.clients.name },
+            due_date: invoice.due_date,
+            start_date: invoice.start_date,
+            invoice_items: invoice.invoice_items,
+            total: invoice.total,
+            notes: invoice.notes || undefined,
+        });
+        await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Overdue Invoice - ${invoice.invoice_number}`, null, {
+            name: invoice.clients.name,
+            invoice_number: invoice.invoice_number,
+            token,
+        }, pdfBuffer);
+    }
+    console.log(`${overdueInvoices.length} invoice(s) marked as OVERDUE and email sent.`);
+    return overdueInvoices.length;
+};
+exports.markOverdueInvoices = markOverdueInvoices;

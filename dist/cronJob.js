@@ -9,7 +9,9 @@ node_cron_1.default.schedule("0 6 * * *", async () => {
     try {
         console.log("Cron running: sending scheduled email invoice...");
         const count = await (0, scheduledEmailLogic_1.scheduledEmailLogic)();
+        const countOverdue = await (0, scheduledEmailLogic_1.markOverdueInvoices)();
         console.log(`Cron success: Sent ${count} invoice(s)`);
+        console.log(`Cron success: Marked ${countOverdue} invoice(s) as Overdue`);
     }
     catch (error) {
         console.error("Cron error:", error.message);

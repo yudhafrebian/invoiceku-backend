@@ -67,3 +67,58 @@ export const scheduledEmailLogic = async () => {
 
   return invoices.length;
 };
+
+
+export const markOverdueInvoices = async () => {
+  const now = new Date();
+  const overdueInvoices = await prisma.invoices.findMany({
+    where: {
+      due_date: {
+        lt: now,
+      },
+      status: "Pending",
+      is_deleted: false,
+    },
+    include: {
+      clients: true,
+      invoice_items: true,
+      users: true
+    },
+  });
+
+  for (const invoice of overdueInvoices) {
+    await prisma.invoices.update({
+      where: { id: invoice.id },
+      data: {
+        status: "Overdue",
+      },
+    });
+
+    const token = createToken({ id: invoice.clients.id, email: invoice.clients.email }, "30d");
+
+    const pdfBuffer = await generateInvoicePDFBuffer({
+      invoice_number: invoice.invoice_number,
+      client: { name: invoice.clients.name },
+      due_date: invoice.due_date,
+      start_date: invoice.start_date,
+      invoice_items: invoice.invoice_items,
+      total: invoice.total,
+      notes: invoice.notes || undefined,
+    });
+
+    await sendInvoiceEmail(
+      invoice.clients.email,
+      `Overdue Invoice - ${invoice.invoice_number}`,
+      null,
+      {
+        name: invoice.clients.name,
+        invoice_number: invoice.invoice_number,
+        token,
+      },
+      pdfBuffer
+    );
+  }
+
+  console.log(`${overdueInvoices.length} invoice(s) marked as OVERDUE and email sent.`);
+  return overdueInvoices.length;
+};

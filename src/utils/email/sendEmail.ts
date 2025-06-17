@@ -75,6 +75,31 @@ export const sendInvoiceEmail = async (
     throw error;
   }
 };
+export const sendOverdueInvoiceEmail = async (
+  emailTo: string,
+  subject: string,
+  content?: string | null,
+  data?: { name: string; invoice_number: string, token: string },
+  pdfBuffer?: Buffer
+) => {
+  try {
+    const templatePath = path.join(__dirname, "../../templates/overdue-invoice.hbs");
+    const templateSource = fs.readFileSync(templatePath, "utf-8");
+    const templateCompile = handlebars.compile(templateSource);
+    const generateHtml = templateCompile(data);
+
+
+    await transporter.sendMail({
+      from: process.env.MAIL_SENDER,
+      to: emailTo,
+      subject,
+      html: content || generateHtml,
+      attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const sendStatusEmail = async (
   emailTo: string,
