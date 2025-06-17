@@ -90,8 +90,6 @@ class InvoiceController {
         try {
             const userId = res.locals.data.id;
             const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, } = req.body;
-            const parsedStartDate = new Date(start_date);
-            const parsedDueDate = new Date(due_date);
             const userPaymentMethod = await prisma_1.default.user_payment_method.count({
                 where: {
                     user_id: userId,
@@ -124,8 +122,8 @@ class InvoiceController {
                 data: {
                     user_id: userId,
                     client_id,
-                    start_date: parsedStartDate,
-                    due_date: parsedDueDate,
+                    start_date,
+                    due_date,
                     invoice_number,
                     status: status,
                     notes,
@@ -145,15 +143,11 @@ class InvoiceController {
                 })),
             });
             const today = (0, dayjs_1.default)().format("YYYY-MM-DD");
-            const startDateFormatted = (0, dayjs_1.default)(parsedStartDate).format("YYYY-MM-DD");
+            const startDateFormatted = (0, dayjs_1.default)(start_date).format("YYYY-MM-DD");
             if (today === startDateFormatted) {
                 const user = await prisma_1.default.users.findUnique({ where: { id: userId } });
-                const userProfile = await prisma_1.default.user_profiles.findFirst({
-                    where: { user_id: userId },
-                });
-                const client = await prisma_1.default.clients.findUnique({
-                    where: { id: client_id },
-                });
+                const userProfile = await prisma_1.default.user_profiles.findFirst({ where: { user_id: userId } });
+                const client = await prisma_1.default.clients.findUnique({ where: { id: client_id } });
                 if (user && userProfile && client) {
                     const token = (0, createToken_1.createToken)({
                         id: client.id,
@@ -162,8 +156,8 @@ class InvoiceController {
                     const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
                         invoice_number: invoice_number,
                         client: { name: client.name },
-                        due_date: due_date.toISOString(),
-                        start_date: start_date.toISOString(),
+                        due_date: due_date,
+                        start_date: start_date,
                         invoice_items,
                         total,
                         notes: notes || undefined,
@@ -191,7 +185,7 @@ class InvoiceController {
                     clients: true,
                     users: true,
                     invoice_items: true,
-                },
+                }
             });
             if (!invoice) {
                 throw "Invoice not found";
@@ -217,14 +211,14 @@ class InvoiceController {
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
                 template: "payment-paid-client",
-                status: status,
+                status: status
             });
             const sendEmailToUser = await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Updated", null, {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
                 template: "payment-paid-user",
-                status: status,
+                status: status
             });
             (0, response_1.successResponse)(res, "Status has been updated successfully", updateStatus);
         }
@@ -392,22 +386,18 @@ class InvoiceController {
             }
             const token = (0, createToken_1.createToken)({
                 id: invoice.client_id,
-                email: invoice.clients.email,
+                email: invoice.clients.email
             }, "30d");
             const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
-                due_date: invoice.due_date.toISOString(),
-                start_date: invoice.start_date.toISOString(),
+                due_date: invoice.due_date,
+                start_date: invoice.start_date,
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
             });
-            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
-                name: invoice.clients.name,
-                invoice_number: invoice.invoice_number,
-                token,
-            }, pdfBuffer);
+            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, { name: invoice.clients.name, invoice_number: invoice.invoice_number, token }, pdfBuffer);
             (0, response_1.successResponse)(res, "Email sent successfully");
         }
         catch (error) {

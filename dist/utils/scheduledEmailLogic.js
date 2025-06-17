@@ -42,8 +42,8 @@ const scheduledEmailLogic = async () => {
         const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
             invoice_number: invoice.invoice_number,
             client: { name: invoice.clients.name },
-            due_date: invoice.due_date.toISOString(),
-            start_date: invoice.start_date.toISOString(),
+            due_date: invoice.due_date,
+            start_date: invoice.start_date,
             invoice_items: invoice.invoice_items,
             total: invoice.total,
             notes: invoice.notes || undefined,

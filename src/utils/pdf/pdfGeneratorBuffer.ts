@@ -9,8 +9,8 @@ interface Invoice {
   client: {
     name: string;
   };
-  due_date: string;
-  start_date: string;
+  due_date: Date;
+  start_date: Date;
   invoice_items: InvoiceItem[];
   total: number;
   notes?: string;

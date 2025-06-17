@@ -124,9 +124,6 @@ class InvoiceController {
         }[];
       } = req.body;
 
-      const parsedStartDate = new Date(start_date);
-      const parsedDueDate = new Date(due_date);
-
       const userPaymentMethod = await prisma.user_payment_method.count({
         where: {
           user_id: userId,
@@ -165,8 +162,8 @@ class InvoiceController {
         data: {
           user_id: userId,
           client_id,
-          start_date: parsedStartDate,
-          due_date: parsedDueDate,
+          start_date,
+          due_date,
           invoice_number,
           status: status as Status,
           notes,
@@ -188,60 +185,52 @@ class InvoiceController {
       });
 
       const today = dayjs().format("YYYY-MM-DD");
-      const startDateFormatted = dayjs(parsedStartDate).format("YYYY-MM-DD");
+      const startDateFormatted = dayjs(start_date).format("YYYY-MM-DD");
 
-      if (today === startDateFormatted) {
-        const user = await prisma.users.findUnique({ where: { id: userId } });
-        const userProfile = await prisma.user_profiles.findFirst({
-          where: { user_id: userId },
-        });
-        const client = await prisma.clients.findUnique({
-          where: { id: client_id },
-        });
+if (today === startDateFormatted) {
+  const user = await prisma.users.findUnique({ where: { id: userId } });
+  const userProfile = await prisma.user_profiles.findFirst({ where: { user_id: userId } });
+  const client = await prisma.clients.findUnique({ where: { id: client_id } });
 
-        if (user && userProfile && client) {
-          const token = createToken(
-            {
-              id: client.id,
-              email: client.email,
-            },
-            "30d"
-          );
+  if (user && userProfile && client) {
+    const token = createToken(
+      {
+        id: client.id,
+        email: client.email,
+      },
+      "30d"
+    );
 
-          const pdfBuffer = await generateInvoicePDFBuffer({
-            invoice_number: invoice_number,
-            client: { name: client.name },
-            due_date: due_date.toISOString(),
-            start_date: start_date.toISOString(),
-            invoice_items,
-            total,
-            notes: notes || undefined,
-          });
+    const pdfBuffer = await generateInvoicePDFBuffer({
+      invoice_number: invoice_number,
+      client: { name: client.name },
+      due_date: due_date,
+      start_date: start_date,
+      invoice_items,
+      total,
+      notes: notes || undefined,
+    });
 
-          await sendInvoiceEmail(
-            client.email,
-            `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
-            null,
-            {
-              name: client.name,
-              invoice_number: invoice_number,
-              token,
-            },
-            pdfBuffer
-          );
-        }
-      }
+    await sendInvoiceEmail(
+      client.email,
+      `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
+      null,
+      {
+        name: client.name,
+        invoice_number: invoice_number,
+        token,
+      },
+      pdfBuffer
+    );
+  }
+}
       createResponse(res, "Invoice has been created", createInvoice);
     } catch (error) {
       next(error);
     }
   }
 
-  async updateInvoiceStatus(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updateInvoiceStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
       const status = req.body.status;
@@ -252,10 +241,10 @@ class InvoiceController {
           clients: true,
           users: true,
           invoice_items: true,
-        },
+        }
       });
 
-      if (!invoice) {
+      if (!invoice) { 
         throw "Invoice not found";
       }
 
@@ -263,7 +252,7 @@ class InvoiceController {
         where: {
           user_id: invoice.users.id,
         },
-      });
+      })
 
       if (!userProfile) {
         throw "User profile not found";
@@ -287,9 +276,9 @@ class InvoiceController {
           invoice_number: invoice.invoice_number,
           client_name: invoice.clients.name,
           template: "payment-paid-client",
-          status: status,
+          status: status
         }
-      );
+      )
 
       const sendEmailToUser = await sendStatusEmail(
         invoice.users.email,
@@ -300,25 +289,17 @@ class InvoiceController {
           invoice_number: invoice.invoice_number,
           client_name: invoice.clients.name,
           template: "payment-paid-user",
-          status: status,
+          status: status
         }
-      );
+      )
 
-      successResponse(
-        res,
-        "Status has been updated successfully",
-        updateStatus
-      );
+      successResponse(res, "Status has been updated successfully", updateStatus);
     } catch (error) {
       next(error);
     }
   }
 
-  async scheduledEmailInvoice(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async scheduledEmailInvoice(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       await scheduledEmailLogic();
       successResponse(res, "Email has been sent successfully");
@@ -370,11 +351,7 @@ class InvoiceController {
     }
   }
 
-  async detailPayment(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
       const invoice = await prisma.invoices.findUnique({
@@ -383,7 +360,7 @@ class InvoiceController {
           invoice_items: true,
           clients: true,
         },
-      });
+      })
 
       if (!invoice) {
         throw "Invoice not found";
@@ -530,25 +507,22 @@ class InvoiceController {
       }
       const userProfile = await prisma.user_profiles.findFirst({
         where: { user_id: user.id },
-      });
+      })
 
       if (!userProfile) {
         throw "User profile not found";
       }
 
-      const token = createToken(
-        {
-          id: invoice.client_id,
-          email: invoice.clients.email,
-        },
-        "30d"
-      );
+      const token = createToken({
+        id: invoice.client_id,
+        email: invoice.clients.email
+      },"30d")
 
       const pdfBuffer = await generateInvoicePDFBuffer({
         invoice_number: invoice.invoice_number,
         client: { name: invoice.clients.name },
-        due_date: invoice.due_date.toISOString(),
-        start_date: invoice.start_date.toISOString(),
+        due_date: invoice.due_date,
+        start_date: invoice.start_date,
         invoice_items: invoice.invoice_items,
         total: invoice.total,
         notes: invoice.notes || undefined,
@@ -558,11 +532,7 @@ class InvoiceController {
         invoice.clients.email,
         `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
         null,
-        {
-          name: invoice.clients.name,
-          invoice_number: invoice.invoice_number,
-          token,
-        },
+        { name: invoice.clients.name, invoice_number: invoice.invoice_number , token},
         pdfBuffer
       );
 
