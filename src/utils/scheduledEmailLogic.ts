@@ -1,6 +1,6 @@
 import prisma from "../configs/prisma";
 import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
-import { sendInvoiceEmail } from "../utils/email/sendEmail";
+import { sendInvoiceEmail, sendOverdueInvoiceEmail } from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
 
 export const scheduledEmailLogic = async () => {
@@ -106,7 +106,7 @@ export const markOverdueInvoices = async () => {
       notes: invoice.notes || undefined,
     });
 
-    await sendInvoiceEmail(
+    await sendOverdueInvoiceEmail(
       invoice.clients.email,
       `Overdue Invoice - ${invoice.invoice_number}`,
       null,

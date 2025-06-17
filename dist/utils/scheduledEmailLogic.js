@@ -90,7 +90,7 @@ const markOverdueInvoices = async () => {
             total: invoice.total,
             notes: invoice.notes || undefined,
         });
-        await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Overdue Invoice - ${invoice.invoice_number}`, null, {
+        await (0, sendEmail_1.sendOverdueInvoiceEmail)(invoice.clients.email, `Overdue Invoice - ${invoice.invoice_number}`, null, {
             name: invoice.clients.name,
             invoice_number: invoice.invoice_number,
             token,
