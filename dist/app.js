@@ -14,6 +14,7 @@ const client_router_1 = __importDefault(require("./routers/client.router"));
 const invoice_router_1 = __importDefault(require("./routers/invoice.router"));
 const transaction_router_1 = __importDefault(require("./routers/transaction.router"));
 const prisma_1 = __importDefault(require("./configs/prisma"));
+const cron_router_1 = __importDefault(require("./routers/cron.router"));
 // import "./cronJob";
 const PORT = process.env.PORT || 4000;
 class App {
@@ -50,12 +51,14 @@ class App {
         const clientRouter = new client_router_1.default();
         const invoiceRouter = new invoice_router_1.default();
         const transactionRouter = new transaction_router_1.default();
+        const cronRouter = new cron_router_1.default();
         this.app.get("/", (req, res) => {
             res.status(200).send("BASE API");
         });
         this.app.get("/healthz", (req, res) => {
             res.status(200).json({ status: "ok" });
         });
+        this.app.use("/cron", cronRouter.getRouter());
         this.app.use("/auth", authRouter.getRouter());
         this.app.use("/user", userRouter.getRouter());
         this.app.use("/product", productRouter.getRouter());
