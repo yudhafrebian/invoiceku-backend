@@ -13,7 +13,6 @@ const product_router_1 = __importDefault(require("./routers/product.router"));
 const client_router_1 = __importDefault(require("./routers/client.router"));
 const invoice_router_1 = __importDefault(require("./routers/invoice.router"));
 const transaction_router_1 = __importDefault(require("./routers/transaction.router"));
-require("./cronJob");
 const prisma_1 = __importDefault(require("./configs/prisma"));
 const PORT = process.env.PORT || 4000;
 class App {
@@ -60,6 +59,7 @@ class App {
             this.app.listen(PORT, () => {
                 console.log(`Server is running on port ${PORT}`);
             });
+            require("./cronJob");
         }
         catch (error) {
             console.log(error);
