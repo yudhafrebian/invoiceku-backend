@@ -78,7 +78,7 @@ class InvoiceController {
         pagination: {
           page,
           limit,
-          totalPage: Math.ceil(total / limit),
+          totalPages: Math.ceil(total / limit),
           totalItems: total,
         },
       });
