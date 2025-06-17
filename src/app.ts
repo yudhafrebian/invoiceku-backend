@@ -100,15 +100,13 @@ class App {
       await prisma.$connect();
       console.log("✅ Connected to DB");
 
-      // Mulai listen setelah DB connect
       this.app.listen(PORT, () => {
         console.log(`🚀 Server is running on port ${PORT}`);
       });
 
-      // Import cronJob setelah DB dan server sudah ready
-      // await import("./cronJob")
-      //   .then(() => console.log("✅ CronJob started"))
-      //   .catch((err) => console.error("❌ Failed to start CronJob:", err));
+      await import("./cronJob")
+        .then(() => console.log("✅ CronJob started"))
+        .catch((err) => console.error("❌ Failed to start CronJob:", err));
     } catch (error) {
       console.error("❌ Server failed to start:", error);
       process.exit(1);
