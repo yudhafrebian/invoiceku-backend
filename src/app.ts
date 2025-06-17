@@ -9,7 +9,7 @@ import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
 import prisma from "./configs/prisma";
-import CronRouter from "./routers/cron.router";
+import CronRouter from "./routers/recurring.router";
 // import "./cronJob";
 
 const PORT = process.env.PORT || 4000;
@@ -73,7 +73,7 @@ class App {
     this.app.get("/healthz", (req: Request, res: Response) => {
       res.status(200).json({ status: "ok" });
     });
-    this.app.use("/cron", cronRouter.getRouter());
+    this.app.use("/recurring-invoice", cronRouter.getRouter());
     this.app.use("/auth", authRouter.getRouter());
     this.app.use("/user", userRouter.getRouter());
     this.app.use("/product", productRouter.getRouter());

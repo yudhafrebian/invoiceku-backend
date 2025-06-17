@@ -189,12 +189,18 @@ exports.Prisma.Recurring_invoiceScalarFieldEnum = {
   invoice_number: 'invoice_number',
   start_date: 'start_date',
   due_date: 'due_date',
-  recurrence: 'recurrence',
+  due_in_days: 'due_in_days',
+  recurrence_type: 'recurrence_type',
+  recurrence_interval: 'recurrence_interval',
+  duration: 'duration',
+  occurrences_done: 'occurrences_done',
   notes: 'notes',
   next_run: 'next_run',
   is_active: 'is_active',
   is_deleted: 'is_deleted',
-  total: 'total'
+  total: 'total',
+  status: 'status',
+  payment_method: 'payment_method'
 };
 
 exports.Prisma.Recurring_invoice_itemScalarFieldEnum = {
@@ -264,6 +270,12 @@ exports.Unit = exports.$Enums.Unit = {
   Pcs: 'Pcs',
   Hour: 'Hour',
   Day: 'Day'
+};
+
+exports.Recurrence = exports.$Enums.Recurrence = {
+  Daily: 'Daily',
+  Weekly: 'Weekly',
+  Monthly: 'Monthly'
 };
 
 exports.Prisma.ModelName = {

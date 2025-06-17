@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Verify from "../middleware/verifier/verify";
 import InvoiceController from "../controllers/invoice.controller";
+import { invoiceValidation } from "../middleware/validation/invoice";
 
 
 class InvoiceRouter {
@@ -27,7 +28,7 @@ class InvoiceRouter {
         this.route.post("/send-email-payment/:invoice_number", this.InvoiceController.sendInvoiceEmail);
         this.route.patch("/update-status/:invoice_number", this.InvoiceController.updateInvoiceStatus);
         this.route.use(this.verify.verifyStatus)
-        this.route.post("/create-invoice", this.InvoiceController.createInvoice);
+        this.route.post("/create-invoice", invoiceValidation, this.InvoiceController.createInvoice);
     }
     public getRouter():Router{
         return this.route;
