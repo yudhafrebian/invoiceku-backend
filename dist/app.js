@@ -62,8 +62,19 @@ class App {
             methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
             credentials: true,
         }));
-        this.app.options("*", (0, cors_1.default)());
+        this.app.use(express_1.default.urlencoded({ extended: true }));
         this.app.use(express_1.default.json());
+        this.app.use((req, res, next) => {
+            res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+            res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+            res.header("Access-Control-Allow-Credentials", "true");
+            if (req.method === "OPTIONS") {
+                res.sendStatus(200);
+                return;
+            }
+            next();
+        });
     }
     route() {
         const authRouter = new auth_router_1.default();
