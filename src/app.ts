@@ -8,8 +8,8 @@ import ProductRouter from "./routers/product.router";
 import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
-
 import prisma from "./configs/prisma";
+import "./cronJob";
 
 const PORT = process.env.PORT || 4000;
 
@@ -66,7 +66,6 @@ class App {
       this.app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
       });
-      require("./cronJob");
     } catch (error) {
       console.log(error);
       process.exit(1);

@@ -4,15 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_cron_1 = __importDefault(require("node-cron"));
-const axios_1 = __importDefault(require("axios"));
-const BACKEND_URL = process.env.BASE_URL || "http://localhost:4000";
-node_cron_1.default.schedule("*/2 * * * *", async () => {
+const scheduledEmailLogic_1 = require("./utils/scheduledEmailLogic");
+node_cron_1.default.schedule("*/10 * * * *", async () => {
     try {
         console.log("Cron running: sending scheduled email invoice...");
-        const response = await axios_1.default.post(`${BACKEND_URL}/invoice/send-email-auto`);
-        console.log("Cron success:", response.data);
+        const count = await (0, scheduledEmailLogic_1.scheduledEmailLogic)();
+        console.log(`Cron success: Sent ${count} invoice(s)`);
     }
     catch (error) {
-        console.error("Cron error:", error.response?.data || error.message);
+        console.error("Cron error:", error.message);
     }
 });

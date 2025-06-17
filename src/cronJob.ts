@@ -1,14 +1,12 @@
 import cron from "node-cron";
-import axios from "axios";
+import { scheduledEmailLogic } from "./utils/scheduledEmailLogic";
 
-const BACKEND_URL = process.env.BASE_URL || "http://localhost:4000";
-
-cron.schedule("*/2 * * * *", async () => {
+cron.schedule("*/10 * * * *", async () => {
   try {
     console.log("Cron running: sending scheduled email invoice...");
-    const response = await axios.post(`${BACKEND_URL}/invoice/send-email-auto`);
-    console.log("Cron success:", response.data);
+    const count = await scheduledEmailLogic();
+    console.log(`Cron success: Sent ${count} invoice(s)`);
   } catch (error: any) {
-    console.error("Cron error:", error.response?.data || error.message);
+    console.error("Cron error:", error.message);
   }
 });
