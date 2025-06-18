@@ -20,7 +20,7 @@ class RecurringRouter {
         this.route.get("/detail/:invoice_number", this.RecurringController.DetailRecurringInvoice);
         this.route.use(this.verify.verifyToken);
         this.route.get("/all", this.RecurringController.getAllRecurringInvoice);
-        this.route.post("/send-email", this.RecurringController.sendRecurringInvoiceEmail);
+        this.route.post("/send-email/:invoice_number", this.RecurringController.sendRecurringInvoiceEmail);
         this.route.use(this.verify.verifyStatus);
         this.route.post("/create", recurring_invoice_1.recurringInvoiceValidation, this.RecurringController.createRecurringInvoice);
     }
