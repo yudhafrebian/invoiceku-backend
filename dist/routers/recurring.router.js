@@ -16,7 +16,7 @@ class RecurringRouter {
     }
     initializeRoutes() {
         this.route.get("/recurring-type", this.CronController.recurringType);
-        this.route.post("preview", this.CronController.previewRecurringInvoicePDF);
+        this.route.post("/preview", this.CronController.previewRecurringInvoicePDF);
         this.route.use(this.verify.verifyToken);
         this.route.get("/all", this.CronController.getAllRecurringInvoice);
         this.route.use(this.verify.verifyStatus);
