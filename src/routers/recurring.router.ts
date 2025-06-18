@@ -17,7 +17,7 @@ class RecurringRouter {
   private initializeRoutes(): void {
     this.route.get("/recurring-type", this.RecurringController.recurringType);
     this.route.post("/preview", this.RecurringController.previewRecurringInvoicePDF);
-    this.route.get("detail/:invoice_number", this.RecurringController.DetailRecurringInvoice);
+    this.route.get("/detail/:invoice_number", this.RecurringController.DetailRecurringInvoice);
     this.route.use(this.verify.verifyToken);
     this.route.get("/all", this.RecurringController.getAllRecurringInvoice);
     this.route.use(this.verify.verifyStatus);
