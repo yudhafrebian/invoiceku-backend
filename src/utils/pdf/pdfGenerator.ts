@@ -9,7 +9,7 @@ interface InvoiceItem {
 interface Invoice {
   invoice_number: string;
   client: { name: string };
-  due_date: string;
+  due_date: Date;
   start_date: string;
   invoice_items: InvoiceItem[];
   total: number;

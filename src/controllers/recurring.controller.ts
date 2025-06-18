@@ -69,16 +69,17 @@ class RecurringController {
         },
       });
 
-      const recurring_invoice_item = await prisma.recurring_invoice_item.createMany({
-        data: recurring_invoice_items.map((item) => ({
-          recurring_invoice_id: created.id,
-          product_id: item.product_id,
-          name_snapshot: item.name_snapshot,
-          price_snapshot: item.price_snapshot,
-          quantity: item.quantity,
-          total: item.total,
-        })),
-      });
+      const recurring_invoice_item =
+        await prisma.recurring_invoice_item.createMany({
+          data: recurring_invoice_items.map((item) => ({
+            recurring_invoice_id: created.id,
+            product_id: item.product_id,
+            name_snapshot: item.name_snapshot,
+            price_snapshot: item.price_snapshot,
+            quantity: item.quantity,
+            total: item.total,
+          })),
+        });
 
       createResponse(res, "Recurring invoice created successfully", created);
     } catch (error) {
@@ -170,52 +171,54 @@ class RecurringController {
     }
   }
 
- async previewRecurringInvoicePDF(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const {
-      client_id,
-      invoice_number,
-      start_date,
-      due_date,
-      recurring_invoice_items,
-      notes,
-      recurrence_type,
-      recurrence_interval,
-    } = req.body;
-    console.log("Received body for previewRecurringInvoicePDF:", req.body);
+  async previewRecurringInvoicePDF(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const {
+        client_id,
+        invoice_number,
+        start_date,
+        due_date,
+        recurring_invoice_items,
+        notes,
+        recurrence_type,
+        recurrence_interval,
+        due_in_days,
+      } = req.body;
+      console.log("Received body for previewRecurringInvoicePDF:", req.body);
+      const startDate = new Date(start_date);
+      const dueDate = new Date(startDate);
+      dueDate.setDate(dueDate.getDate() + due_in_days);
 
+      const total = recurring_invoice_items.reduce(
+        (acc: number, item: any) => acc + item.quantity * item.price_snapshot,
+        0
+      );
 
-    const total = recurring_invoice_items.reduce(
-      (acc: number, item: any) => acc + item.quantity * item.price_snapshot,
-      0
-    );
+      const clientData = await prisma.clients.findUnique({
+        where: { id: client_id },
+      });
 
-    const clientData = await prisma.clients.findUnique({
-      where: { id: client_id },
-    });
+      const invoiceData = {
+        invoice_number,
+        client: { name: clientData?.name || "Unknown Client" },
+        start_date,
+        due_date: dueDate,
+        invoice_items: recurring_invoice_items,
+        total,
+        notes,
+        recurrence_type,
+        recurrence_interval,
+      };
 
-    const invoiceData = {
-      invoice_number,
-      client: { name: clientData?.name || "Unknown Client" },
-      start_date,
-      due_date,
-      invoice_items: recurring_invoice_items,
-      total,
-      notes,
-      recurrence_type,
-      recurrence_interval,
-    };
-
-    generateInvoicePDF(invoiceData, res, false);
-  } catch (error) {
-    next(error);
+      generateInvoicePDF(invoiceData, res, false);
+    } catch (error) {
+      next(error);
+    }
   }
-}
-
 
   async recurringType(req: Request, res: Response, next: NextFunction) {
     try {

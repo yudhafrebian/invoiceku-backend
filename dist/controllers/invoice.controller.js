@@ -304,7 +304,7 @@ class InvoiceController {
             (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
-                due_date: invoice.due_date.toISOString(),
+                due_date: invoice.due_date,
                 start_date: invoice.start_date.toISOString(),
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
@@ -331,7 +331,7 @@ class InvoiceController {
             (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
-                due_date: invoice.due_date.toISOString(),
+                due_date: invoice.due_date,
                 start_date: invoice.start_date.toISOString(),
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
@@ -358,7 +358,7 @@ class InvoiceController {
             (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
-                due_date: invoice.due_date.toISOString(),
+                due_date: invoice.due_date,
                 start_date: invoice.start_date.toISOString(),
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
