@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const response_1 = require("../utils/response");
 const prisma_1 = __importDefault(require("../configs/prisma"));
+const client_1 = require("../../prisma/generated/client");
 class RecurringController {
     async createRecurringInvoice(req, res, next) {
         try {
@@ -117,6 +118,15 @@ class RecurringController {
                     totalItems: total,
                 },
             }, 200);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    async recurringType(req, res, next) {
+        try {
+            const recurringType = Object.values(client_1.Recurrence);
+            (0, response_1.successResponse)(res, "Success", recurringType);
         }
         catch (error) {
             next(error);

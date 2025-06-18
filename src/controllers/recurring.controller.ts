@@ -168,6 +168,15 @@ class RecurringController {
       next(error);
     }
   }
+
+  async recurringType(req: Request, res: Response, next: NextFunction) {
+    try {
+      const recurringType = Object.values(Recurrence);
+      successResponse(res, "Success", recurringType);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default RecurringController;
