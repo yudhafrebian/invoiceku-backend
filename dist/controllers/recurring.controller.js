@@ -152,6 +152,38 @@ class RecurringController {
             next(error);
         }
     }
+    async DetailRecurringInvoice(req, res, next) {
+        try {
+            const invoiceNumber = req.params.invoice_number;
+            const invoice = await prisma_1.default.recurring_invoice.findUnique({
+                where: { invoice_number: invoiceNumber },
+                include: {
+                    recurring_invoice_item: true,
+                    clients: true,
+                },
+            });
+            if (!invoice) {
+                throw "Invoice not found";
+            }
+            const startDate = new Date(invoice.start_date);
+            const dueDate = new Date(startDate);
+            dueDate.setDate(dueDate.getDate() + invoice.due_in_days);
+            (0, pdfGenerator_1.generateInvoicePDF)({
+                invoice_number: invoice.invoice_number,
+                client: { name: invoice.clients.name },
+                due_date: dueDate,
+                start_date: invoice.start_date.toISOString(),
+                invoice_items: invoice.recurring_invoice_item,
+                total: invoice.total,
+                notes: invoice.notes || undefined,
+                recurrence_type: invoice.recurrence_type,
+                recurrence_interval: invoice.recurrence_interval,
+            }, res, false);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     async recurringType(req, res, next) {
         try {
             const recurringType = Object.values(client_1.Recurrence);

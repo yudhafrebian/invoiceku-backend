@@ -5,22 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const verify_1 = __importDefault(require("../middleware/verifier/verify"));
-const recurring_controller_1 = __importDefault(require("../controllers/recurring.controller"));
 const recurring_invoice_1 = require("../middleware/validation/recurring-invoice");
+const recurring_controller_1 = __importDefault(require("../controllers/recurring.controller"));
 class RecurringRouter {
     constructor() {
         this.route = (0, express_1.Router)();
         this.verify = new verify_1.default();
-        this.CronController = new recurring_controller_1.default();
+        this.RecurringController = new recurring_controller_1.default();
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.route.get("/recurring-type", this.CronController.recurringType);
-        this.route.post("/preview", this.CronController.previewRecurringInvoicePDF);
+        this.route.get("/recurring-type", this.RecurringController.recurringType);
+        this.route.post("/preview", this.RecurringController.previewRecurringInvoicePDF);
+        this.route.get("detail/:invoice_number", this.RecurringController.DetailRecurringInvoice);
         this.route.use(this.verify.verifyToken);
-        this.route.get("/all", this.CronController.getAllRecurringInvoice);
+        this.route.get("/all", this.RecurringController.getAllRecurringInvoice);
         this.route.use(this.verify.verifyStatus);
-        this.route.post("/create", recurring_invoice_1.recurringInvoiceValidation, this.CronController.createRecurringInvoice);
+        this.route.post("/create", recurring_invoice_1.recurringInvoiceValidation, this.RecurringController.createRecurringInvoice);
     }
     getRouter() {
         return this.route;

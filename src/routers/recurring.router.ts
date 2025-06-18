@@ -1,29 +1,30 @@
 import { Router } from "express";
 import Verify from "../middleware/verifier/verify";
-import CronController from "../controllers/recurring.controller";
 import { recurringInvoiceValidation } from "../middleware/validation/recurring-invoice";
+import RecurringController from "../controllers/recurring.controller";
 
 class RecurringRouter {
   private route: Router;
   private verify: Verify;
-  private CronController: CronController;
+  private RecurringController: RecurringController;
   constructor() {
     this.route = Router();
     this.verify = new Verify();
-    this.CronController = new CronController();
+    this.RecurringController = new RecurringController();
     this.initializeRoutes();
   }
 
   private initializeRoutes(): void {
-    this.route.get("/recurring-type", this.CronController.recurringType);
-    this.route.post("/preview", this.CronController.previewRecurringInvoicePDF);
+    this.route.get("/recurring-type", this.RecurringController.recurringType);
+    this.route.post("/preview", this.RecurringController.previewRecurringInvoicePDF);
+    this.route.get("detail/:invoice_number", this.RecurringController.DetailRecurringInvoice);
     this.route.use(this.verify.verifyToken);
-    this.route.get("/all", this.CronController.getAllRecurringInvoice);
+    this.route.get("/all", this.RecurringController.getAllRecurringInvoice);
     this.route.use(this.verify.verifyStatus);
     this.route.post(
       "/create",
       recurringInvoiceValidation,
-      this.CronController.createRecurringInvoice
+      this.RecurringController.createRecurringInvoice
     );
   }
 
