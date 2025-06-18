@@ -19,6 +19,10 @@ async function generateInvoicePDFBuffer(invoice) {
     doc.text(`Invoice Number: ${invoice.invoice_number}`);
     doc.text(`Client: ${invoice.client.name}`);
     doc.text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`);
+    if (invoice.recurrence_type && invoice.recurrence_interval) {
+        doc.text(`Recurring Type: ${invoice.recurrence_type}`);
+        doc.text(`Recurring: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
+    }
     doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
     doc.moveDown();
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
@@ -44,9 +48,12 @@ async function generateInvoicePDFBuffer(invoice) {
         padding: 5,
     });
     doc.moveDown();
-    doc.font("Helvetica-Bold")
+    doc
+        .font("Helvetica-Bold")
         .fontSize(12)
-        .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, { align: "right" });
+        .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, {
+        align: "right",
+    });
     doc.moveDown(2);
     doc.fontSize(10).font("Helvetica").fillColor("#555");
     doc.text(`Note: ${invoice.notes || "Thank you for your business!"}`);

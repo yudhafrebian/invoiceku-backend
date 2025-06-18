@@ -1,6 +1,9 @@
 import { addDays, addWeeks, addMonths } from "date-fns";
 import prisma from "../configs/prisma";
 import { PaymentMethod } from "../../prisma/generated/client";
+import { sendInvoiceEmail } from "./email/sendEmail";
+import { createToken } from "./createToken";
+import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
 
 export const handleRecurringInvoice = async () => {
   
@@ -17,8 +20,10 @@ export const handleRecurringInvoice = async () => {
       },
       include: {
         recurring_invoice_item: true,
+        clients: true,
       },
     });
+
 
     for (const recurring of recurringInvoices) {
       const {
@@ -110,6 +115,38 @@ export const handleRecurringInvoice = async () => {
           next_run: newNextRun,
         },
       });
+
+      const token = createToken(
+        {
+          id: recurring.clients.id,
+          email: recurring.clients.email,
+        },
+        "30d"
+      );
+
+      const pdfBuffer = await generateInvoicePDFBuffer({
+        invoice_number: recurring.invoice_number,
+        client: { name: recurring.clients.name },
+        due_date: dueDate,
+        start_date: recurring.start_date,
+        invoice_items: recurring.recurring_invoice_item,
+        total: recurringInvoice.total,
+        notes: recurring.notes || undefined,
+        recurrence_interval: recurring.recurrence_interval,
+        recurrence_type: recurring.recurrence_type
+      })
+
+      await sendInvoiceEmail(
+        recurring.clients.email,
+        `Invoice ${recurring.invoice_number}`,
+        null,
+        {
+          name: recurring.clients.name,
+          invoice_number: recurring.invoice_number,
+          token
+        },
+        pdfBuffer
+      )
     }
 
     return createdCount;

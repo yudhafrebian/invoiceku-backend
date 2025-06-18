@@ -14,8 +14,12 @@ interface Invoice {
   invoice_items: InvoiceItem[];
   total: number;
   notes?: string;
+  recurrence_type?: string;
+  recurrence_interval?: number;
 }
-export async function generateInvoicePDFBuffer(invoice: Invoice): Promise<Buffer> {
+export async function generateInvoicePDFBuffer(
+  invoice: Invoice
+): Promise<Buffer> {
   const PDFDocument = require("pdfkit-table");
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
@@ -34,8 +38,20 @@ export async function generateInvoicePDFBuffer(invoice: Invoice): Promise<Buffer
   doc.fontSize(12).fillColor("#000");
   doc.text(`Invoice Number: ${invoice.invoice_number}`);
   doc.text(`Client: ${invoice.client.name}`);
-  doc.text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`);
-  doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
+  doc.text(
+    `Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`
+  );
+  if (invoice.recurrence_type && invoice.recurrence_interval) {
+    doc.text(`Recurring Type: ${invoice.recurrence_type}`);
+    doc.text(
+      `Recurring: Every ${
+        invoice.recurrence_interval
+      } ${invoice.recurrence_type.toLowerCase()}(s)`
+    );
+  }
+  doc.text(
+    `Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`
+  );
   doc.moveDown();
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
   doc.moveDown(2);
@@ -51,7 +67,9 @@ export async function generateInvoicePDFBuffer(invoice: Invoice): Promise<Buffer
       item: item.name_snapshot,
       qty: item.quantity,
       price: `Rp  ${item.price_snapshot.toLocaleString("id-ID")}`,
-      total: `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
+      total: `Rp ${(item.quantity * item.price_snapshot).toLocaleString(
+        "id-ID"
+      )}`,
       options: { separator: true },
     })),
   };
@@ -63,9 +81,12 @@ export async function generateInvoicePDFBuffer(invoice: Invoice): Promise<Buffer
   });
 
   doc.moveDown();
-  doc.font("Helvetica-Bold")
+  doc
+    .font("Helvetica-Bold")
     .fontSize(12)
-    .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, { align: "right" });
+    .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, {
+      align: "right",
+    });
 
   doc.moveDown(2);
   doc.fontSize(10).font("Helvetica").fillColor("#555");

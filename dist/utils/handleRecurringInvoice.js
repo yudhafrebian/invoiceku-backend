@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleRecurringInvoice = void 0;
 const date_fns_1 = require("date-fns");
 const prisma_1 = __importDefault(require("../configs/prisma"));
+const sendEmail_1 = require("./email/sendEmail");
+const createToken_1 = require("./createToken");
+const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
 const handleRecurringInvoice = async () => {
     const now = new Date();
     let createdCount = 0;
@@ -19,6 +22,7 @@ const handleRecurringInvoice = async () => {
         },
         include: {
             recurring_invoice_item: true,
+            clients: true,
         },
     });
     for (const recurring of recurringInvoices) {
@@ -86,6 +90,26 @@ const handleRecurringInvoice = async () => {
                 next_run: newNextRun,
             },
         });
+        const token = (0, createToken_1.createToken)({
+            id: recurring.clients.id,
+            email: recurring.clients.email,
+        }, "30d");
+        const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+            invoice_number: recurring.invoice_number,
+            client: { name: recurring.clients.name },
+            due_date: dueDate,
+            start_date: recurring.start_date,
+            invoice_items: recurring.recurring_invoice_item,
+            total: recurringInvoice.total,
+            notes: recurring.notes || undefined,
+            recurrence_interval: recurring.recurrence_interval,
+            recurrence_type: recurring.recurrence_type
+        });
+        await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${recurring.invoice_number}`, null, {
+            name: recurring.clients.name,
+            invoice_number: recurring.invoice_number,
+            token
+        }, pdfBuffer);
     }
     return createdCount;
 };

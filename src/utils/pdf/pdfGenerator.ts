@@ -51,8 +51,13 @@ export async function generateInvoicePDF(
     `Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`
   );
   if (invoice.recurrence_type && invoice.recurrence_interval) {
-  doc.text(`Recurring: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
-}
+    doc.text(`Recurring Type: ${invoice.recurrence_type}`);
+    doc.text(
+      `Recurring: Every ${
+        invoice.recurrence_interval
+      } ${invoice.recurrence_type.toLowerCase()}(s)`
+    );
+  }
 
   doc.text(
     `Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`
