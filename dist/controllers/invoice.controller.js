@@ -267,6 +267,7 @@ class InvoiceController {
                 include: {
                     invoice_items: true,
                     clients: true,
+                    users: true
                 },
             });
             if (!invoice) {

@@ -359,6 +359,7 @@ if (today === startDateFormatted) {
         include: {
           invoice_items: true,
           clients: true,
+          users: true
         },
       })
 
