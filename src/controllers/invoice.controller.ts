@@ -187,50 +187,59 @@ class InvoiceController {
       const today = dayjs().format("YYYY-MM-DD");
       const startDateFormatted = dayjs(start_date).format("YYYY-MM-DD");
 
-if (today === startDateFormatted) {
-  const user = await prisma.users.findUnique({ where: { id: userId } });
-  const userProfile = await prisma.user_profiles.findFirst({ where: { user_id: userId } });
-  const client = await prisma.clients.findUnique({ where: { id: client_id } });
+      if (today === startDateFormatted) {
+        const user = await prisma.users.findUnique({ where: { id: userId } });
+        const userProfile = await prisma.user_profiles.findFirst({
+          where: { user_id: userId },
+        });
+        const client = await prisma.clients.findUnique({
+          where: { id: client_id },
+        });
 
-  if (user && userProfile && client) {
-    const token = createToken(
-      {
-        id: client.id,
-        email: client.email,
-      },
-      "30d"
-    );
+        if (user && userProfile && client) {
+          const token = createToken(
+            {
+              id: client.id,
+              email: client.email,
+            },
+            "30d"
+          );
 
-    const pdfBuffer = await generateInvoicePDFBuffer({
-      invoice_number: invoice_number,
-      client: { name: client.name },
-      due_date: due_date,
-      start_date: start_date,
-      invoice_items,
-      total,
-      notes: notes || undefined,
-    });
+          const pdfBuffer = await generateInvoicePDFBuffer({
+            invoice_number: invoice_number,
+            client: { name: client.name },
+            due_date: due_date,
+            start_date: start_date,
+            invoice_items,
+            total,
+            notes: notes || undefined,
+          });
 
-    await sendInvoiceEmail(
-      client.email,
-      `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
-      null,
-      {
-        name: client.name,
-        invoice_number: invoice_number,
-        token,
-      },
-      pdfBuffer
-    );
-  }
-}
+          await sendInvoiceEmail(
+            client.email,
+            `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
+            null,
+            {
+              name: client.name,
+              invoice_number: invoice_number,
+              token,
+              isRecurring: false,
+            },
+            pdfBuffer
+          );
+        }
+      }
       createResponse(res, "Invoice has been created", createInvoice);
     } catch (error) {
       next(error);
     }
   }
 
-  async updateInvoiceStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async updateInvoiceStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
       const status = req.body.status;
@@ -241,10 +250,10 @@ if (today === startDateFormatted) {
           clients: true,
           users: true,
           invoice_items: true,
-        }
+        },
       });
 
-      if (!invoice) { 
+      if (!invoice) {
         throw "Invoice not found";
       }
 
@@ -252,7 +261,7 @@ if (today === startDateFormatted) {
         where: {
           user_id: invoice.users.id,
         },
-      })
+      });
 
       if (!userProfile) {
         throw "User profile not found";
@@ -276,9 +285,9 @@ if (today === startDateFormatted) {
           invoice_number: invoice.invoice_number,
           client_name: invoice.clients.name,
           template: "payment-paid-client",
-          status: status
+          status: status,
         }
-      )
+      );
 
       const sendEmailToUser = await sendStatusEmail(
         invoice.users.email,
@@ -289,17 +298,25 @@ if (today === startDateFormatted) {
           invoice_number: invoice.invoice_number,
           client_name: invoice.clients.name,
           template: "payment-paid-user",
-          status: status
+          status: status,
         }
-      )
+      );
 
-      successResponse(res, "Status has been updated successfully", updateStatus);
+      successResponse(
+        res,
+        "Status has been updated successfully",
+        updateStatus
+      );
     } catch (error) {
       next(error);
     }
   }
 
-  async scheduledEmailInvoice(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async scheduledEmailInvoice(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       await scheduledEmailLogic();
       successResponse(res, "Email has been sent successfully");
@@ -351,7 +368,11 @@ if (today === startDateFormatted) {
     }
   }
 
-  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detailPayment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
       const invoice = await prisma.invoices.findUnique({
@@ -359,9 +380,9 @@ if (today === startDateFormatted) {
         include: {
           invoice_items: true,
           clients: true,
-          users: true
+          users: true,
         },
-      })
+      });
 
       if (!invoice) {
         throw "Invoice not found";
@@ -370,13 +391,13 @@ if (today === startDateFormatted) {
       const userPaymentMethod = await prisma.user_payment_method.findFirst({
         where: {
           user_id: invoice.user_id,
-          payment_method: invoice.payment_method
-        }
-      })
+          payment_method: invoice.payment_method,
+        },
+      });
 
       successResponse(res, "Success", {
         invoice,
-        userPaymentMethod
+        userPaymentMethod,
       });
     } catch (error) {
       next(error);
@@ -518,16 +539,19 @@ if (today === startDateFormatted) {
       }
       const userProfile = await prisma.user_profiles.findFirst({
         where: { user_id: user.id },
-      })
+      });
 
       if (!userProfile) {
         throw "User profile not found";
       }
 
-      const token = createToken({
-        id: invoice.client_id,
-        email: invoice.clients.email
-      },"30d")
+      const token = createToken(
+        {
+          id: invoice.client_id,
+          email: invoice.clients.email,
+        },
+        "30d"
+      );
 
       const pdfBuffer = await generateInvoicePDFBuffer({
         invoice_number: invoice.invoice_number,
@@ -543,7 +567,12 @@ if (today === startDateFormatted) {
         invoice.clients.email,
         `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
         null,
-        { name: invoice.clients.name, invoice_number: invoice.invoice_number , token},
+        {
+          name: invoice.clients.name,
+          invoice_number: invoice.invoice_number,
+          token,
+          isRecurring: false
+        },
         pdfBuffer
       );
 

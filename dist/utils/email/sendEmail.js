@@ -46,7 +46,7 @@ const sendResetLinkEmail = async (emailTo, subject, content, data) => {
 exports.sendResetLinkEmail = sendResetLinkEmail;
 const sendInvoiceEmail = async (emailTo, subject, content, data, pdfBuffer) => {
     try {
-        const templatePath = path_1.default.join(__dirname, "../../templates/invoice.hbs");
+        const templatePath = path_1.default.join(__dirname, `../../templates/${data?.isRecurring ? "recurring-invoice" : "invoice"}.hbs`);
         const templateSource = fs_1.default.readFileSync(templatePath, "utf-8");
         const templateCompile = handlebars_1.default.compile(templateSource);
         const generateHtml = templateCompile(data);

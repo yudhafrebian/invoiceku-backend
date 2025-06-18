@@ -108,7 +108,8 @@ const handleRecurringInvoice = async () => {
         await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${recurring.invoice_number}`, null, {
             name: recurring.clients.name,
             invoice_number: recurring.invoice_number,
-            token
+            token,
+            isRecurring: true
         }, pdfBuffer);
     }
     return createdCount;

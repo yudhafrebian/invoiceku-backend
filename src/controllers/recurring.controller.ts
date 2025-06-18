@@ -279,7 +279,7 @@ class RecurringController {
         },
       });
 
-      console.log(invoiceNumber)
+      console.log(invoiceNumber);
 
       if (!invoice) {
         throw "Invoice not found";
@@ -294,7 +294,7 @@ class RecurringController {
       }
       const userProfile = await prisma.user_profiles.findFirst({
         where: { user_id: user.id },
-      })
+      });
 
       if (!userProfile) {
         throw "User profile not found";
@@ -304,10 +304,13 @@ class RecurringController {
       const dueDate = new Date(startDate);
       dueDate.setDate(dueDate.getDate() + invoice.due_in_days);
 
-      const token = createToken({
-        id: invoice.client_id,
-        email: invoice.clients.email
-      },"30d")
+      const token = createToken(
+        {
+          id: invoice.client_id,
+          email: invoice.clients.email,
+        },
+        "30d"
+      );
 
       const pdfBuffer = await generateInvoicePDFBuffer({
         invoice_number: invoice.invoice_number,
@@ -325,7 +328,12 @@ class RecurringController {
         invoice.clients.email,
         `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
         null,
-        { name: invoice.clients.name, invoice_number: invoice.invoice_number , token},
+        {
+          name: invoice.clients.name,
+          invoice_number: invoice.invoice_number,
+          token,
+          isRecurring: true,
+        },
         pdfBuffer
       );
 
@@ -335,39 +343,43 @@ class RecurringController {
     }
   }
 
-  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
-      try {
-        const invoiceNumber = req.params.invoice_number;
-        const invoice = await prisma.recurring_invoice.findUnique({
-          where: { invoice_number: invoiceNumber },
-          include: {
-            recurring_invoice_item: true,
-            clients: true,
-            users: true
-          },
-        })
-  
-        if (!invoice) {
-          throw "Invoice not found";
-        }
-  
-        const userPaymentMethod = await prisma.user_payment_method.findFirst({
-          where: {
-            user_id: invoice.user_id,
-            payment_method: invoice.payment_method
-          }
-        })
-  
-        successResponse(res, "Success", {
-          invoice,
-          userPaymentMethod
-        });
-      } catch (error) {
-        next(error);
-      }
-    }
+  async detailPayment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.recurring_invoice.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          recurring_invoice_item: true,
+          clients: true,
+          users: true,
+        },
+      });
 
-    async downloadPdf(
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      const userPaymentMethod = await prisma.user_payment_method.findFirst({
+        where: {
+          user_id: invoice.user_id,
+          payment_method: invoice.payment_method,
+        },
+      });
+
+      successResponse(res, "Success", {
+        invoice,
+        userPaymentMethod,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async downloadPdf(
     req: Request,
     res: Response,
     next: NextFunction

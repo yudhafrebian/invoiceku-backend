@@ -143,7 +143,8 @@ export const handleRecurringInvoice = async () => {
         {
           name: recurring.clients.name,
           invoice_number: recurring.invoice_number,
-          token
+          token,
+          isRecurring: true
         },
         pdfBuffer
       )

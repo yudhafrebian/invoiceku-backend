@@ -54,11 +54,11 @@ export const sendInvoiceEmail = async (
   emailTo: string,
   subject: string,
   content?: string | null,
-  data?: { name: string; invoice_number: string, token: string },
+  data?: { name: string; invoice_number: string, token: string, isRecurring: boolean },
   pdfBuffer?: Buffer
 ) => {
   try {
-    const templatePath = path.join(__dirname, "../../templates/invoice.hbs");
+    const templatePath = path.join(__dirname, `../../templates/${data?.isRecurring ? "recurring-invoice" : "invoice"}.hbs`);
     const templateSource = fs.readFileSync(templatePath, "utf-8");
     const templateCompile = handlebars.compile(templateSource);
     const generateHtml = templateCompile(data);

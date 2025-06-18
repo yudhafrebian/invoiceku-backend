@@ -146,8 +146,12 @@ class InvoiceController {
             const startDateFormatted = (0, dayjs_1.default)(start_date).format("YYYY-MM-DD");
             if (today === startDateFormatted) {
                 const user = await prisma_1.default.users.findUnique({ where: { id: userId } });
-                const userProfile = await prisma_1.default.user_profiles.findFirst({ where: { user_id: userId } });
-                const client = await prisma_1.default.clients.findUnique({ where: { id: client_id } });
+                const userProfile = await prisma_1.default.user_profiles.findFirst({
+                    where: { user_id: userId },
+                });
+                const client = await prisma_1.default.clients.findUnique({
+                    where: { id: client_id },
+                });
                 if (user && userProfile && client) {
                     const token = (0, createToken_1.createToken)({
                         id: client.id,
@@ -166,6 +170,7 @@ class InvoiceController {
                         name: client.name,
                         invoice_number: invoice_number,
                         token,
+                        isRecurring: false,
                     }, pdfBuffer);
                 }
             }
@@ -185,7 +190,7 @@ class InvoiceController {
                     clients: true,
                     users: true,
                     invoice_items: true,
-                }
+                },
             });
             if (!invoice) {
                 throw "Invoice not found";
@@ -211,14 +216,14 @@ class InvoiceController {
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
                 template: "payment-paid-client",
-                status: status
+                status: status,
             });
             const sendEmailToUser = await (0, sendEmail_1.sendStatusEmail)(invoice.users.email, "Payment Status Updated", null, {
                 name: `${userProfile.first_name} ${userProfile.last_name}`,
                 invoice_number: invoice.invoice_number,
                 client_name: invoice.clients.name,
                 template: "payment-paid-user",
-                status: status
+                status: status,
             });
             (0, response_1.successResponse)(res, "Status has been updated successfully", updateStatus);
         }
@@ -267,7 +272,7 @@ class InvoiceController {
                 include: {
                     invoice_items: true,
                     clients: true,
-                    users: true
+                    users: true,
                 },
             });
             if (!invoice) {
@@ -276,12 +281,12 @@ class InvoiceController {
             const userPaymentMethod = await prisma_1.default.user_payment_method.findFirst({
                 where: {
                     user_id: invoice.user_id,
-                    payment_method: invoice.payment_method
-                }
+                    payment_method: invoice.payment_method,
+                },
             });
             (0, response_1.successResponse)(res, "Success", {
                 invoice,
-                userPaymentMethod
+                userPaymentMethod,
             });
         }
         catch (error) {
@@ -396,7 +401,7 @@ class InvoiceController {
             }
             const token = (0, createToken_1.createToken)({
                 id: invoice.client_id,
-                email: invoice.clients.email
+                email: invoice.clients.email,
             }, "30d");
             const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
                 invoice_number: invoice.invoice_number,
@@ -407,7 +412,12 @@ class InvoiceController {
                 total: invoice.total,
                 notes: invoice.notes || undefined,
             });
-            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, { name: invoice.clients.name, invoice_number: invoice.invoice_number, token }, pdfBuffer);
+            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
+                name: invoice.clients.name,
+                invoice_number: invoice.invoice_number,
+                token,
+                isRecurring: false
+            }, pdfBuffer);
             (0, response_1.successResponse)(res, "Email sent successfully");
         }
         catch (error) {

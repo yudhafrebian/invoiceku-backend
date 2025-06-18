@@ -52,6 +52,7 @@ const scheduledEmailLogic = async () => {
             name: invoice.clients.name,
             invoice_number: invoice.invoice_number,
             token,
+            isRecurring: false
         }, pdfBuffer);
     }
     return invoices.length;

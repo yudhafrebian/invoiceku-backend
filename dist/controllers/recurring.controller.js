@@ -218,7 +218,7 @@ class RecurringController {
             dueDate.setDate(dueDate.getDate() + invoice.due_in_days);
             const token = (0, createToken_1.createToken)({
                 id: invoice.client_id,
-                email: invoice.clients.email
+                email: invoice.clients.email,
             }, "30d");
             const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
                 invoice_number: invoice.invoice_number,
@@ -231,7 +231,12 @@ class RecurringController {
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
             });
-            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, { name: invoice.clients.name, invoice_number: invoice.invoice_number, token }, pdfBuffer);
+            await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
+                name: invoice.clients.name,
+                invoice_number: invoice.invoice_number,
+                token,
+                isRecurring: true,
+            }, pdfBuffer);
             (0, response_1.successResponse)(res, "Email sent successfully");
         }
         catch (error) {
@@ -246,7 +251,7 @@ class RecurringController {
                 include: {
                     recurring_invoice_item: true,
                     clients: true,
-                    users: true
+                    users: true,
                 },
             });
             if (!invoice) {
@@ -255,12 +260,12 @@ class RecurringController {
             const userPaymentMethod = await prisma_1.default.user_payment_method.findFirst({
                 where: {
                     user_id: invoice.user_id,
-                    payment_method: invoice.payment_method
-                }
+                    payment_method: invoice.payment_method,
+                },
             });
             (0, response_1.successResponse)(res, "Success", {
                 invoice,
-                userPaymentMethod
+                userPaymentMethod,
             });
         }
         catch (error) {
