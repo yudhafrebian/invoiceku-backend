@@ -8,7 +8,7 @@ export const recurringInvoiceValidation = [
     .isInt()
     .withMessage("Client ID must be an integer"),
 
-  body("invoice_items")
+  body("recurring_invoice_items")
     .isArray({ min: 1 })
     .withMessage("Invoice Items must be a non-empty array"),
 
@@ -17,8 +17,6 @@ export const recurringInvoiceValidation = [
     .withMessage("Total is required")
     .isInt({ min: 0 })
     .withMessage("Total must be a non-negative integer"),
-
-  body("status").notEmpty().withMessage("Status is required"),
 
   body("due_in_days")
     .notEmpty()

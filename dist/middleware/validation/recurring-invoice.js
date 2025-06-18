@@ -8,7 +8,7 @@ exports.recurringInvoiceValidation = [
         .withMessage("Client ID is required")
         .isInt()
         .withMessage("Client ID must be an integer"),
-    (0, express_validator_1.body)("invoice_items")
+    (0, express_validator_1.body)("recurring_invoice_items")
         .isArray({ min: 1 })
         .withMessage("Invoice Items must be a non-empty array"),
     (0, express_validator_1.body)("total")
@@ -16,7 +16,6 @@ exports.recurringInvoiceValidation = [
         .withMessage("Total is required")
         .isInt({ min: 0 })
         .withMessage("Total must be a non-negative integer"),
-    (0, express_validator_1.body)("status").notEmpty().withMessage("Status is required"),
     (0, express_validator_1.body)("due_in_days")
         .notEmpty()
         .withMessage("Due in days is required")
