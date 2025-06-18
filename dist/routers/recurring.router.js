@@ -16,6 +16,7 @@ class RecurringRouter {
     }
     initializeRoutes() {
         this.route.use(this.verify.verifyToken);
+        this.route.get("/all", this.CronController.getAllRecurringInvoice);
         this.route.use(this.verify.verifyStatus);
         this.route.post("/create", recurring_invoice_1.recurringInvoiceValidation, this.CronController.createRecurringInvoice);
     }
