@@ -181,7 +181,7 @@ class RecurringController {
       invoice_number,
       start_date,
       due_date,
-      invoice_items,
+      recurring_invoice_items,
       notes,
       recurrence_type,
       recurrence_interval,
@@ -189,7 +189,7 @@ class RecurringController {
     console.log("Received body for previewRecurringInvoicePDF:", req.body);
 
 
-    const total = invoice_items.reduce(
+    const total = recurring_invoice_items.reduce(
       (acc: number, item: any) => acc + item.quantity * item.price_snapshot,
       0
     );
@@ -203,7 +203,7 @@ class RecurringController {
       client: { name: clientData?.name || "Unknown Client" },
       start_date,
       due_date,
-      invoice_items,
+      invoice_items: recurring_invoice_items,
       total,
       notes,
       recurrence_type,

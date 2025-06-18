@@ -126,9 +126,9 @@ class RecurringController {
     }
     async previewRecurringInvoicePDF(req, res, next) {
         try {
-            const { client_id, invoice_number, start_date, due_date, invoice_items, notes, recurrence_type, recurrence_interval, } = req.body;
+            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, } = req.body;
             console.log("Received body for previewRecurringInvoicePDF:", req.body);
-            const total = invoice_items.reduce((acc, item) => acc + item.quantity * item.price_snapshot, 0);
+            const total = recurring_invoice_items.reduce((acc, item) => acc + item.quantity * item.price_snapshot, 0);
             const clientData = await prisma_1.default.clients.findUnique({
                 where: { id: client_id },
             });
@@ -137,7 +137,7 @@ class RecurringController {
                 client: { name: clientData?.name || "Unknown Client" },
                 start_date,
                 due_date,
-                invoice_items,
+                invoice_items: recurring_invoice_items,
                 total,
                 notes,
                 recurrence_type,
