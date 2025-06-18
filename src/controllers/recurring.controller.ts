@@ -3,6 +3,9 @@ import { createResponse, successResponse } from "../utils/response";
 import prisma from "../configs/prisma";
 import { PaymentMethod, Recurrence } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
+import { createToken } from "../utils/createToken";
+import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
+import { sendInvoiceEmail } from "../utils/email/sendEmail";
 
 class RecurringController {
   async createRecurringInvoice(
@@ -256,6 +259,75 @@ class RecurringController {
         res,
         false
       );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async sendRecurringInvoiceEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.recurring_invoice.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          recurring_invoice_item: true,
+          clients: true,
+        },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      const user = await prisma.users.findUnique({
+        where: { id: invoice.user_id },
+      });
+
+      if (!user) {
+        throw "User not found";
+      }
+      const userProfile = await prisma.user_profiles.findFirst({
+        where: { user_id: user.id },
+      })
+
+      if (!userProfile) {
+        throw "User profile not found";
+      }
+
+      const startDate = new Date(invoice.start_date);
+      const dueDate = new Date(startDate);
+      dueDate.setDate(dueDate.getDate() + invoice.due_in_days);
+
+      const token = createToken({
+        id: invoice.client_id,
+        email: invoice.clients.email
+      },"30d")
+
+      const pdfBuffer = await generateInvoicePDFBuffer({
+        invoice_number: invoice.invoice_number,
+        client: { name: invoice.clients.name },
+        due_date: dueDate,
+        start_date: invoice.start_date,
+        invoice_items: invoice.recurring_invoice_item,
+        total: invoice.total,
+        notes: invoice.notes || undefined,
+        recurrence_type: invoice.recurrence_type,
+        recurrence_interval: invoice.recurrence_interval,
+      });
+
+      await sendInvoiceEmail(
+        invoice.clients.email,
+        `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
+        null,
+        { name: invoice.clients.name, invoice_number: invoice.invoice_number , token},
+        pdfBuffer
+      );
+
+      successResponse(res, "Email sent successfully");
     } catch (error) {
       next(error);
     }
