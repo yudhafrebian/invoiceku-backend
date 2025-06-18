@@ -9127,22 +9127,22 @@ export namespace Prisma {
     id: number | null
     user_id: number | null
     client_id: number | null
-    due_in_days: number | null
-    recurrence_interval: number | null
+    total: number | null
     duration: number | null
     occurrences_done: number | null
-    total: number | null
+    recurrence_interval: number | null
+    due_in_days: number | null
   }
 
   export type Recurring_invoiceSumAggregateOutputType = {
     id: number | null
     user_id: number | null
     client_id: number | null
-    due_in_days: number | null
-    recurrence_interval: number | null
+    total: number | null
     duration: number | null
     occurrences_done: number | null
-    total: number | null
+    recurrence_interval: number | null
+    due_in_days: number | null
   }
 
   export type Recurring_invoiceMinAggregateOutputType = {
@@ -9152,18 +9152,19 @@ export namespace Prisma {
     invoice_number: string | null
     start_date: Date | null
     due_date: Date | null
-    due_in_days: number | null
-    recurrence_type: $Enums.Recurrence | null
-    recurrence_interval: number | null
-    duration: number | null
-    occurrences_done: number | null
     notes: string | null
     next_run: Date | null
     is_active: boolean | null
     is_deleted: boolean | null
     total: number | null
+    duration: number | null
+    occurrences_done: number | null
+    recurrence_interval: number | null
+    recurrence_type: $Enums.Recurrence | null
+    due_in_days: number | null
     status: $Enums.Status | null
     payment_method: $Enums.PaymentMethod | null
+    created_at: Date | null
   }
 
   export type Recurring_invoiceMaxAggregateOutputType = {
@@ -9173,18 +9174,19 @@ export namespace Prisma {
     invoice_number: string | null
     start_date: Date | null
     due_date: Date | null
-    due_in_days: number | null
-    recurrence_type: $Enums.Recurrence | null
-    recurrence_interval: number | null
-    duration: number | null
-    occurrences_done: number | null
     notes: string | null
     next_run: Date | null
     is_active: boolean | null
     is_deleted: boolean | null
     total: number | null
+    duration: number | null
+    occurrences_done: number | null
+    recurrence_interval: number | null
+    recurrence_type: $Enums.Recurrence | null
+    due_in_days: number | null
     status: $Enums.Status | null
     payment_method: $Enums.PaymentMethod | null
+    created_at: Date | null
   }
 
   export type Recurring_invoiceCountAggregateOutputType = {
@@ -9194,18 +9196,19 @@ export namespace Prisma {
     invoice_number: number
     start_date: number
     due_date: number
-    due_in_days: number
-    recurrence_type: number
-    recurrence_interval: number
-    duration: number
-    occurrences_done: number
     notes: number
     next_run: number
     is_active: number
     is_deleted: number
     total: number
+    duration: number
+    occurrences_done: number
+    recurrence_interval: number
+    recurrence_type: number
+    due_in_days: number
     status: number
     payment_method: number
+    created_at: number
     _all: number
   }
 
@@ -9214,22 +9217,22 @@ export namespace Prisma {
     id?: true
     user_id?: true
     client_id?: true
-    due_in_days?: true
-    recurrence_interval?: true
+    total?: true
     duration?: true
     occurrences_done?: true
-    total?: true
+    recurrence_interval?: true
+    due_in_days?: true
   }
 
   export type Recurring_invoiceSumAggregateInputType = {
     id?: true
     user_id?: true
     client_id?: true
-    due_in_days?: true
-    recurrence_interval?: true
+    total?: true
     duration?: true
     occurrences_done?: true
-    total?: true
+    recurrence_interval?: true
+    due_in_days?: true
   }
 
   export type Recurring_invoiceMinAggregateInputType = {
@@ -9239,18 +9242,19 @@ export namespace Prisma {
     invoice_number?: true
     start_date?: true
     due_date?: true
-    due_in_days?: true
-    recurrence_type?: true
-    recurrence_interval?: true
-    duration?: true
-    occurrences_done?: true
     notes?: true
     next_run?: true
     is_active?: true
     is_deleted?: true
     total?: true
+    duration?: true
+    occurrences_done?: true
+    recurrence_interval?: true
+    recurrence_type?: true
+    due_in_days?: true
     status?: true
     payment_method?: true
+    created_at?: true
   }
 
   export type Recurring_invoiceMaxAggregateInputType = {
@@ -9260,18 +9264,19 @@ export namespace Prisma {
     invoice_number?: true
     start_date?: true
     due_date?: true
-    due_in_days?: true
-    recurrence_type?: true
-    recurrence_interval?: true
-    duration?: true
-    occurrences_done?: true
     notes?: true
     next_run?: true
     is_active?: true
     is_deleted?: true
     total?: true
+    duration?: true
+    occurrences_done?: true
+    recurrence_interval?: true
+    recurrence_type?: true
+    due_in_days?: true
     status?: true
     payment_method?: true
+    created_at?: true
   }
 
   export type Recurring_invoiceCountAggregateInputType = {
@@ -9281,18 +9286,19 @@ export namespace Prisma {
     invoice_number?: true
     start_date?: true
     due_date?: true
-    due_in_days?: true
-    recurrence_type?: true
-    recurrence_interval?: true
-    duration?: true
-    occurrences_done?: true
     notes?: true
     next_run?: true
     is_active?: true
     is_deleted?: true
     total?: true
+    duration?: true
+    occurrences_done?: true
+    recurrence_interval?: true
+    recurrence_type?: true
+    due_in_days?: true
     status?: true
     payment_method?: true
+    created_at?: true
     _all?: true
   }
 
@@ -9389,18 +9395,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date
     due_date: Date | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval: number
-    duration: number | null
-    occurrences_done: number
     notes: string | null
     next_run: Date
     is_active: boolean
     is_deleted: boolean
     total: number
+    duration: number | null
+    occurrences_done: number
+    recurrence_interval: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at: Date
     _count: Recurring_invoiceCountAggregateOutputType | null
     _avg: Recurring_invoiceAvgAggregateOutputType | null
     _sum: Recurring_invoiceSumAggregateOutputType | null
@@ -9429,18 +9436,19 @@ export namespace Prisma {
     invoice_number?: boolean
     start_date?: boolean
     due_date?: boolean
-    due_in_days?: boolean
-    recurrence_type?: boolean
-    recurrence_interval?: boolean
-    duration?: boolean
-    occurrences_done?: boolean
     notes?: boolean
     next_run?: boolean
     is_active?: boolean
     is_deleted?: boolean
     total?: boolean
+    duration?: boolean
+    occurrences_done?: boolean
+    recurrence_interval?: boolean
+    recurrence_type?: boolean
+    due_in_days?: boolean
     status?: boolean
     payment_method?: boolean
+    created_at?: boolean
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     recurring_invoice_item?: boolean | recurring_invoice$recurring_invoice_itemArgs<ExtArgs>
@@ -9454,18 +9462,19 @@ export namespace Prisma {
     invoice_number?: boolean
     start_date?: boolean
     due_date?: boolean
-    due_in_days?: boolean
-    recurrence_type?: boolean
-    recurrence_interval?: boolean
-    duration?: boolean
-    occurrences_done?: boolean
     notes?: boolean
     next_run?: boolean
     is_active?: boolean
     is_deleted?: boolean
     total?: boolean
+    duration?: boolean
+    occurrences_done?: boolean
+    recurrence_interval?: boolean
+    recurrence_type?: boolean
+    due_in_days?: boolean
     status?: boolean
     payment_method?: boolean
+    created_at?: boolean
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recurring_invoice"]>
@@ -9477,18 +9486,19 @@ export namespace Prisma {
     invoice_number?: boolean
     start_date?: boolean
     due_date?: boolean
-    due_in_days?: boolean
-    recurrence_type?: boolean
-    recurrence_interval?: boolean
-    duration?: boolean
-    occurrences_done?: boolean
     notes?: boolean
     next_run?: boolean
     is_active?: boolean
     is_deleted?: boolean
     total?: boolean
+    duration?: boolean
+    occurrences_done?: boolean
+    recurrence_interval?: boolean
+    recurrence_type?: boolean
+    due_in_days?: boolean
     status?: boolean
     payment_method?: boolean
+    created_at?: boolean
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recurring_invoice"]>
@@ -9500,21 +9510,22 @@ export namespace Prisma {
     invoice_number?: boolean
     start_date?: boolean
     due_date?: boolean
-    due_in_days?: boolean
-    recurrence_type?: boolean
-    recurrence_interval?: boolean
-    duration?: boolean
-    occurrences_done?: boolean
     notes?: boolean
     next_run?: boolean
     is_active?: boolean
     is_deleted?: boolean
     total?: boolean
+    duration?: boolean
+    occurrences_done?: boolean
+    recurrence_interval?: boolean
+    recurrence_type?: boolean
+    due_in_days?: boolean
     status?: boolean
     payment_method?: boolean
+    created_at?: boolean
   }
 
-  export type recurring_invoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "due_in_days" | "recurrence_type" | "recurrence_interval" | "duration" | "occurrences_done" | "notes" | "next_run" | "is_active" | "is_deleted" | "total" | "status" | "payment_method", ExtArgs["result"]["recurring_invoice"]>
+  export type recurring_invoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "notes" | "next_run" | "is_active" | "is_deleted" | "total" | "duration" | "occurrences_done" | "recurrence_interval" | "recurrence_type" | "due_in_days" | "status" | "payment_method" | "created_at", ExtArgs["result"]["recurring_invoice"]>
   export type recurring_invoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
@@ -9544,18 +9555,19 @@ export namespace Prisma {
       invoice_number: string
       start_date: Date
       due_date: Date | null
-      due_in_days: number
-      recurrence_type: $Enums.Recurrence
-      recurrence_interval: number
-      duration: number | null
-      occurrences_done: number
       notes: string | null
       next_run: Date
       is_active: boolean
       is_deleted: boolean
       total: number
+      duration: number | null
+      occurrences_done: number
+      recurrence_interval: number
+      recurrence_type: $Enums.Recurrence
+      due_in_days: number
       status: $Enums.Status
       payment_method: $Enums.PaymentMethod
+      created_at: Date
     }, ExtArgs["result"]["recurring_invoice"]>
     composites: {}
   }
@@ -9988,18 +10000,19 @@ export namespace Prisma {
     readonly invoice_number: FieldRef<"recurring_invoice", 'String'>
     readonly start_date: FieldRef<"recurring_invoice", 'DateTime'>
     readonly due_date: FieldRef<"recurring_invoice", 'DateTime'>
-    readonly due_in_days: FieldRef<"recurring_invoice", 'Int'>
-    readonly recurrence_type: FieldRef<"recurring_invoice", 'Recurrence'>
-    readonly recurrence_interval: FieldRef<"recurring_invoice", 'Int'>
-    readonly duration: FieldRef<"recurring_invoice", 'Int'>
-    readonly occurrences_done: FieldRef<"recurring_invoice", 'Int'>
     readonly notes: FieldRef<"recurring_invoice", 'String'>
     readonly next_run: FieldRef<"recurring_invoice", 'DateTime'>
     readonly is_active: FieldRef<"recurring_invoice", 'Boolean'>
     readonly is_deleted: FieldRef<"recurring_invoice", 'Boolean'>
     readonly total: FieldRef<"recurring_invoice", 'Int'>
+    readonly duration: FieldRef<"recurring_invoice", 'Int'>
+    readonly occurrences_done: FieldRef<"recurring_invoice", 'Int'>
+    readonly recurrence_interval: FieldRef<"recurring_invoice", 'Int'>
+    readonly recurrence_type: FieldRef<"recurring_invoice", 'Recurrence'>
+    readonly due_in_days: FieldRef<"recurring_invoice", 'Int'>
     readonly status: FieldRef<"recurring_invoice", 'Status'>
     readonly payment_method: FieldRef<"recurring_invoice", 'PaymentMethod'>
+    readonly created_at: FieldRef<"recurring_invoice", 'DateTime'>
   }
     
 
@@ -10454,18 +10467,18 @@ export namespace Prisma {
     id: number | null
     recurring_invoice_id: number | null
     product_id: number | null
-    price_snapshot: number | null
     quantity: number | null
     total: number | null
+    price_snapshot: number | null
   }
 
   export type Recurring_invoice_itemSumAggregateOutputType = {
     id: number | null
     recurring_invoice_id: number | null
     product_id: number | null
-    price_snapshot: number | null
     quantity: number | null
     total: number | null
+    price_snapshot: number | null
   }
 
   export type Recurring_invoice_itemMinAggregateOutputType = {
@@ -10473,9 +10486,9 @@ export namespace Prisma {
     recurring_invoice_id: number | null
     product_id: number | null
     name_snapshot: string | null
-    price_snapshot: number | null
     quantity: number | null
     total: number | null
+    price_snapshot: number | null
   }
 
   export type Recurring_invoice_itemMaxAggregateOutputType = {
@@ -10483,9 +10496,9 @@ export namespace Prisma {
     recurring_invoice_id: number | null
     product_id: number | null
     name_snapshot: string | null
-    price_snapshot: number | null
     quantity: number | null
     total: number | null
+    price_snapshot: number | null
   }
 
   export type Recurring_invoice_itemCountAggregateOutputType = {
@@ -10493,9 +10506,9 @@ export namespace Prisma {
     recurring_invoice_id: number
     product_id: number
     name_snapshot: number
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
     _all: number
   }
 
@@ -10504,18 +10517,18 @@ export namespace Prisma {
     id?: true
     recurring_invoice_id?: true
     product_id?: true
-    price_snapshot?: true
     quantity?: true
     total?: true
+    price_snapshot?: true
   }
 
   export type Recurring_invoice_itemSumAggregateInputType = {
     id?: true
     recurring_invoice_id?: true
     product_id?: true
-    price_snapshot?: true
     quantity?: true
     total?: true
+    price_snapshot?: true
   }
 
   export type Recurring_invoice_itemMinAggregateInputType = {
@@ -10523,9 +10536,9 @@ export namespace Prisma {
     recurring_invoice_id?: true
     product_id?: true
     name_snapshot?: true
-    price_snapshot?: true
     quantity?: true
     total?: true
+    price_snapshot?: true
   }
 
   export type Recurring_invoice_itemMaxAggregateInputType = {
@@ -10533,9 +10546,9 @@ export namespace Prisma {
     recurring_invoice_id?: true
     product_id?: true
     name_snapshot?: true
-    price_snapshot?: true
     quantity?: true
     total?: true
+    price_snapshot?: true
   }
 
   export type Recurring_invoice_itemCountAggregateInputType = {
@@ -10543,9 +10556,9 @@ export namespace Prisma {
     recurring_invoice_id?: true
     product_id?: true
     name_snapshot?: true
-    price_snapshot?: true
     quantity?: true
     total?: true
+    price_snapshot?: true
     _all?: true
   }
 
@@ -10640,9 +10653,9 @@ export namespace Prisma {
     recurring_invoice_id: number
     product_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
     _count: Recurring_invoice_itemCountAggregateOutputType | null
     _avg: Recurring_invoice_itemAvgAggregateOutputType | null
     _sum: Recurring_invoice_itemSumAggregateOutputType | null
@@ -10669,9 +10682,9 @@ export namespace Prisma {
     recurring_invoice_id?: boolean
     product_id?: boolean
     name_snapshot?: boolean
-    price_snapshot?: boolean
     quantity?: boolean
     total?: boolean
+    price_snapshot?: boolean
     products_services?: boolean | products_servicesDefaultArgs<ExtArgs>
     recurring_invoice?: boolean | recurring_invoiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recurring_invoice_item"]>
@@ -10681,9 +10694,9 @@ export namespace Prisma {
     recurring_invoice_id?: boolean
     product_id?: boolean
     name_snapshot?: boolean
-    price_snapshot?: boolean
     quantity?: boolean
     total?: boolean
+    price_snapshot?: boolean
     products_services?: boolean | products_servicesDefaultArgs<ExtArgs>
     recurring_invoice?: boolean | recurring_invoiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recurring_invoice_item"]>
@@ -10693,9 +10706,9 @@ export namespace Prisma {
     recurring_invoice_id?: boolean
     product_id?: boolean
     name_snapshot?: boolean
-    price_snapshot?: boolean
     quantity?: boolean
     total?: boolean
+    price_snapshot?: boolean
     products_services?: boolean | products_servicesDefaultArgs<ExtArgs>
     recurring_invoice?: boolean | recurring_invoiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recurring_invoice_item"]>
@@ -10705,12 +10718,12 @@ export namespace Prisma {
     recurring_invoice_id?: boolean
     product_id?: boolean
     name_snapshot?: boolean
-    price_snapshot?: boolean
     quantity?: boolean
     total?: boolean
+    price_snapshot?: boolean
   }
 
-  export type recurring_invoice_itemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recurring_invoice_id" | "product_id" | "name_snapshot" | "price_snapshot" | "quantity" | "total", ExtArgs["result"]["recurring_invoice_item"]>
+  export type recurring_invoice_itemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recurring_invoice_id" | "product_id" | "name_snapshot" | "quantity" | "total" | "price_snapshot", ExtArgs["result"]["recurring_invoice_item"]>
   export type recurring_invoice_itemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products_services?: boolean | products_servicesDefaultArgs<ExtArgs>
     recurring_invoice?: boolean | recurring_invoiceDefaultArgs<ExtArgs>
@@ -10735,9 +10748,9 @@ export namespace Prisma {
       recurring_invoice_id: number
       product_id: number
       name_snapshot: string
-      price_snapshot: number
       quantity: number
       total: number
+      price_snapshot: number
     }, ExtArgs["result"]["recurring_invoice_item"]>
     composites: {}
   }
@@ -11167,9 +11180,9 @@ export namespace Prisma {
     readonly recurring_invoice_id: FieldRef<"recurring_invoice_item", 'Int'>
     readonly product_id: FieldRef<"recurring_invoice_item", 'Int'>
     readonly name_snapshot: FieldRef<"recurring_invoice_item", 'String'>
-    readonly price_snapshot: FieldRef<"recurring_invoice_item", 'Int'>
     readonly quantity: FieldRef<"recurring_invoice_item", 'Int'>
     readonly total: FieldRef<"recurring_invoice_item", 'Int'>
+    readonly price_snapshot: FieldRef<"recurring_invoice_item", 'Int'>
   }
     
 
@@ -13903,18 +13916,19 @@ export namespace Prisma {
     invoice_number: 'invoice_number',
     start_date: 'start_date',
     due_date: 'due_date',
-    due_in_days: 'due_in_days',
-    recurrence_type: 'recurrence_type',
-    recurrence_interval: 'recurrence_interval',
-    duration: 'duration',
-    occurrences_done: 'occurrences_done',
     notes: 'notes',
     next_run: 'next_run',
     is_active: 'is_active',
     is_deleted: 'is_deleted',
     total: 'total',
+    duration: 'duration',
+    occurrences_done: 'occurrences_done',
+    recurrence_interval: 'recurrence_interval',
+    recurrence_type: 'recurrence_type',
+    due_in_days: 'due_in_days',
     status: 'status',
-    payment_method: 'payment_method'
+    payment_method: 'payment_method',
+    created_at: 'created_at'
   };
 
   export type Recurring_invoiceScalarFieldEnum = (typeof Recurring_invoiceScalarFieldEnum)[keyof typeof Recurring_invoiceScalarFieldEnum]
@@ -13925,9 +13939,9 @@ export namespace Prisma {
     recurring_invoice_id: 'recurring_invoice_id',
     product_id: 'product_id',
     name_snapshot: 'name_snapshot',
-    price_snapshot: 'price_snapshot',
     quantity: 'quantity',
-    total: 'total'
+    total: 'total',
+    price_snapshot: 'price_snapshot'
   };
 
   export type Recurring_invoice_itemScalarFieldEnum = (typeof Recurring_invoice_itemScalarFieldEnum)[keyof typeof Recurring_invoice_itemScalarFieldEnum]
@@ -14583,18 +14597,19 @@ export namespace Prisma {
     invoice_number?: StringFilter<"recurring_invoice"> | string
     start_date?: DateTimeFilter<"recurring_invoice"> | Date | string
     due_date?: DateTimeNullableFilter<"recurring_invoice"> | Date | string | null
-    due_in_days?: IntFilter<"recurring_invoice"> | number
-    recurrence_type?: EnumRecurrenceFilter<"recurring_invoice"> | $Enums.Recurrence
-    recurrence_interval?: IntFilter<"recurring_invoice"> | number
-    duration?: IntNullableFilter<"recurring_invoice"> | number | null
-    occurrences_done?: IntFilter<"recurring_invoice"> | number
     notes?: StringNullableFilter<"recurring_invoice"> | string | null
     next_run?: DateTimeFilter<"recurring_invoice"> | Date | string
     is_active?: BoolFilter<"recurring_invoice"> | boolean
     is_deleted?: BoolFilter<"recurring_invoice"> | boolean
     total?: IntFilter<"recurring_invoice"> | number
+    duration?: IntNullableFilter<"recurring_invoice"> | number | null
+    occurrences_done?: IntFilter<"recurring_invoice"> | number
+    recurrence_interval?: IntFilter<"recurring_invoice"> | number
+    recurrence_type?: EnumRecurrenceFilter<"recurring_invoice"> | $Enums.Recurrence
+    due_in_days?: IntFilter<"recurring_invoice"> | number
     status?: EnumStatusFilter<"recurring_invoice"> | $Enums.Status
     payment_method?: EnumPaymentMethodFilter<"recurring_invoice"> | $Enums.PaymentMethod
+    created_at?: DateTimeFilter<"recurring_invoice"> | Date | string
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     recurring_invoice_item?: Recurring_invoice_itemListRelationFilter
@@ -14607,18 +14622,19 @@ export namespace Prisma {
     invoice_number?: SortOrder
     start_date?: SortOrder
     due_date?: SortOrderInput | SortOrder
-    due_in_days?: SortOrder
-    recurrence_type?: SortOrder
-    recurrence_interval?: SortOrder
-    duration?: SortOrderInput | SortOrder
-    occurrences_done?: SortOrder
     notes?: SortOrderInput | SortOrder
     next_run?: SortOrder
     is_active?: SortOrder
     is_deleted?: SortOrder
     total?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    occurrences_done?: SortOrder
+    recurrence_interval?: SortOrder
+    recurrence_type?: SortOrder
+    due_in_days?: SortOrder
     status?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
     clients?: clientsOrderByWithRelationInput
     users?: usersOrderByWithRelationInput
     recurring_invoice_item?: recurring_invoice_itemOrderByRelationAggregateInput
@@ -14634,18 +14650,19 @@ export namespace Prisma {
     client_id?: IntFilter<"recurring_invoice"> | number
     start_date?: DateTimeFilter<"recurring_invoice"> | Date | string
     due_date?: DateTimeNullableFilter<"recurring_invoice"> | Date | string | null
-    due_in_days?: IntFilter<"recurring_invoice"> | number
-    recurrence_type?: EnumRecurrenceFilter<"recurring_invoice"> | $Enums.Recurrence
-    recurrence_interval?: IntFilter<"recurring_invoice"> | number
-    duration?: IntNullableFilter<"recurring_invoice"> | number | null
-    occurrences_done?: IntFilter<"recurring_invoice"> | number
     notes?: StringNullableFilter<"recurring_invoice"> | string | null
     next_run?: DateTimeFilter<"recurring_invoice"> | Date | string
     is_active?: BoolFilter<"recurring_invoice"> | boolean
     is_deleted?: BoolFilter<"recurring_invoice"> | boolean
     total?: IntFilter<"recurring_invoice"> | number
+    duration?: IntNullableFilter<"recurring_invoice"> | number | null
+    occurrences_done?: IntFilter<"recurring_invoice"> | number
+    recurrence_interval?: IntFilter<"recurring_invoice"> | number
+    recurrence_type?: EnumRecurrenceFilter<"recurring_invoice"> | $Enums.Recurrence
+    due_in_days?: IntFilter<"recurring_invoice"> | number
     status?: EnumStatusFilter<"recurring_invoice"> | $Enums.Status
     payment_method?: EnumPaymentMethodFilter<"recurring_invoice"> | $Enums.PaymentMethod
+    created_at?: DateTimeFilter<"recurring_invoice"> | Date | string
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     recurring_invoice_item?: Recurring_invoice_itemListRelationFilter
@@ -14658,18 +14675,19 @@ export namespace Prisma {
     invoice_number?: SortOrder
     start_date?: SortOrder
     due_date?: SortOrderInput | SortOrder
-    due_in_days?: SortOrder
-    recurrence_type?: SortOrder
-    recurrence_interval?: SortOrder
-    duration?: SortOrderInput | SortOrder
-    occurrences_done?: SortOrder
     notes?: SortOrderInput | SortOrder
     next_run?: SortOrder
     is_active?: SortOrder
     is_deleted?: SortOrder
     total?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    occurrences_done?: SortOrder
+    recurrence_interval?: SortOrder
+    recurrence_type?: SortOrder
+    due_in_days?: SortOrder
     status?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
     _count?: recurring_invoiceCountOrderByAggregateInput
     _avg?: recurring_invoiceAvgOrderByAggregateInput
     _max?: recurring_invoiceMaxOrderByAggregateInput
@@ -14687,18 +14705,19 @@ export namespace Prisma {
     invoice_number?: StringWithAggregatesFilter<"recurring_invoice"> | string
     start_date?: DateTimeWithAggregatesFilter<"recurring_invoice"> | Date | string
     due_date?: DateTimeNullableWithAggregatesFilter<"recurring_invoice"> | Date | string | null
-    due_in_days?: IntWithAggregatesFilter<"recurring_invoice"> | number
-    recurrence_type?: EnumRecurrenceWithAggregatesFilter<"recurring_invoice"> | $Enums.Recurrence
-    recurrence_interval?: IntWithAggregatesFilter<"recurring_invoice"> | number
-    duration?: IntNullableWithAggregatesFilter<"recurring_invoice"> | number | null
-    occurrences_done?: IntWithAggregatesFilter<"recurring_invoice"> | number
     notes?: StringNullableWithAggregatesFilter<"recurring_invoice"> | string | null
     next_run?: DateTimeWithAggregatesFilter<"recurring_invoice"> | Date | string
     is_active?: BoolWithAggregatesFilter<"recurring_invoice"> | boolean
     is_deleted?: BoolWithAggregatesFilter<"recurring_invoice"> | boolean
     total?: IntWithAggregatesFilter<"recurring_invoice"> | number
+    duration?: IntNullableWithAggregatesFilter<"recurring_invoice"> | number | null
+    occurrences_done?: IntWithAggregatesFilter<"recurring_invoice"> | number
+    recurrence_interval?: IntWithAggregatesFilter<"recurring_invoice"> | number
+    recurrence_type?: EnumRecurrenceWithAggregatesFilter<"recurring_invoice"> | $Enums.Recurrence
+    due_in_days?: IntWithAggregatesFilter<"recurring_invoice"> | number
     status?: EnumStatusWithAggregatesFilter<"recurring_invoice"> | $Enums.Status
     payment_method?: EnumPaymentMethodWithAggregatesFilter<"recurring_invoice"> | $Enums.PaymentMethod
+    created_at?: DateTimeWithAggregatesFilter<"recurring_invoice"> | Date | string
   }
 
   export type recurring_invoice_itemWhereInput = {
@@ -14709,9 +14728,9 @@ export namespace Prisma {
     recurring_invoice_id?: IntFilter<"recurring_invoice_item"> | number
     product_id?: IntFilter<"recurring_invoice_item"> | number
     name_snapshot?: StringFilter<"recurring_invoice_item"> | string
-    price_snapshot?: IntFilter<"recurring_invoice_item"> | number
     quantity?: IntFilter<"recurring_invoice_item"> | number
     total?: IntFilter<"recurring_invoice_item"> | number
+    price_snapshot?: IntFilter<"recurring_invoice_item"> | number
     products_services?: XOR<Products_servicesScalarRelationFilter, products_servicesWhereInput>
     recurring_invoice?: XOR<Recurring_invoiceScalarRelationFilter, recurring_invoiceWhereInput>
   }
@@ -14721,9 +14740,9 @@ export namespace Prisma {
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
     name_snapshot?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
     products_services?: products_servicesOrderByWithRelationInput
     recurring_invoice?: recurring_invoiceOrderByWithRelationInput
   }
@@ -14736,9 +14755,9 @@ export namespace Prisma {
     recurring_invoice_id?: IntFilter<"recurring_invoice_item"> | number
     product_id?: IntFilter<"recurring_invoice_item"> | number
     name_snapshot?: StringFilter<"recurring_invoice_item"> | string
-    price_snapshot?: IntFilter<"recurring_invoice_item"> | number
     quantity?: IntFilter<"recurring_invoice_item"> | number
     total?: IntFilter<"recurring_invoice_item"> | number
+    price_snapshot?: IntFilter<"recurring_invoice_item"> | number
     products_services?: XOR<Products_servicesScalarRelationFilter, products_servicesWhereInput>
     recurring_invoice?: XOR<Recurring_invoiceScalarRelationFilter, recurring_invoiceWhereInput>
   }, "id">
@@ -14748,9 +14767,9 @@ export namespace Prisma {
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
     name_snapshot?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
     _count?: recurring_invoice_itemCountOrderByAggregateInput
     _avg?: recurring_invoice_itemAvgOrderByAggregateInput
     _max?: recurring_invoice_itemMaxOrderByAggregateInput
@@ -14766,9 +14785,9 @@ export namespace Prisma {
     recurring_invoice_id?: IntWithAggregatesFilter<"recurring_invoice_item"> | number
     product_id?: IntWithAggregatesFilter<"recurring_invoice_item"> | number
     name_snapshot?: StringWithAggregatesFilter<"recurring_invoice_item"> | string
-    price_snapshot?: IntWithAggregatesFilter<"recurring_invoice_item"> | number
     quantity?: IntWithAggregatesFilter<"recurring_invoice_item"> | number
     total?: IntWithAggregatesFilter<"recurring_invoice_item"> | number
+    price_snapshot?: IntWithAggregatesFilter<"recurring_invoice_item"> | number
   }
 
   export type user_payment_methodWhereInput = {
@@ -15356,18 +15375,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
     users: usersCreateNestedOneWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
@@ -15380,18 +15400,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
@@ -15399,18 +15420,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
@@ -15423,18 +15445,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
@@ -15445,36 +15468,38 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
   }
 
   export type recurring_invoiceUpdateManyMutationInput = {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type recurring_invoiceUncheckedUpdateManyInput = {
@@ -15484,25 +15509,26 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type recurring_invoice_itemCreateInput = {
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
     products_services: products_servicesCreateNestedOneWithoutRecurring_invoice_itemInput
     recurring_invoice: recurring_invoiceCreateNestedOneWithoutRecurring_invoice_itemInput
   }
@@ -15512,16 +15538,16 @@ export namespace Prisma {
     recurring_invoice_id: number
     product_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
   }
 
   export type recurring_invoice_itemUpdateInput = {
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
     products_services?: products_servicesUpdateOneRequiredWithoutRecurring_invoice_itemNestedInput
     recurring_invoice?: recurring_invoiceUpdateOneRequiredWithoutRecurring_invoice_itemNestedInput
   }
@@ -15531,9 +15557,9 @@ export namespace Prisma {
     recurring_invoice_id?: IntFieldUpdateOperationsInput | number
     product_id?: IntFieldUpdateOperationsInput | number
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
   export type recurring_invoice_itemCreateManyInput = {
@@ -15541,16 +15567,16 @@ export namespace Prisma {
     recurring_invoice_id: number
     product_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
   }
 
   export type recurring_invoice_itemUpdateManyMutationInput = {
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
   export type recurring_invoice_itemUncheckedUpdateManyInput = {
@@ -15558,9 +15584,9 @@ export namespace Prisma {
     recurring_invoice_id?: IntFieldUpdateOperationsInput | number
     product_id?: IntFieldUpdateOperationsInput | number
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
   export type user_payment_methodCreateInput = {
@@ -16264,13 +16290,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type EnumRecurrenceFilter<$PrismaModel = never> = {
-    equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
-    in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceFilter<$PrismaModel> | $Enums.Recurrence
-  }
-
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -16282,6 +16301,13 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumRecurrenceFilter<$PrismaModel = never> = {
+    equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
+    in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecurrenceFilter<$PrismaModel> | $Enums.Recurrence
+  }
+
   export type recurring_invoiceCountOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
@@ -16289,29 +16315,30 @@ export namespace Prisma {
     invoice_number?: SortOrder
     start_date?: SortOrder
     due_date?: SortOrder
-    due_in_days?: SortOrder
-    recurrence_type?: SortOrder
-    recurrence_interval?: SortOrder
-    duration?: SortOrder
-    occurrences_done?: SortOrder
     notes?: SortOrder
     next_run?: SortOrder
     is_active?: SortOrder
     is_deleted?: SortOrder
     total?: SortOrder
+    duration?: SortOrder
+    occurrences_done?: SortOrder
+    recurrence_interval?: SortOrder
+    recurrence_type?: SortOrder
+    due_in_days?: SortOrder
     status?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
   }
 
   export type recurring_invoiceAvgOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
     client_id?: SortOrder
-    due_in_days?: SortOrder
-    recurrence_interval?: SortOrder
+    total?: SortOrder
     duration?: SortOrder
     occurrences_done?: SortOrder
-    total?: SortOrder
+    recurrence_interval?: SortOrder
+    due_in_days?: SortOrder
   }
 
   export type recurring_invoiceMaxOrderByAggregateInput = {
@@ -16321,18 +16348,19 @@ export namespace Prisma {
     invoice_number?: SortOrder
     start_date?: SortOrder
     due_date?: SortOrder
-    due_in_days?: SortOrder
-    recurrence_type?: SortOrder
-    recurrence_interval?: SortOrder
-    duration?: SortOrder
-    occurrences_done?: SortOrder
     notes?: SortOrder
     next_run?: SortOrder
     is_active?: SortOrder
     is_deleted?: SortOrder
     total?: SortOrder
+    duration?: SortOrder
+    occurrences_done?: SortOrder
+    recurrence_interval?: SortOrder
+    recurrence_type?: SortOrder
+    due_in_days?: SortOrder
     status?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
   }
 
   export type recurring_invoiceMinOrderByAggregateInput = {
@@ -16342,29 +16370,30 @@ export namespace Prisma {
     invoice_number?: SortOrder
     start_date?: SortOrder
     due_date?: SortOrder
-    due_in_days?: SortOrder
-    recurrence_type?: SortOrder
-    recurrence_interval?: SortOrder
-    duration?: SortOrder
-    occurrences_done?: SortOrder
     notes?: SortOrder
     next_run?: SortOrder
     is_active?: SortOrder
     is_deleted?: SortOrder
     total?: SortOrder
+    duration?: SortOrder
+    occurrences_done?: SortOrder
+    recurrence_interval?: SortOrder
+    recurrence_type?: SortOrder
+    due_in_days?: SortOrder
     status?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
   }
 
   export type recurring_invoiceSumOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
     client_id?: SortOrder
-    due_in_days?: SortOrder
-    recurrence_interval?: SortOrder
+    total?: SortOrder
     duration?: SortOrder
     occurrences_done?: SortOrder
-    total?: SortOrder
+    recurrence_interval?: SortOrder
+    due_in_days?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16379,16 +16408,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type EnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
-    in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel> | $Enums.Recurrence
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRecurrenceFilter<$PrismaModel>
-    _max?: NestedEnumRecurrenceFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16407,6 +16426,16 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type EnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
+    in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel> | $Enums.Recurrence
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecurrenceFilter<$PrismaModel>
+    _max?: NestedEnumRecurrenceFilter<$PrismaModel>
+  }
+
   export type Recurring_invoiceScalarRelationFilter = {
     is?: recurring_invoiceWhereInput
     isNot?: recurring_invoiceWhereInput
@@ -16417,18 +16446,18 @@ export namespace Prisma {
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
     name_snapshot?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
   }
 
   export type recurring_invoice_itemAvgOrderByAggregateInput = {
     id?: SortOrder
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
   }
 
   export type recurring_invoice_itemMaxOrderByAggregateInput = {
@@ -16436,9 +16465,9 @@ export namespace Prisma {
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
     name_snapshot?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
   }
 
   export type recurring_invoice_itemMinOrderByAggregateInput = {
@@ -16446,18 +16475,18 @@ export namespace Prisma {
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
     name_snapshot?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
   }
 
   export type recurring_invoice_itemSumOrderByAggregateInput = {
     id?: SortOrder
     recurring_invoice_id?: SortOrder
     product_id?: SortOrder
-    price_snapshot?: SortOrder
     quantity?: SortOrder
     total?: SortOrder
+    price_snapshot?: SortOrder
   }
 
   export type user_payment_methodCountOrderByAggregateInput = {
@@ -17206,16 +17235,16 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
-  export type EnumRecurrenceFieldUpdateOperationsInput = {
-    set?: $Enums.Recurrence
-  }
-
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type EnumRecurrenceFieldUpdateOperationsInput = {
+    set?: $Enums.Recurrence
   }
 
   export type clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput = {
@@ -17567,16 +17596,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
-    in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel> | $Enums.Recurrence
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRecurrenceFilter<$PrismaModel>
-    _max?: NestedEnumRecurrenceFilter<$PrismaModel>
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -17602,6 +17621,16 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
+    in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel> | $Enums.Recurrence
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecurrenceFilter<$PrismaModel>
+    _max?: NestedEnumRecurrenceFilter<$PrismaModel>
   }
 
   export type usersCreateWithoutClientsInput = {
@@ -17675,18 +17704,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     users: usersCreateNestedOneWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
   }
@@ -17697,18 +17727,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
@@ -17815,18 +17846,19 @@ export namespace Prisma {
     invoice_number?: StringFilter<"recurring_invoice"> | string
     start_date?: DateTimeFilter<"recurring_invoice"> | Date | string
     due_date?: DateTimeNullableFilter<"recurring_invoice"> | Date | string | null
-    due_in_days?: IntFilter<"recurring_invoice"> | number
-    recurrence_type?: EnumRecurrenceFilter<"recurring_invoice"> | $Enums.Recurrence
-    recurrence_interval?: IntFilter<"recurring_invoice"> | number
-    duration?: IntNullableFilter<"recurring_invoice"> | number | null
-    occurrences_done?: IntFilter<"recurring_invoice"> | number
     notes?: StringNullableFilter<"recurring_invoice"> | string | null
     next_run?: DateTimeFilter<"recurring_invoice"> | Date | string
     is_active?: BoolFilter<"recurring_invoice"> | boolean
     is_deleted?: BoolFilter<"recurring_invoice"> | boolean
     total?: IntFilter<"recurring_invoice"> | number
+    duration?: IntNullableFilter<"recurring_invoice"> | number | null
+    occurrences_done?: IntFilter<"recurring_invoice"> | number
+    recurrence_interval?: IntFilter<"recurring_invoice"> | number
+    recurrence_type?: EnumRecurrenceFilter<"recurring_invoice"> | $Enums.Recurrence
+    due_in_days?: IntFilter<"recurring_invoice"> | number
     status?: EnumStatusFilter<"recurring_invoice"> | $Enums.Status
     payment_method?: EnumPaymentMethodFilter<"recurring_invoice"> | $Enums.PaymentMethod
+    created_at?: DateTimeFilter<"recurring_invoice"> | Date | string
   }
 
   export type invoicesCreateWithoutInvoice_itemsInput = {
@@ -18252,9 +18284,9 @@ export namespace Prisma {
 
   export type recurring_invoice_itemCreateWithoutProducts_servicesInput = {
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
     recurring_invoice: recurring_invoiceCreateNestedOneWithoutRecurring_invoice_itemInput
   }
 
@@ -18262,9 +18294,9 @@ export namespace Prisma {
     id?: number
     recurring_invoice_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
   }
 
   export type recurring_invoice_itemCreateOrConnectWithoutProducts_servicesInput = {
@@ -18351,9 +18383,9 @@ export namespace Prisma {
     recurring_invoice_id?: IntFilter<"recurring_invoice_item"> | number
     product_id?: IntFilter<"recurring_invoice_item"> | number
     name_snapshot?: StringFilter<"recurring_invoice_item"> | string
-    price_snapshot?: IntFilter<"recurring_invoice_item"> | number
     quantity?: IntFilter<"recurring_invoice_item"> | number
     total?: IntFilter<"recurring_invoice_item"> | number
+    price_snapshot?: IntFilter<"recurring_invoice_item"> | number
   }
 
   export type usersCreateWithoutUser_profilesInput = {
@@ -18527,18 +18559,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
   }
@@ -18549,18 +18582,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
@@ -18833,9 +18867,9 @@ export namespace Prisma {
 
   export type recurring_invoice_itemCreateWithoutRecurring_invoiceInput = {
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
     products_services: products_servicesCreateNestedOneWithoutRecurring_invoice_itemInput
   }
 
@@ -18843,9 +18877,9 @@ export namespace Prisma {
     id?: number
     product_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
   }
 
   export type recurring_invoice_itemCreateOrConnectWithoutRecurring_invoiceInput = {
@@ -18974,18 +19008,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
     users: usersCreateNestedOneWithoutRecurring_invoiceInput
   }
@@ -18997,18 +19032,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
   }
 
   export type recurring_invoiceCreateOrConnectWithoutRecurring_invoice_itemInput = {
@@ -19065,18 +19101,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
   }
@@ -19088,18 +19125,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type usersCreateWithoutUser_payment_methodInput = {
@@ -19257,18 +19295,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
   }
 
   export type invoicesUpdateWithoutClientsInput = {
@@ -19317,18 +19356,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
   }
@@ -19339,18 +19379,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
@@ -19360,18 +19401,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type invoice_itemsCreateManyInvoicesInput = {
@@ -19449,9 +19491,9 @@ export namespace Prisma {
     id?: number
     recurring_invoice_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
   }
 
   export type invoice_itemsUpdateWithoutProducts_servicesInput = {
@@ -19482,9 +19524,9 @@ export namespace Prisma {
 
   export type recurring_invoice_itemUpdateWithoutProducts_servicesInput = {
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
     recurring_invoice?: recurring_invoiceUpdateOneRequiredWithoutRecurring_invoice_itemNestedInput
   }
 
@@ -19492,18 +19534,18 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     recurring_invoice_id?: IntFieldUpdateOperationsInput | number
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
   export type recurring_invoice_itemUncheckedUpdateManyWithoutProducts_servicesInput = {
     id?: IntFieldUpdateOperationsInput | number
     recurring_invoice_id?: IntFieldUpdateOperationsInput | number
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
   export type clientsCreateManyUsersInput = {
@@ -19545,18 +19587,19 @@ export namespace Prisma {
     invoice_number: string
     start_date: Date | string
     due_date?: Date | string | null
-    due_in_days: number
-    recurrence_type: $Enums.Recurrence
-    recurrence_interval?: number
-    duration?: number | null
-    occurrences_done?: number
     notes?: string | null
     next_run: Date | string
     is_active?: boolean
     is_deleted?: boolean
     total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
   }
 
   export type user_payment_methodCreateManyUsersInput = {
@@ -19688,18 +19731,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
   }
@@ -19710,18 +19754,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
@@ -19731,18 +19776,19 @@ export namespace Prisma {
     invoice_number?: StringFieldUpdateOperationsInput | string
     start_date?: DateTimeFieldUpdateOperationsInput | Date | string
     due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    due_in_days?: IntFieldUpdateOperationsInput | number
-    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
-    recurrence_interval?: IntFieldUpdateOperationsInput | number
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    occurrences_done?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     next_run?: DateTimeFieldUpdateOperationsInput | Date | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type user_payment_methodUpdateWithoutUsersInput = {
@@ -19798,16 +19844,16 @@ export namespace Prisma {
     id?: number
     product_id: number
     name_snapshot: string
-    price_snapshot: number
     quantity: number
     total: number
+    price_snapshot: number
   }
 
   export type recurring_invoice_itemUpdateWithoutRecurring_invoiceInput = {
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
     products_services?: products_servicesUpdateOneRequiredWithoutRecurring_invoice_itemNestedInput
   }
 
@@ -19815,18 +19861,18 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     product_id?: IntFieldUpdateOperationsInput | number
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
   export type recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceInput = {
     id?: IntFieldUpdateOperationsInput | number
     product_id?: IntFieldUpdateOperationsInput | number
     name_snapshot?: StringFieldUpdateOperationsInput | string
-    price_snapshot?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    price_snapshot?: IntFieldUpdateOperationsInput | number
   }
 
 

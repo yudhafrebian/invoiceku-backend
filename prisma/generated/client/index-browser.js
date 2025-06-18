@@ -189,18 +189,19 @@ exports.Prisma.Recurring_invoiceScalarFieldEnum = {
   invoice_number: 'invoice_number',
   start_date: 'start_date',
   due_date: 'due_date',
-  due_in_days: 'due_in_days',
-  recurrence_type: 'recurrence_type',
-  recurrence_interval: 'recurrence_interval',
-  duration: 'duration',
-  occurrences_done: 'occurrences_done',
   notes: 'notes',
   next_run: 'next_run',
   is_active: 'is_active',
   is_deleted: 'is_deleted',
   total: 'total',
+  duration: 'duration',
+  occurrences_done: 'occurrences_done',
+  recurrence_interval: 'recurrence_interval',
+  recurrence_type: 'recurrence_type',
+  due_in_days: 'due_in_days',
   status: 'status',
-  payment_method: 'payment_method'
+  payment_method: 'payment_method',
+  created_at: 'created_at'
 };
 
 exports.Prisma.Recurring_invoice_itemScalarFieldEnum = {
@@ -208,9 +209,9 @@ exports.Prisma.Recurring_invoice_itemScalarFieldEnum = {
   recurring_invoice_id: 'recurring_invoice_id',
   product_id: 'product_id',
   name_snapshot: 'name_snapshot',
-  price_snapshot: 'price_snapshot',
   quantity: 'quantity',
-  total: 'total'
+  total: 'total',
+  price_snapshot: 'price_snapshot'
 };
 
 exports.Prisma.User_payment_methodScalarFieldEnum = {
