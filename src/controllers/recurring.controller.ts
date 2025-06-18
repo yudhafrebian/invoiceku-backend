@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { createResponse, successResponse } from "../utils/response";
 import prisma from "../configs/prisma";
 import { PaymentMethod, Recurrence } from "../../prisma/generated/client";
+import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 
 class RecurringController {
   async createRecurringInvoice(
@@ -168,6 +169,51 @@ class RecurringController {
       next(error);
     }
   }
+
+ async previewRecurringInvoicePDF(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const {
+      client_id,
+      invoice_number,
+      start_date,
+      due_date,
+      invoice_items,
+      notes,
+      recurrence_type,
+      recurrence_interval,
+    } = req.body;
+
+    const total = invoice_items.reduce(
+      (acc: number, item: any) => acc + item.quantity * item.price_snapshot,
+      0
+    );
+
+    const clientData = await prisma.clients.findUnique({
+      where: { id: client_id },
+    });
+
+    const invoiceData = {
+      invoice_number,
+      client: { name: clientData?.name || "Unknown Client" },
+      start_date,
+      due_date,
+      invoice_items,
+      total,
+      notes,
+      recurrence_type,
+      recurrence_interval,
+    };
+
+    generateInvoicePDF(invoiceData, res, false);
+  } catch (error) {
+    next(error);
+  }
+}
+
 
   async recurringType(req: Request, res: Response, next: NextFunction) {
     try {

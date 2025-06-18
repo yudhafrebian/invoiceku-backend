@@ -8,17 +8,21 @@ interface InvoiceItem {
 
 interface Invoice {
   invoice_number: string;
-  client: {
-    name: string;
-  };
+  client: { name: string };
   due_date: string;
   start_date: string;
   invoice_items: InvoiceItem[];
   total: number;
   notes?: string;
+  recurrence_type?: string;
+  recurrence_interval?: number;
 }
 
-export async function generateInvoicePDF(invoice: Invoice, res: Response, isDownload: boolean = false) {
+export async function generateInvoicePDF(
+  invoice: Invoice,
+  res: Response,
+  isDownload: boolean = false
+) {
   const PDFDocument = require("pdfkit-table");
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
@@ -29,12 +33,13 @@ export async function generateInvoicePDF(invoice: Invoice, res: Response, isDown
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`
+      `${isDownload ? "attachment" : "inline"}; filename=invoice-${
+        invoice.client.name
+      }-${invoice.invoice_number}.pdf`
     );
     res.send(pdfData);
   });
 
-  
   doc.fontSize(20).fillColor("#333").text("InvoiceKu", { align: "center" });
   doc.moveDown();
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
@@ -42,8 +47,16 @@ export async function generateInvoicePDF(invoice: Invoice, res: Response, isDown
   doc.fontSize(12).fillColor("#000");
   doc.text(`Invoice Number: ${invoice.invoice_number}`);
   doc.text(`Client: ${invoice.client.name}`);
-  doc.text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`);
-  doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
+  doc.text(
+    `Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`
+  );
+  if (invoice.recurrence_type && invoice.recurrence_interval) {
+  doc.text(`Recurring: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
+}
+
+  doc.text(
+    `Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`
+  );
   doc.moveDown();
 
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
@@ -51,9 +64,8 @@ export async function generateInvoicePDF(invoice: Invoice, res: Response, isDown
   doc.moveDown();
 
   const tableData = {
-    
     headers: [
-      { label: "Item", property: "item", align: "left", width: 200 }, 
+      { label: "Item", property: "item", align: "left", width: 200 },
       { label: "Qty", property: "qty", align: "right", width: 50 },
       { label: "Price", property: "price", align: "right", width: 125 },
       { label: "Total", property: "total", align: "right", width: 125 },
@@ -65,7 +77,7 @@ export async function generateInvoicePDF(invoice: Invoice, res: Response, isDown
       total: `Rp ${(item.quantity * item.price_snapshot).toLocaleString(
         "id-ID"
       )}`,
-      options: {separator: true},
+      options: { separator: true },
     })),
   };
 

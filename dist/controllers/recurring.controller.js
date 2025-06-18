@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const response_1 = require("../utils/response");
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const client_1 = require("../../prisma/generated/client");
+const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
 class RecurringController {
     async createRecurringInvoice(req, res, next) {
         try {
@@ -118,6 +119,30 @@ class RecurringController {
                     totalItems: total,
                 },
             }, 200);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    async previewRecurringInvoicePDF(req, res, next) {
+        try {
+            const { client_id, invoice_number, start_date, due_date, invoice_items, notes, recurrence_type, recurrence_interval, } = req.body;
+            const total = invoice_items.reduce((acc, item) => acc + item.quantity * item.price_snapshot, 0);
+            const clientData = await prisma_1.default.clients.findUnique({
+                where: { id: client_id },
+            });
+            const invoiceData = {
+                invoice_number,
+                client: { name: clientData?.name || "Unknown Client" },
+                start_date,
+                due_date,
+                invoice_items,
+                total,
+                notes,
+                recurrence_type,
+                recurrence_interval,
+            };
+            (0, pdfGenerator_1.generateInvoicePDF)(invoiceData, res, false);
         }
         catch (error) {
             next(error);

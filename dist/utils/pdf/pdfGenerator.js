@@ -20,6 +20,9 @@ async function generateInvoicePDF(invoice, res, isDownload = false) {
     doc.text(`Invoice Number: ${invoice.invoice_number}`);
     doc.text(`Client: ${invoice.client.name}`);
     doc.text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`);
+    if (invoice.recurrence_type && invoice.recurrence_interval) {
+        doc.text(`Recurring: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
+    }
     doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
     doc.moveDown();
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
