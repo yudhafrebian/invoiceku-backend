@@ -279,6 +279,8 @@ class RecurringController {
         },
       });
 
+      console.log(invoiceNumber)
+
       if (!invoice) {
         throw "Invoice not found";
       }
