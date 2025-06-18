@@ -367,7 +367,18 @@ if (today === startDateFormatted) {
         throw "Invoice not found";
       }
 
-      successResponse(res, "Success", invoice);
+      const userPaymentMethod = await prisma.user_payment_method.findFirst({
+        where: {
+          user_id: invoice.user_id,
+          payment_method: invoice.payment_method
+        }
+      })
+
+
+      successResponse(res, "Success", {
+        invoice,
+        userPaymentMethod
+      });
     } catch (error) {
       next(error);
     }

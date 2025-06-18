@@ -273,7 +273,16 @@ class InvoiceController {
             if (!invoice) {
                 throw "Invoice not found";
             }
-            (0, response_1.successResponse)(res, "Success", invoice);
+            const userPaymentMethod = await prisma_1.default.user_payment_method.findFirst({
+                where: {
+                    user_id: invoice.user_id,
+                    payment_method: invoice.payment_method
+                }
+            });
+            (0, response_1.successResponse)(res, "Success", {
+                invoice,
+                userPaymentMethod
+            });
         }
         catch (error) {
             next(error);
