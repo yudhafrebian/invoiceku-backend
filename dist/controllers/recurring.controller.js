@@ -9,7 +9,7 @@ class RecurringController {
     async createRecurringInvoice(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, invoice_items, } = req.body;
+            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -29,16 +29,17 @@ class RecurringController {
                     due_in_days,
                     total,
                     next_run: nextRun,
-                    recurring_invoice_item: {
-                        create: invoice_items.map((item) => ({
-                            product_id: item.product_id,
-                            name_snapshot: item.name_snapshot,
-                            price_snapshot: item.price_snapshot,
-                            quantity: item.quantity,
-                            total: item.total,
-                        })),
-                    },
                 },
+            });
+            const recurring_invoice_item = await prisma_1.default.recurring_invoice_item.createMany({
+                data: recurring_invoice_items.map((item) => ({
+                    recurring_invoice_id: created.id,
+                    product_id: item.product_id,
+                    name_snapshot: item.name_snapshot,
+                    price_snapshot: item.price_snapshot,
+                    quantity: item.quantity,
+                    total: item.total,
+                })),
             });
             (0, response_1.createResponse)(res, "Recurring invoice created successfully", created);
         }

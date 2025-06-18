@@ -23,7 +23,7 @@ class RecurringController {
         due_in_days,
         total,
         payment_method,
-        invoice_items,
+        recurring_invoice_items,
       }: {
         client_id: number;
         invoice_number: string;
@@ -35,7 +35,7 @@ class RecurringController {
         due_in_days: number;
         total: number;
         payment_method: string;
-        invoice_items: {
+        recurring_invoice_items: {
           product_id: number;
           name_snapshot: string;
           price_snapshot: number;
@@ -65,16 +65,18 @@ class RecurringController {
           due_in_days,
           total,
           next_run: nextRun,
-          recurring_invoice_item: {
-            create: invoice_items.map((item) => ({
-              product_id: item.product_id,
-              name_snapshot: item.name_snapshot,
-              price_snapshot: item.price_snapshot,
-              quantity: item.quantity,
-              total: item.total,
-            })),
-          },
         },
+      });
+
+      const recurring_invoice_item = await prisma.recurring_invoice_item.createMany({
+        data: recurring_invoice_items.map((item) => ({
+          recurring_invoice_id: created.id,
+          product_id: item.product_id,
+          name_snapshot: item.name_snapshot,
+          price_snapshot: item.price_snapshot,
+          quantity: item.quantity,
+          total: item.total,
+        })),
       });
 
       createResponse(res, "Recurring invoice created successfully", created);
