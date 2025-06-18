@@ -374,7 +374,6 @@ if (today === startDateFormatted) {
         }
       })
 
-
       successResponse(res, "Success", {
         invoice,
         userPaymentMethod

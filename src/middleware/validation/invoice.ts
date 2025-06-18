@@ -5,7 +5,6 @@ export const invoiceValidation = [
     body("client_id").notEmpty().withMessage("Client ID is required"),
     body("invoice_items").notEmpty().withMessage("Invoice Items is required"),
     body("total").notEmpty().withMessage("Total is required"),
-    body("status").notEmpty().withMessage("Status is required"),
     body("due_date").notEmpty().withMessage("Due Date is required"),
     body("start_date").notEmpty().withMessage("Start Date is required"),
     body("payment_method").notEmpty().withMessage("Payment Method is required"),
