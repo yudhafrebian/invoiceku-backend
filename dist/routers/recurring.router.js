@@ -18,8 +18,10 @@ class RecurringRouter {
         this.route.get("/recurring-type", this.RecurringController.recurringType);
         this.route.post("/preview", this.RecurringController.previewRecurringInvoicePDF);
         this.route.get("/detail/:invoice_number", this.RecurringController.DetailRecurringInvoice);
+        this.route.get("/download/:invoice_number", this.RecurringController.downloadPdf);
         this.route.use(this.verify.verifyToken);
         this.route.get("/all", this.RecurringController.getAllRecurringInvoice);
+        this.route.get("/detail-payment/:invoice_number", this.RecurringController.detailPayment);
         this.route.post("/send-email/:invoice_number", this.RecurringController.sendRecurringInvoiceEmail);
         this.route.use(this.verify.verifyStatus);
         this.route.post("/create", recurring_invoice_1.recurringInvoiceValidation, this.RecurringController.createRecurringInvoice);

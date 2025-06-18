@@ -335,6 +335,81 @@ class RecurringController {
     }
   }
 
+  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        const invoiceNumber = req.params.invoice_number;
+        const invoice = await prisma.recurring_invoice.findUnique({
+          where: { invoice_number: invoiceNumber },
+          include: {
+            recurring_invoice_item: true,
+            clients: true,
+            users: true
+          },
+        })
+  
+        if (!invoice) {
+          throw "Invoice not found";
+        }
+  
+        const userPaymentMethod = await prisma.user_payment_method.findFirst({
+          where: {
+            user_id: invoice.user_id,
+            payment_method: invoice.payment_method
+          }
+        })
+  
+        successResponse(res, "Success", {
+          invoice,
+          userPaymentMethod
+        });
+      } catch (error) {
+        next(error);
+      }
+    }
+
+    async downloadPdf(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const invoiceNumber = req.params.invoice_number;
+      const invoice = await prisma.recurring_invoice.findUnique({
+        where: { invoice_number: invoiceNumber },
+        include: {
+          recurring_invoice_item: true,
+          clients: true,
+        },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      const startDate = new Date(invoice.start_date);
+      const dueDate = new Date(startDate);
+      dueDate.setDate(dueDate.getDate() + invoice.due_in_days);
+
+      generateInvoicePDF(
+        {
+          invoice_number: invoice.invoice_number,
+          client: { name: invoice.clients.name },
+          due_date: dueDate,
+          start_date: invoice.start_date.toISOString(),
+          invoice_items: invoice.recurring_invoice_item,
+          total: invoice.total,
+          notes: invoice.notes || undefined,
+          recurrence_type: invoice.recurrence_type,
+          recurrence_interval: invoice.recurrence_interval,
+        },
+        res,
+        true
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async recurringType(req: Request, res: Response, next: NextFunction) {
     try {
       const recurringType = Object.values(Recurrence);
