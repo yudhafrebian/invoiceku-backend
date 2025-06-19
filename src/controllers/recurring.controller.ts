@@ -416,7 +416,8 @@ class RecurringController {
         `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
         null,
         {
-          name: invoice.clients.name,
+          name: userProfile.first_name,
+          client_name: invoice.clients.name,
           invoice_number: invoice.invoice_number,
           token,
           isRecurring: true,

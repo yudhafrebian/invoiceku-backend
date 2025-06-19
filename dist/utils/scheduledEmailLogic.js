@@ -49,7 +49,8 @@ const scheduledEmailLogic = async () => {
             notes: invoice.notes || undefined,
         });
         await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
-            name: invoice.clients.name,
+            name: userProfile.first_name,
+            client_name: invoice.clients.name,
             invoice_number: invoice.invoice_number,
             token,
             isRecurring: false
@@ -81,6 +82,16 @@ const markOverdueInvoices = async () => {
                 status: "Overdue",
             },
         });
+        const user = await prisma_1.default.users.findUnique({
+            where: { id: invoice.user_id },
+        });
+        if (!user)
+            continue;
+        const userProfile = await prisma_1.default.user_profiles.findFirst({
+            where: { user_id: user.id },
+        });
+        if (!userProfile)
+            continue;
         const token = (0, createToken_1.createToken)({ id: invoice.clients.id, email: invoice.clients.email }, "30d");
         const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
             invoice_number: invoice.invoice_number,
@@ -91,13 +102,13 @@ const markOverdueInvoices = async () => {
             total: invoice.total,
             notes: invoice.notes || undefined,
         });
-        await (0, sendEmail_1.sendOverdueInvoiceEmail)(invoice.clients.email, `Overdue Invoice - ${invoice.invoice_number}`, null, {
-            name: invoice.clients.name,
+        await (0, sendEmail_1.sendOverdueInvoiceEmail)(invoice.clients.email, `Overdue Invoice - ${userProfile.first_name} ${userProfile.last_name}`, null, {
+            name: userProfile.first_name,
+            client_name: invoice.clients.name,
             invoice_number: invoice.invoice_number,
             token,
         }, pdfBuffer);
     }
-    console.log(`${overdueInvoices.length} invoice(s) marked as OVERDUE and email sent.`);
     return overdueInvoices.length;
 };
 exports.markOverdueInvoices = markOverdueInvoices;

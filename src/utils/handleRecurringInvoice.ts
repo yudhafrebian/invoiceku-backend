@@ -20,6 +20,7 @@ export const handleRecurringInvoice = async () => {
     include: {
       recurring_invoice_item: true,
       clients: true,
+      users: true,
     },
   });
 
@@ -133,6 +134,15 @@ export const handleRecurringInvoice = async () => {
       "30d"
     );
 
+    const userProfile = await prisma.user_profiles.findFirst({
+      where: { user_id: user_id },
+
+    })
+
+    if (!userProfile) { 
+      continue;
+    }
+
     const pdfBuffer = await generateInvoicePDFBuffer({
       invoice_number: invoice.invoice_number,
       client: { name: recurring.clients.name },
@@ -150,7 +160,8 @@ export const handleRecurringInvoice = async () => {
       `Invoice ${invoice.invoice_number}`,
       null,
       {
-        name: recurring.clients.name,
+        name: userProfile.first_name,
+        client_name: recurring.clients.name,
         invoice_number: invoice.invoice_number,
         token,
         isRecurring: true,

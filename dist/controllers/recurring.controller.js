@@ -310,7 +310,8 @@ class RecurringController {
                 recurrence_interval: invoice.recurrence_interval,
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
-                name: invoice.clients.name,
+                name: userProfile.first_name,
+                client_name: invoice.clients.name,
                 invoice_number: invoice.invoice_number,
                 token,
                 isRecurring: true,

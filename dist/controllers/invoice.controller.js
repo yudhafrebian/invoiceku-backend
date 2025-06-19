@@ -167,7 +167,8 @@ class InvoiceController {
                         notes: notes || undefined,
                     });
                     await (0, sendEmail_1.sendInvoiceEmail)(client.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
-                        name: client.name,
+                        name: userProfile.first_name,
+                        client_name: client.name,
                         invoice_number: invoice_number,
                         token,
                         isRecurring: false,
@@ -413,7 +414,8 @@ class InvoiceController {
                 notes: invoice.notes || undefined,
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
-                name: invoice.clients.name,
+                name: userProfile.first_name,
+                client_name: invoice.clients.name,
                 invoice_number: invoice.invoice_number,
                 token,
                 isRecurring: false
