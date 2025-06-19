@@ -69,7 +69,7 @@ export const sendInvoiceEmail = async (
       to: emailTo,
       subject,
       html: content || generateHtml,
-      attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+      attachments: pdfBuffer ? [{ filename: `invoice-${data?.client_name}-${data?.invoice_number}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
     });
   } catch (error) {
     throw error;
@@ -94,7 +94,7 @@ export const sendOverdueInvoiceEmail = async (
       to: emailTo,
       subject,
       html: content || generateHtml,
-      attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+      attachments: pdfBuffer ? [{ filename: `invoice-${data?.client_name}-${data?.invoice_number}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
     });
   } catch (error) {
     throw error;
@@ -120,7 +120,7 @@ export const sendStatusEmail = async (
       to: emailTo,
       subject,
       html: content || generateHtml,
-      attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+      attachments: pdfBuffer ? [{ filename: `invoice-${data?.client_name}-${data?.invoice_number}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
     });
   } catch (error) {
     throw error;

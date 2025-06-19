@@ -55,7 +55,7 @@ const sendInvoiceEmail = async (emailTo, subject, content, data, pdfBuffer) => {
             to: emailTo,
             subject,
             html: content || generateHtml,
-            attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+            attachments: pdfBuffer ? [{ filename: `invoice-${data?.client_name}-${data?.invoice_number}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
         });
     }
     catch (error) {
@@ -74,7 +74,7 @@ const sendOverdueInvoiceEmail = async (emailTo, subject, content, data, pdfBuffe
             to: emailTo,
             subject,
             html: content || generateHtml,
-            attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+            attachments: pdfBuffer ? [{ filename: `invoice-${data?.client_name}-${data?.invoice_number}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
         });
     }
     catch (error) {
@@ -93,7 +93,7 @@ const sendStatusEmail = async (emailTo, subject, content, data, pdfBuffer) => {
             to: emailTo,
             subject,
             html: content || generateHtml,
-            attachments: pdfBuffer ? [{ filename: `invoice-${data?.name}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
+            attachments: pdfBuffer ? [{ filename: `invoice-${data?.client_name}-${data?.invoice_number}.pdf`, content: pdfBuffer, contentType: "application/pdf" }] : [],
         });
     }
     catch (error) {

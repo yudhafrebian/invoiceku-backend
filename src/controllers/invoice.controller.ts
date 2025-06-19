@@ -573,7 +573,7 @@ class InvoiceController {
           client_name: invoice.clients.name,
           invoice_number: invoice.invoice_number,
           token,
-          isRecurring: false
+          isRecurring: invoice.recurrence_invoice_id ? true : false
         },
         pdfBuffer
       );
