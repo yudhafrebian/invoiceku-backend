@@ -65,6 +65,13 @@ class DashboardController {
         take: 5,
       });
 
+      const invoices = await prisma.invoices.findMany({
+        where: {
+          user_id: userId,
+        },
+        take: 5,
+      });
+
       successResponse(res, "Success", {
         invoiceSummary: {
           totalInvoice,
@@ -76,6 +83,7 @@ class DashboardController {
         },
         clients,
         products,
+        invoices,
       });
     } catch (error) {
       next(error);
