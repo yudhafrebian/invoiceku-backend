@@ -54,7 +54,7 @@ export const sendInvoiceEmail = async (
   emailTo: string,
   subject: string,
   content?: string | null,
-  data?: { name: string; invoice_number: string, token: string, isRecurring: boolean },
+  data?: { name: string; client_name: string; invoice_number: string, token: string, isRecurring: boolean },
   pdfBuffer?: Buffer
 ) => {
   try {
@@ -79,7 +79,7 @@ export const sendOverdueInvoiceEmail = async (
   emailTo: string,
   subject: string,
   content?: string | null,
-  data?: { name: string; invoice_number: string, token: string },
+  data?: { name: string; client_name: string; invoice_number: string, token: string },
   pdfBuffer?: Buffer
 ) => {
   try {

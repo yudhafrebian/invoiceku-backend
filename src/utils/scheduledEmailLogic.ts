@@ -57,7 +57,8 @@ export const scheduledEmailLogic = async () => {
       `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`,
       null,
       {
-        name: invoice.clients.name,
+        name: userProfile.first_name,
+        client_name: invoice.clients.name,
         invoice_number: invoice.invoice_number,
         token,
         isRecurring: false
@@ -95,6 +96,19 @@ export const markOverdueInvoices = async () => {
       },
     });
 
+    const user = await prisma.users.findUnique({
+      where: { id: invoice.user_id },
+    });
+
+    if (!user) continue;
+
+    const userProfile = await prisma.user_profiles.findFirst({
+      where: { user_id: user.id },
+    });
+
+    if (!userProfile) continue;
+
+
     const token = createToken({ id: invoice.clients.id, email: invoice.clients.email }, "30d");
 
     const pdfBuffer = await generateInvoicePDFBuffer({
@@ -109,17 +123,16 @@ export const markOverdueInvoices = async () => {
 
     await sendOverdueInvoiceEmail(
       invoice.clients.email,
-      `Overdue Invoice - ${invoice.invoice_number}`,
+      `Overdue Invoice - ${userProfile.first_name} ${userProfile.last_name}`,
       null,
       {
-        name: invoice.clients.name,
+        name: userProfile.first_name,
+        client_name: invoice.clients.name,
         invoice_number: invoice.invoice_number,
         token,
       },
       pdfBuffer
     );
   }
-
-  console.log(`${overdueInvoices.length} invoice(s) marked as OVERDUE and email sent.`);
   return overdueInvoices.length;
 };
