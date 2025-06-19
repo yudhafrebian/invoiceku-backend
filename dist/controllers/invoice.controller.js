@@ -23,7 +23,7 @@ class InvoiceController {
             const payment = req.query.payment;
             const status = req.query.status;
             const sort = req.query.sort;
-            let orderByClause = { invoice_number: "asc" };
+            let orderByClause = { created_at: "asc" };
             if (sort === "invoice_number_asc")
                 orderByClause = { invoice_number: "asc" };
             else if (sort === "invoice_number_desc")

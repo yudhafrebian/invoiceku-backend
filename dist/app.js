@@ -48,6 +48,7 @@ const invoice_router_1 = __importDefault(require("./routers/invoice.router"));
 const transaction_router_1 = __importDefault(require("./routers/transaction.router"));
 const prisma_1 = __importDefault(require("./configs/prisma"));
 const recurring_router_1 = __importDefault(require("./routers/recurring.router"));
+const dashboard_router_1 = __importDefault(require("./routers/dashboard.router"));
 // import "./cronJob";
 const PORT = process.env.PORT || 4000;
 class App {
@@ -84,14 +85,13 @@ class App {
         const clientRouter = new client_router_1.default();
         const invoiceRouter = new invoice_router_1.default();
         const transactionRouter = new transaction_router_1.default();
-        const cronRouter = new recurring_router_1.default();
+        const recurringRouter = new recurring_router_1.default();
+        const dashboardRouter = new dashboard_router_1.default();
         this.app.get("/", (req, res) => {
             res.status(200).send("BASE API");
         });
-        this.app.get("/healthz", (req, res) => {
-            res.status(200).json({ status: "ok" });
-        });
-        this.app.use("/recurring-invoice", cronRouter.getRouter());
+        this.app.use("/dashboard", dashboardRouter.getRouter());
+        this.app.use("/recurring-invoice", recurringRouter.getRouter());
         this.app.use("/auth", authRouter.getRouter());
         this.app.use("/user", userRouter.getRouter());
         this.app.use("/product", productRouter.getRouter());
