@@ -45,6 +45,8 @@ export const handleRecurringInvoice = async () => {
       notes,
       start_date,
     } = recurring;
+    console.log("now:", new Date().toISOString());
+    console.log("next_run:", recurring.next_run.toISOString());
 
     if (
       duration !== null &&
