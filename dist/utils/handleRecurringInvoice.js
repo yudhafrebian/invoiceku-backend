@@ -12,6 +12,7 @@ const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
 const handleRecurringInvoice = async () => {
     const now = new Date();
     let createdCount = 0;
+    console.log("Memulai handleRecurringInvoice");
     const recurringInvoices = await prisma_1.default.recurring_invoice.findMany({
         where: {
             is_active: true,
@@ -26,6 +27,7 @@ const handleRecurringInvoice = async () => {
             users: true,
         },
     });
+    console.log("Recurring invoices ditemukan:", recurringInvoices.length);
     for (const recurring of recurringInvoices) {
         const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, start_date, } = recurring;
         if (duration !== null &&
@@ -43,6 +45,8 @@ const handleRecurringInvoice = async () => {
                 invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
             },
         });
+        console.log("Cek existing invoice:", `${invoice_number}-${recurring.occurrences_done + 1}`);
+        console.log("Isi recurring:", recurring);
         if (existing) {
             console.warn(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
             console.log(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);

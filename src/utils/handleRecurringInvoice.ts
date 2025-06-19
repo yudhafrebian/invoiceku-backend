@@ -8,6 +8,7 @@ import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
 export const handleRecurringInvoice = async () => {
   const now = new Date();
   let createdCount = 0;
+  console.log("Memulai handleRecurringInvoice");
 
   const recurringInvoices = await prisma.recurring_invoice.findMany({
     where: {
@@ -23,6 +24,8 @@ export const handleRecurringInvoice = async () => {
       users: true,
     },
   });
+
+  console.log("Recurring invoices ditemukan:", recurringInvoices.length);
 
   for (const recurring of recurringInvoices) {
     const {
@@ -62,13 +65,24 @@ export const handleRecurringInvoice = async () => {
         invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
       },
     });
+
+    console.log(
+      "Cek existing invoice:",
+      `${invoice_number}-${recurring.occurrences_done + 1}`
+    );
+    console.log("Isi recurring:", recurring);
+
     if (existing) {
       console.warn(
         `Invoice ${invoice_number}-${
           recurring.occurrences_done + 1
         } sudah ada, skip`
       );
-      console.log(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
+      console.log(
+        `Invoice ${invoice_number}-${
+          recurring.occurrences_done + 1
+        } sudah ada, skip`
+      );
       continue;
     }
 
@@ -90,7 +104,7 @@ export const handleRecurringInvoice = async () => {
       });
     } catch (err) {
       console.error("Gagal membuat invoice:", err);
-      continue; 
+      continue;
     }
 
     await prisma.invoice_items.createMany({
@@ -137,10 +151,9 @@ export const handleRecurringInvoice = async () => {
 
     const userProfile = await prisma.user_profiles.findFirst({
       where: { user_id: user_id },
+    });
 
-    })
-
-    if (!userProfile) { 
+    if (!userProfile) {
       continue;
     }
 
