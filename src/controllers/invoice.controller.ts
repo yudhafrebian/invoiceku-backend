@@ -456,6 +456,7 @@ class InvoiceController {
         include: {
           invoice_items: true,
           clients: true,
+          recurring_invoice: true,
         },
       });
       if (!invoice) {
@@ -470,6 +471,8 @@ class InvoiceController {
           invoice_items: invoice.invoice_items,
           total: invoice.total,
           notes: invoice.notes || undefined,
+          recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
+          recurrence_type: invoice.recurring_invoice?.recurrence_type
         },
         res,
         true
@@ -479,42 +482,6 @@ class InvoiceController {
     }
   }
 
-  async sendInvoice(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.invoices.findUnique({
-        where: { invoice_number: invoiceNumber },
-        include: {
-          invoice_items: true,
-          clients: true,
-        },
-      });
-
-      if (!invoice) {
-        throw "Invoice not found";
-      }
-
-      generateInvoicePDF(
-        {
-          invoice_number: invoice.invoice_number,
-          client: { name: invoice.clients.name },
-          due_date: invoice.due_date,
-          start_date: invoice.start_date.toISOString(),
-          invoice_items: invoice.invoice_items,
-          total: invoice.total,
-          notes: invoice.notes || undefined,
-        },
-        res,
-        false
-      );
-    } catch (error) {
-      next(error);
-    }
-  }
 
   async sendInvoiceEmail(
     req: Request,
@@ -528,6 +495,7 @@ class InvoiceController {
         include: {
           invoice_items: true,
           clients: true,
+          recurring_invoice: true,
         },
       });
 
@@ -566,6 +534,8 @@ class InvoiceController {
         invoice_items: invoice.invoice_items,
         total: invoice.total,
         notes: invoice.notes || undefined,
+        recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
+        recurrence_type: invoice.recurring_invoice?.recurrence_type
       });
 
       await sendInvoiceEmail(
