@@ -1,5 +1,4 @@
 import { addDays, addWeeks, addMonths } from "date-fns";
-import { zonedTimeToUtc } from "date-fns-tz";
 import prisma from "../configs/prisma";
 import { PaymentMethod } from "../../prisma/generated/client";
 import { sendInvoiceEmail } from "./email/sendEmail";
@@ -7,21 +6,29 @@ import { createToken } from "./createToken";
 import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
 
 export const handleRecurringInvoice = async () => {
-  const now = new Date();
   const zone = "Asia/Jakarta";
-  const jakartaToday = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
-  const formattedStart = zonedTimeToUtc(`${jakartaToday}T00:00:00`, zone);
-  const formattedEnd = zonedTimeToUtc(`${jakartaToday}T23:59:59.999`, zone);
+
+  const todayString = new Intl.DateTimeFormat("en-CA", {
+    timeZone: zone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+
+  const formattedStart = new Date(`${todayString}T00:00:00.000Z`);
+  const formattedEnd = new Date(`${todayString}T23:59:59.999Z`);
+
   let createdCount = 0;
   console.log("Memulai handleRecurringInvoice");
+  console.log("Tanggal di Jakarta:", todayString);
 
   const recurringInvoices = await prisma.recurring_invoice.findMany({
     where: {
       is_active: true,
       is_deleted: false,
       next_run: {
-        gte: new Date(formattedStart + "T00:00:00.000Z"),
-        lte: new Date(formattedEnd + "T23:59:59.999Z"),
+        gte: formattedStart,
+        lte: formattedEnd,
       },
     },
     include: {
@@ -33,7 +40,6 @@ export const handleRecurringInvoice = async () => {
 
   console.log("Recurring invoices ditemukan:", recurringInvoices.length);
 
-  console.log("now:", now.toISOString());
   for (const r of recurringInvoices) {
     console.log(
       `Invoice ${r.invoice_number} | next_run: ${r.next_run.toISOString()}`
@@ -56,10 +62,7 @@ export const handleRecurringInvoice = async () => {
       recurring_invoice_item,
       payment_method,
       notes,
-      start_date,
     } = recurring;
-
-    console.log("next_run:", recurring.next_run.toISOString());
 
     if (
       duration !== null &&
@@ -75,29 +78,14 @@ export const handleRecurringInvoice = async () => {
 
     const dueDate = addDays(new Date(next_run), due_in_days);
 
+    const newInvoiceNumber = `${invoice_number}-${recurring.occurrences_done + 1}`;
+
     const existing = await prisma.invoices.findFirst({
-      where: {
-        invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
-      },
+      where: { invoice_number: newInvoiceNumber },
     });
 
-    console.log(
-      "Cek existing invoice:",
-      `${invoice_number}-${recurring.occurrences_done + 1}`
-    );
-    console.log("Isi recurring:", recurring);
-
     if (existing) {
-      console.warn(
-        `Invoice ${invoice_number}-${
-          recurring.occurrences_done + 1
-        } sudah ada, skip`
-      );
-      console.log(
-        `Invoice ${invoice_number}-${
-          recurring.occurrences_done + 1
-        } sudah ada, skip`
-      );
+      console.warn(`Invoice ${newInvoiceNumber} sudah ada, skip`);
       continue;
     }
 
@@ -107,7 +95,7 @@ export const handleRecurringInvoice = async () => {
         data: {
           user_id,
           client_id,
-          invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
+          invoice_number: newInvoiceNumber,
           start_date: next_run,
           due_date: dueDate,
           total,
@@ -145,7 +133,7 @@ export const handleRecurringInvoice = async () => {
         newNextRun = addMonths(next_run, recurrence_interval);
         break;
       default:
-        newNextRun = addDays(next_run, 7);
+        newNextRun = addDays(next_run, 7); // fallback
     }
 
     await prisma.recurring_invoice.update({
@@ -165,12 +153,10 @@ export const handleRecurringInvoice = async () => {
     );
 
     const userProfile = await prisma.user_profiles.findFirst({
-      where: { user_id: user_id },
+      where: { user_id },
     });
 
-    if (!userProfile) {
-      continue;
-    }
+    if (!userProfile) continue;
 
     const pdfBuffer = await generateInvoicePDFBuffer({
       invoice_number: invoice.invoice_number,

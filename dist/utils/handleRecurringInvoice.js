@@ -5,26 +5,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleRecurringInvoice = void 0;
 const date_fns_1 = require("date-fns");
-const date_fns_tz_1 = require("date-fns-tz");
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const sendEmail_1 = require("./email/sendEmail");
 const createToken_1 = require("./createToken");
 const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
 const handleRecurringInvoice = async () => {
-    const now = new Date();
     const zone = "Asia/Jakarta";
-    const jakartaToday = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
-    const formattedStart = (0, date_fns_tz_1.zonedTimeToUtc)(`${jakartaToday}T00:00:00`, zone);
-    const formattedEnd = (0, date_fns_tz_1.zonedTimeToUtc)(`${jakartaToday}T23:59:59.999`, zone);
+    const todayString = new Intl.DateTimeFormat("en-CA", {
+        timeZone: zone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    }).format(new Date());
+    const formattedStart = new Date(`${todayString}T00:00:00.000Z`);
+    const formattedEnd = new Date(`${todayString}T23:59:59.999Z`);
     let createdCount = 0;
     console.log("Memulai handleRecurringInvoice");
+    console.log("Tanggal di Jakarta:", todayString);
     const recurringInvoices = await prisma_1.default.recurring_invoice.findMany({
         where: {
             is_active: true,
             is_deleted: false,
             next_run: {
-                gte: new Date(formattedStart + "T00:00:00.000Z"),
-                lte: new Date(formattedEnd + "T23:59:59.999Z"),
+                gte: formattedStart,
+                lte: formattedEnd,
             },
         },
         include: {
@@ -34,13 +38,11 @@ const handleRecurringInvoice = async () => {
         },
     });
     console.log("Recurring invoices ditemukan:", recurringInvoices.length);
-    console.log("now:", now.toISOString());
     for (const r of recurringInvoices) {
         console.log(`Invoice ${r.invoice_number} | next_run: ${r.next_run.toISOString()}`);
     }
     for (const recurring of recurringInvoices) {
-        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, start_date, } = recurring;
-        console.log("next_run:", recurring.next_run.toISOString());
+        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, } = recurring;
         if (duration !== null &&
             duration !== undefined &&
             recurring.occurrences_done >= duration) {
@@ -51,16 +53,12 @@ const handleRecurringInvoice = async () => {
             continue;
         }
         const dueDate = (0, date_fns_1.addDays)(new Date(next_run), due_in_days);
+        const newInvoiceNumber = `${invoice_number}-${recurring.occurrences_done + 1}`;
         const existing = await prisma_1.default.invoices.findFirst({
-            where: {
-                invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
-            },
+            where: { invoice_number: newInvoiceNumber },
         });
-        console.log("Cek existing invoice:", `${invoice_number}-${recurring.occurrences_done + 1}`);
-        console.log("Isi recurring:", recurring);
         if (existing) {
-            console.warn(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
-            console.log(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
+            console.warn(`Invoice ${newInvoiceNumber} sudah ada, skip`);
             continue;
         }
         let invoice;
@@ -69,7 +67,7 @@ const handleRecurringInvoice = async () => {
                 data: {
                     user_id,
                     client_id,
-                    invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
+                    invoice_number: newInvoiceNumber,
                     start_date: next_run,
                     due_date: dueDate,
                     total,
@@ -106,7 +104,7 @@ const handleRecurringInvoice = async () => {
                 newNextRun = (0, date_fns_1.addMonths)(next_run, recurrence_interval);
                 break;
             default:
-                newNextRun = (0, date_fns_1.addDays)(next_run, 7);
+                newNextRun = (0, date_fns_1.addDays)(next_run, 7); // fallback
         }
         await prisma_1.default.recurring_invoice.update({
             where: { id },
@@ -120,11 +118,10 @@ const handleRecurringInvoice = async () => {
             email: recurring.clients.email,
         }, "30d");
         const userProfile = await prisma_1.default.user_profiles.findFirst({
-            where: { user_id: user_id },
+            where: { user_id },
         });
-        if (!userProfile) {
+        if (!userProfile)
             continue;
-        }
         const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
             invoice_number: invoice.invoice_number,
             client: { name: recurring.clients.name },
