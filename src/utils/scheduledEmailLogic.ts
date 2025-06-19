@@ -6,6 +6,7 @@ import { createToken } from "../utils/createToken";
 export const scheduledEmailLogic = async () => {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
+  console.log("formattedDate:", formattedDate);
 
   const invoices = await prisma.invoices.findMany({
     where: {

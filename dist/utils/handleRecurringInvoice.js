@@ -29,6 +29,10 @@ const handleRecurringInvoice = async () => {
         },
     });
     console.log("Recurring invoices ditemukan:", recurringInvoices.length);
+    console.log("now:", now.toISOString());
+    for (const r of recurringInvoices) {
+        console.log(`Invoice ${r.invoice_number} | next_run: ${r.next_run.toISOString()}`);
+    }
     for (const recurring of recurringInvoices) {
         const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, start_date, } = recurring;
         console.log("next_run:", recurring.next_run.toISOString());
