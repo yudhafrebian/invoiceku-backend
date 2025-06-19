@@ -26,16 +26,10 @@ const handleRecurringInvoice = async () => {
         },
     });
     for (const recurring of recurringInvoices) {
-        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, start_date, due_in_days, status, total, recurring_invoice_item, payment_method, notes } = recurring;
-        const existingGenerated = await prisma_1.default.invoices.count({
-            where: {
-                invoice_number: {
-                    startsWith: invoice_number,
-                },
-                user_id,
-            },
-        });
-        if (duration !== null && duration !== undefined && existingGenerated >= duration) {
+        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, start_date, } = recurring;
+        if (duration !== null &&
+            duration !== undefined &&
+            recurring.occurrences_done >= duration) {
             await prisma_1.default.recurring_invoice.update({
                 where: { id },
                 data: { is_active: false },
@@ -43,25 +37,39 @@ const handleRecurringInvoice = async () => {
             continue;
         }
         const dueDate = (0, date_fns_1.addDays)(new Date(next_run), due_in_days);
-        const recurringInvoice = await prisma_1.default.recurring_invoice.create({
-            data: {
-                user_id,
-                client_id,
-                invoice_number: `${invoice_number}-${existingGenerated + 1}`,
-                start_date: next_run,
-                due_date: dueDate,
-                notes,
-                status,
-                total,
-                payment_method: payment_method,
-                due_in_days,
-                recurrence_type,
-                next_run,
+        const existing = await prisma_1.default.invoices.findFirst({
+            where: {
+                invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
             },
         });
-        await prisma_1.default.recurring_invoice_item.createMany({
+        if (existing) {
+            console.warn(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
+            continue;
+        }
+        let invoice;
+        try {
+            invoice = await prisma_1.default.invoices.create({
+                data: {
+                    user_id,
+                    client_id,
+                    invoice_number: `${invoice_number}-${recurring.occurrences_done + 1}`,
+                    start_date: next_run,
+                    due_date: dueDate,
+                    total,
+                    notes,
+                    status,
+                    payment_method: payment_method,
+                    recurrence_invoice_id: id,
+                },
+            });
+        }
+        catch (err) {
+            console.error("Gagal membuat invoice:", err);
+            continue;
+        }
+        await prisma_1.default.invoice_items.createMany({
             data: recurring_invoice_item.map((item) => ({
-                recurring_invoice_id: recurringInvoice.id,
+                invoice_id: invoice.id,
                 product_id: item.product_id,
                 name_snapshot: item.name_snapshot,
                 price_snapshot: item.price_snapshot,
@@ -69,7 +77,6 @@ const handleRecurringInvoice = async () => {
                 total: item.total,
             })),
         });
-        createdCount++;
         let newNextRun;
         switch (recurrence_type) {
             case "Daily":
@@ -88,6 +95,7 @@ const handleRecurringInvoice = async () => {
             where: { id },
             data: {
                 next_run: newNextRun,
+                occurrences_done: { increment: 1 },
             },
         });
         const token = (0, createToken_1.createToken)({
@@ -95,22 +103,23 @@ const handleRecurringInvoice = async () => {
             email: recurring.clients.email,
         }, "30d");
         const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
-            invoice_number: recurring.invoice_number,
+            invoice_number: invoice.invoice_number,
             client: { name: recurring.clients.name },
             due_date: dueDate,
-            start_date: recurring.start_date,
-            invoice_items: recurring.recurring_invoice_item,
-            total: recurringInvoice.total,
-            notes: recurring.notes || undefined,
-            recurrence_interval: recurring.recurrence_interval,
-            recurrence_type: recurring.recurrence_type
+            start_date: invoice.start_date,
+            invoice_items: recurring_invoice_item,
+            total: invoice.total,
+            notes: invoice.notes || undefined,
+            recurrence_interval,
+            recurrence_type,
         });
-        await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${recurring.invoice_number}`, null, {
+        await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${invoice.invoice_number}`, null, {
             name: recurring.clients.name,
-            invoice_number: recurring.invoice_number,
+            invoice_number: invoice.invoice_number,
             token,
-            isRecurring: true
+            isRecurring: true,
         }, pdfBuffer);
+        createdCount++;
     }
     return createdCount;
 };

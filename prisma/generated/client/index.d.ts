@@ -1957,10 +1957,12 @@ export namespace Prisma {
    */
 
   export type Recurring_invoiceCountOutputType = {
+    invoices: number
     recurring_invoice_item: number
   }
 
   export type Recurring_invoiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoices?: boolean | Recurring_invoiceCountOutputTypeCountInvoicesArgs
     recurring_invoice_item?: boolean | Recurring_invoiceCountOutputTypeCountRecurring_invoice_itemArgs
   }
 
@@ -1973,6 +1975,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the Recurring_invoiceCountOutputType
      */
     select?: Recurring_invoiceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Recurring_invoiceCountOutputType without action
+   */
+  export type Recurring_invoiceCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoicesWhereInput
   }
 
   /**
@@ -4343,6 +4352,7 @@ export namespace Prisma {
     user_id: number | null
     client_id: number | null
     total: number | null
+    recurrence_invoice_id: number | null
   }
 
   export type InvoicesSumAggregateOutputType = {
@@ -4350,6 +4360,7 @@ export namespace Prisma {
     user_id: number | null
     client_id: number | null
     total: number | null
+    recurrence_invoice_id: number | null
   }
 
   export type InvoicesMinAggregateOutputType = {
@@ -4364,6 +4375,8 @@ export namespace Prisma {
     total: number | null
     is_deleted: boolean | null
     payment_method: $Enums.PaymentMethod | null
+    created_at: Date | null
+    recurrence_invoice_id: number | null
   }
 
   export type InvoicesMaxAggregateOutputType = {
@@ -4378,6 +4391,8 @@ export namespace Prisma {
     total: number | null
     is_deleted: boolean | null
     payment_method: $Enums.PaymentMethod | null
+    created_at: Date | null
+    recurrence_invoice_id: number | null
   }
 
   export type InvoicesCountAggregateOutputType = {
@@ -4392,6 +4407,8 @@ export namespace Prisma {
     total: number
     is_deleted: number
     payment_method: number
+    created_at: number
+    recurrence_invoice_id: number
     _all: number
   }
 
@@ -4401,6 +4418,7 @@ export namespace Prisma {
     user_id?: true
     client_id?: true
     total?: true
+    recurrence_invoice_id?: true
   }
 
   export type InvoicesSumAggregateInputType = {
@@ -4408,6 +4426,7 @@ export namespace Prisma {
     user_id?: true
     client_id?: true
     total?: true
+    recurrence_invoice_id?: true
   }
 
   export type InvoicesMinAggregateInputType = {
@@ -4422,6 +4441,8 @@ export namespace Prisma {
     total?: true
     is_deleted?: true
     payment_method?: true
+    created_at?: true
+    recurrence_invoice_id?: true
   }
 
   export type InvoicesMaxAggregateInputType = {
@@ -4436,6 +4457,8 @@ export namespace Prisma {
     total?: true
     is_deleted?: true
     payment_method?: true
+    created_at?: true
+    recurrence_invoice_id?: true
   }
 
   export type InvoicesCountAggregateInputType = {
@@ -4450,6 +4473,8 @@ export namespace Prisma {
     total?: true
     is_deleted?: true
     payment_method?: true
+    created_at?: true
+    recurrence_invoice_id?: true
     _all?: true
   }
 
@@ -4551,6 +4576,8 @@ export namespace Prisma {
     total: number
     is_deleted: boolean
     payment_method: $Enums.PaymentMethod
+    created_at: Date
+    recurrence_invoice_id: number | null
     _count: InvoicesCountAggregateOutputType | null
     _avg: InvoicesAvgAggregateOutputType | null
     _sum: InvoicesSumAggregateOutputType | null
@@ -4584,9 +4611,12 @@ export namespace Prisma {
     total?: boolean
     is_deleted?: boolean
     payment_method?: boolean
+    created_at?: boolean
+    recurrence_invoice_id?: boolean
     invoice_items?: boolean | invoices$invoice_itemsArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
+    recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
     transaction?: boolean | invoices$transactionArgs<ExtArgs>
     _count?: boolean | InvoicesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoices"]>
@@ -4603,8 +4633,11 @@ export namespace Prisma {
     total?: boolean
     is_deleted?: boolean
     payment_method?: boolean
+    created_at?: boolean
+    recurrence_invoice_id?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
+    recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
   }, ExtArgs["result"]["invoices"]>
 
   export type invoicesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4619,8 +4652,11 @@ export namespace Prisma {
     total?: boolean
     is_deleted?: boolean
     payment_method?: boolean
+    created_at?: boolean
+    recurrence_invoice_id?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
+    recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
   }, ExtArgs["result"]["invoices"]>
 
   export type invoicesSelectScalar = {
@@ -4635,23 +4671,28 @@ export namespace Prisma {
     total?: boolean
     is_deleted?: boolean
     payment_method?: boolean
+    created_at?: boolean
+    recurrence_invoice_id?: boolean
   }
 
-  export type invoicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "notes" | "status" | "total" | "is_deleted" | "payment_method", ExtArgs["result"]["invoices"]>
+  export type invoicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "notes" | "status" | "total" | "is_deleted" | "payment_method" | "created_at" | "recurrence_invoice_id", ExtArgs["result"]["invoices"]>
   export type invoicesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoice_items?: boolean | invoices$invoice_itemsArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
+    recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
     transaction?: boolean | invoices$transactionArgs<ExtArgs>
     _count?: boolean | InvoicesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type invoicesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
+    recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
   }
   export type invoicesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
+    recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
   }
 
   export type $invoicesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4660,6 +4701,7 @@ export namespace Prisma {
       invoice_items: Prisma.$invoice_itemsPayload<ExtArgs>[]
       users: Prisma.$usersPayload<ExtArgs>
       clients: Prisma.$clientsPayload<ExtArgs>
+      recurring_invoice: Prisma.$recurring_invoicePayload<ExtArgs> | null
       transaction: Prisma.$transactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4674,6 +4716,8 @@ export namespace Prisma {
       total: number
       is_deleted: boolean
       payment_method: $Enums.PaymentMethod
+      created_at: Date
+      recurrence_invoice_id: number | null
     }, ExtArgs["result"]["invoices"]>
     composites: {}
   }
@@ -5071,6 +5115,7 @@ export namespace Prisma {
     invoice_items<T extends invoices$invoice_itemsArgs<ExtArgs> = {}>(args?: Subset<T, invoices$invoice_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     clients<T extends clientsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, clientsDefaultArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    recurring_invoice<T extends invoices$recurring_invoiceArgs<ExtArgs> = {}>(args?: Subset<T, invoices$recurring_invoiceArgs<ExtArgs>>): Prisma__recurring_invoiceClient<$Result.GetResult<Prisma.$recurring_invoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transaction<T extends invoices$transactionArgs<ExtArgs> = {}>(args?: Subset<T, invoices$transactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$transactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5112,6 +5157,8 @@ export namespace Prisma {
     readonly total: FieldRef<"invoices", 'Int'>
     readonly is_deleted: FieldRef<"invoices", 'Boolean'>
     readonly payment_method: FieldRef<"invoices", 'PaymentMethod'>
+    readonly created_at: FieldRef<"invoices", 'DateTime'>
+    readonly recurrence_invoice_id: FieldRef<"invoices", 'Int'>
   }
     
 
@@ -5529,6 +5576,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Invoice_itemsScalarFieldEnum | Invoice_itemsScalarFieldEnum[]
+  }
+
+  /**
+   * invoices.recurring_invoice
+   */
+  export type invoices$recurring_invoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the recurring_invoice
+     */
+    select?: recurring_invoiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the recurring_invoice
+     */
+    omit?: recurring_invoiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: recurring_invoiceInclude<ExtArgs> | null
+    where?: recurring_invoiceWhereInput
   }
 
   /**
@@ -9449,6 +9515,7 @@ export namespace Prisma {
     status?: boolean
     payment_method?: boolean
     created_at?: boolean
+    invoices?: boolean | recurring_invoice$invoicesArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     recurring_invoice_item?: boolean | recurring_invoice$recurring_invoice_itemArgs<ExtArgs>
@@ -9527,6 +9594,7 @@ export namespace Prisma {
 
   export type recurring_invoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "notes" | "next_run" | "is_active" | "is_deleted" | "total" | "duration" | "occurrences_done" | "recurrence_interval" | "recurrence_type" | "due_in_days" | "status" | "payment_method" | "created_at", ExtArgs["result"]["recurring_invoice"]>
   export type recurring_invoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoices?: boolean | recurring_invoice$invoicesArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     recurring_invoice_item?: boolean | recurring_invoice$recurring_invoice_itemArgs<ExtArgs>
@@ -9544,6 +9612,7 @@ export namespace Prisma {
   export type $recurring_invoicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "recurring_invoice"
     objects: {
+      invoices: Prisma.$invoicesPayload<ExtArgs>[]
       clients: Prisma.$clientsPayload<ExtArgs>
       users: Prisma.$usersPayload<ExtArgs>
       recurring_invoice_item: Prisma.$recurring_invoice_itemPayload<ExtArgs>[]
@@ -9962,6 +10031,7 @@ export namespace Prisma {
    */
   export interface Prisma__recurring_invoiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    invoices<T extends recurring_invoice$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, recurring_invoice$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     clients<T extends clientsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, clientsDefaultArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     recurring_invoice_item<T extends recurring_invoice$recurring_invoice_itemArgs<ExtArgs> = {}>(args?: Subset<T, recurring_invoice$recurring_invoice_itemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$recurring_invoice_itemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10406,6 +10476,30 @@ export namespace Prisma {
      * Limit how many recurring_invoices to delete.
      */
     limit?: number
+  }
+
+  /**
+   * recurring_invoice.invoices
+   */
+  export type recurring_invoice$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoices
+     */
+    select?: invoicesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoices
+     */
+    omit?: invoicesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoicesInclude<ExtArgs> | null
+    where?: invoicesWhereInput
+    orderBy?: invoicesOrderByWithRelationInput | invoicesOrderByWithRelationInput[]
+    cursor?: invoicesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvoicesScalarFieldEnum | InvoicesScalarFieldEnum[]
   }
 
   /**
@@ -13867,7 +13961,9 @@ export namespace Prisma {
     status: 'status',
     total: 'total',
     is_deleted: 'is_deleted',
-    payment_method: 'payment_method'
+    payment_method: 'payment_method',
+    created_at: 'created_at',
+    recurrence_invoice_id: 'recurrence_invoice_id'
   };
 
   export type InvoicesScalarFieldEnum = (typeof InvoicesScalarFieldEnum)[keyof typeof InvoicesScalarFieldEnum]
@@ -14299,9 +14395,12 @@ export namespace Prisma {
     total?: IntFilter<"invoices"> | number
     is_deleted?: BoolFilter<"invoices"> | boolean
     payment_method?: EnumPaymentMethodFilter<"invoices"> | $Enums.PaymentMethod
+    created_at?: DateTimeFilter<"invoices"> | Date | string
+    recurrence_invoice_id?: IntNullableFilter<"invoices"> | number | null
     invoice_items?: Invoice_itemsListRelationFilter
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
+    recurring_invoice?: XOR<Recurring_invoiceNullableScalarRelationFilter, recurring_invoiceWhereInput> | null
     transaction?: TransactionListRelationFilter
   }
 
@@ -14317,9 +14416,12 @@ export namespace Prisma {
     total?: SortOrder
     is_deleted?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
+    recurrence_invoice_id?: SortOrderInput | SortOrder
     invoice_items?: invoice_itemsOrderByRelationAggregateInput
     users?: usersOrderByWithRelationInput
     clients?: clientsOrderByWithRelationInput
+    recurring_invoice?: recurring_invoiceOrderByWithRelationInput
     transaction?: transactionOrderByRelationAggregateInput
   }
 
@@ -14338,9 +14440,12 @@ export namespace Prisma {
     total?: IntFilter<"invoices"> | number
     is_deleted?: BoolFilter<"invoices"> | boolean
     payment_method?: EnumPaymentMethodFilter<"invoices"> | $Enums.PaymentMethod
+    created_at?: DateTimeFilter<"invoices"> | Date | string
+    recurrence_invoice_id?: IntNullableFilter<"invoices"> | number | null
     invoice_items?: Invoice_itemsListRelationFilter
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
+    recurring_invoice?: XOR<Recurring_invoiceNullableScalarRelationFilter, recurring_invoiceWhereInput> | null
     transaction?: TransactionListRelationFilter
   }, "id" | "invoice_number">
 
@@ -14356,6 +14461,8 @@ export namespace Prisma {
     total?: SortOrder
     is_deleted?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
+    recurrence_invoice_id?: SortOrderInput | SortOrder
     _count?: invoicesCountOrderByAggregateInput
     _avg?: invoicesAvgOrderByAggregateInput
     _max?: invoicesMaxOrderByAggregateInput
@@ -14378,6 +14485,8 @@ export namespace Prisma {
     total?: IntWithAggregatesFilter<"invoices"> | number
     is_deleted?: BoolWithAggregatesFilter<"invoices"> | boolean
     payment_method?: EnumPaymentMethodWithAggregatesFilter<"invoices"> | $Enums.PaymentMethod
+    created_at?: DateTimeWithAggregatesFilter<"invoices"> | Date | string
+    recurrence_invoice_id?: IntNullableWithAggregatesFilter<"invoices"> | number | null
   }
 
   export type products_servicesWhereInput = {
@@ -14610,6 +14719,7 @@ export namespace Prisma {
     status?: EnumStatusFilter<"recurring_invoice"> | $Enums.Status
     payment_method?: EnumPaymentMethodFilter<"recurring_invoice"> | $Enums.PaymentMethod
     created_at?: DateTimeFilter<"recurring_invoice"> | Date | string
+    invoices?: InvoicesListRelationFilter
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     recurring_invoice_item?: Recurring_invoice_itemListRelationFilter
@@ -14635,6 +14745,7 @@ export namespace Prisma {
     status?: SortOrder
     payment_method?: SortOrder
     created_at?: SortOrder
+    invoices?: invoicesOrderByRelationAggregateInput
     clients?: clientsOrderByWithRelationInput
     users?: usersOrderByWithRelationInput
     recurring_invoice_item?: recurring_invoice_itemOrderByRelationAggregateInput
@@ -14663,6 +14774,7 @@ export namespace Prisma {
     status?: EnumStatusFilter<"recurring_invoice"> | $Enums.Status
     payment_method?: EnumPaymentMethodFilter<"recurring_invoice"> | $Enums.PaymentMethod
     created_at?: DateTimeFilter<"recurring_invoice"> | Date | string
+    invoices?: InvoicesListRelationFilter
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     recurring_invoice_item?: Recurring_invoice_itemListRelationFilter
@@ -15069,9 +15181,11 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
+    recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
     transaction?: transactionCreateNestedManyWithoutInvoicesInput
   }
 
@@ -15087,6 +15201,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -15100,9 +15216,11 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
+    recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
     transaction?: transactionUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -15118,6 +15236,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -15134,6 +15254,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
   }
 
   export type invoicesUpdateManyMutationInput = {
@@ -15145,6 +15267,7 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type invoicesUncheckedUpdateManyInput = {
@@ -15159,6 +15282,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type products_servicesCreateInput = {
@@ -15388,6 +15513,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesCreateNestedManyWithoutRecurring_invoiceInput
     clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
     users: usersCreateNestedOneWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
@@ -15413,6 +15539,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesUncheckedCreateNestedManyWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
@@ -15433,6 +15560,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUpdateManyWithoutRecurring_invoiceNestedInput
     clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
@@ -15458,6 +15586,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
@@ -15956,6 +16085,17 @@ export namespace Prisma {
     not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type Invoice_itemsListRelationFilter = {
     every?: invoice_itemsWhereInput
     some?: invoice_itemsWhereInput
@@ -15965,6 +16105,11 @@ export namespace Prisma {
   export type ClientsScalarRelationFilter = {
     is?: clientsWhereInput
     isNot?: clientsWhereInput
+  }
+
+  export type Recurring_invoiceNullableScalarRelationFilter = {
+    is?: recurring_invoiceWhereInput | null
+    isNot?: recurring_invoiceWhereInput | null
   }
 
   export type TransactionListRelationFilter = {
@@ -15998,6 +16143,8 @@ export namespace Prisma {
     total?: SortOrder
     is_deleted?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
+    recurrence_invoice_id?: SortOrder
   }
 
   export type invoicesAvgOrderByAggregateInput = {
@@ -16005,6 +16152,7 @@ export namespace Prisma {
     user_id?: SortOrder
     client_id?: SortOrder
     total?: SortOrder
+    recurrence_invoice_id?: SortOrder
   }
 
   export type invoicesMaxOrderByAggregateInput = {
@@ -16019,6 +16167,8 @@ export namespace Prisma {
     total?: SortOrder
     is_deleted?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
+    recurrence_invoice_id?: SortOrder
   }
 
   export type invoicesMinOrderByAggregateInput = {
@@ -16033,6 +16183,8 @@ export namespace Prisma {
     total?: SortOrder
     is_deleted?: SortOrder
     payment_method?: SortOrder
+    created_at?: SortOrder
+    recurrence_invoice_id?: SortOrder
   }
 
   export type invoicesSumOrderByAggregateInput = {
@@ -16040,6 +16192,7 @@ export namespace Prisma {
     user_id?: SortOrder
     client_id?: SortOrder
     total?: SortOrder
+    recurrence_invoice_id?: SortOrder
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -16082,6 +16235,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusFilter<$PrismaModel>
     _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumTypeFilter<$PrismaModel = never> = {
@@ -16290,17 +16459,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EnumRecurrenceFilter<$PrismaModel = never> = {
     equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
     in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
@@ -16408,22 +16566,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
@@ -16728,6 +16870,12 @@ export namespace Prisma {
     connect?: clientsWhereUniqueInput
   }
 
+  export type recurring_invoiceCreateNestedOneWithoutInvoicesInput = {
+    create?: XOR<recurring_invoiceCreateWithoutInvoicesInput, recurring_invoiceUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: recurring_invoiceCreateOrConnectWithoutInvoicesInput
+    connect?: recurring_invoiceWhereUniqueInput
+  }
+
   export type transactionCreateNestedManyWithoutInvoicesInput = {
     create?: XOR<transactionCreateWithoutInvoicesInput, transactionUncheckedCreateWithoutInvoicesInput> | transactionCreateWithoutInvoicesInput[] | transactionUncheckedCreateWithoutInvoicesInput[]
     connectOrCreate?: transactionCreateOrConnectWithoutInvoicesInput | transactionCreateOrConnectWithoutInvoicesInput[]
@@ -16791,6 +16939,16 @@ export namespace Prisma {
     update?: XOR<XOR<clientsUpdateToOneWithWhereWithoutInvoicesInput, clientsUpdateWithoutInvoicesInput>, clientsUncheckedUpdateWithoutInvoicesInput>
   }
 
+  export type recurring_invoiceUpdateOneWithoutInvoicesNestedInput = {
+    create?: XOR<recurring_invoiceCreateWithoutInvoicesInput, recurring_invoiceUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: recurring_invoiceCreateOrConnectWithoutInvoicesInput
+    upsert?: recurring_invoiceUpsertWithoutInvoicesInput
+    disconnect?: recurring_invoiceWhereInput | boolean
+    delete?: recurring_invoiceWhereInput | boolean
+    connect?: recurring_invoiceWhereUniqueInput
+    update?: XOR<XOR<recurring_invoiceUpdateToOneWithWhereWithoutInvoicesInput, recurring_invoiceUpdateWithoutInvoicesInput>, recurring_invoiceUncheckedUpdateWithoutInvoicesInput>
+  }
+
   export type transactionUpdateManyWithoutInvoicesNestedInput = {
     create?: XOR<transactionCreateWithoutInvoicesInput, transactionUncheckedCreateWithoutInvoicesInput> | transactionCreateWithoutInvoicesInput[] | transactionUncheckedCreateWithoutInvoicesInput[]
     connectOrCreate?: transactionCreateOrConnectWithoutInvoicesInput | transactionCreateOrConnectWithoutInvoicesInput[]
@@ -16803,6 +16961,14 @@ export namespace Prisma {
     update?: transactionUpdateWithWhereUniqueWithoutInvoicesInput | transactionUpdateWithWhereUniqueWithoutInvoicesInput[]
     updateMany?: transactionUpdateManyWithWhereWithoutInvoicesInput | transactionUpdateManyWithWhereWithoutInvoicesInput[]
     deleteMany?: transactionScalarWhereInput | transactionScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput = {
@@ -17205,6 +17371,13 @@ export namespace Prisma {
     deleteMany?: user_profilesScalarWhereInput | user_profilesScalarWhereInput[]
   }
 
+  export type invoicesCreateNestedManyWithoutRecurring_invoiceInput = {
+    create?: XOR<invoicesCreateWithoutRecurring_invoiceInput, invoicesUncheckedCreateWithoutRecurring_invoiceInput> | invoicesCreateWithoutRecurring_invoiceInput[] | invoicesUncheckedCreateWithoutRecurring_invoiceInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutRecurring_invoiceInput | invoicesCreateOrConnectWithoutRecurring_invoiceInput[]
+    createMany?: invoicesCreateManyRecurring_invoiceInputEnvelope
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+  }
+
   export type clientsCreateNestedOneWithoutRecurring_invoiceInput = {
     create?: XOR<clientsCreateWithoutRecurring_invoiceInput, clientsUncheckedCreateWithoutRecurring_invoiceInput>
     connectOrCreate?: clientsCreateOrConnectWithoutRecurring_invoiceInput
@@ -17224,6 +17397,13 @@ export namespace Prisma {
     connect?: recurring_invoice_itemWhereUniqueInput | recurring_invoice_itemWhereUniqueInput[]
   }
 
+  export type invoicesUncheckedCreateNestedManyWithoutRecurring_invoiceInput = {
+    create?: XOR<invoicesCreateWithoutRecurring_invoiceInput, invoicesUncheckedCreateWithoutRecurring_invoiceInput> | invoicesCreateWithoutRecurring_invoiceInput[] | invoicesUncheckedCreateWithoutRecurring_invoiceInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutRecurring_invoiceInput | invoicesCreateOrConnectWithoutRecurring_invoiceInput[]
+    createMany?: invoicesCreateManyRecurring_invoiceInputEnvelope
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+  }
+
   export type recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput = {
     create?: XOR<recurring_invoice_itemCreateWithoutRecurring_invoiceInput, recurring_invoice_itemUncheckedCreateWithoutRecurring_invoiceInput> | recurring_invoice_itemCreateWithoutRecurring_invoiceInput[] | recurring_invoice_itemUncheckedCreateWithoutRecurring_invoiceInput[]
     connectOrCreate?: recurring_invoice_itemCreateOrConnectWithoutRecurring_invoiceInput | recurring_invoice_itemCreateOrConnectWithoutRecurring_invoiceInput[]
@@ -17235,16 +17415,22 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type EnumRecurrenceFieldUpdateOperationsInput = {
     set?: $Enums.Recurrence
+  }
+
+  export type invoicesUpdateManyWithoutRecurring_invoiceNestedInput = {
+    create?: XOR<invoicesCreateWithoutRecurring_invoiceInput, invoicesUncheckedCreateWithoutRecurring_invoiceInput> | invoicesCreateWithoutRecurring_invoiceInput[] | invoicesUncheckedCreateWithoutRecurring_invoiceInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutRecurring_invoiceInput | invoicesCreateOrConnectWithoutRecurring_invoiceInput[]
+    upsert?: invoicesUpsertWithWhereUniqueWithoutRecurring_invoiceInput | invoicesUpsertWithWhereUniqueWithoutRecurring_invoiceInput[]
+    createMany?: invoicesCreateManyRecurring_invoiceInputEnvelope
+    set?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    disconnect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    delete?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    update?: invoicesUpdateWithWhereUniqueWithoutRecurring_invoiceInput | invoicesUpdateWithWhereUniqueWithoutRecurring_invoiceInput[]
+    updateMany?: invoicesUpdateManyWithWhereWithoutRecurring_invoiceInput | invoicesUpdateManyWithWhereWithoutRecurring_invoiceInput[]
+    deleteMany?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
   }
 
   export type clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput = {
@@ -17275,6 +17461,20 @@ export namespace Prisma {
     update?: recurring_invoice_itemUpdateWithWhereUniqueWithoutRecurring_invoiceInput | recurring_invoice_itemUpdateWithWhereUniqueWithoutRecurring_invoiceInput[]
     updateMany?: recurring_invoice_itemUpdateManyWithWhereWithoutRecurring_invoiceInput | recurring_invoice_itemUpdateManyWithWhereWithoutRecurring_invoiceInput[]
     deleteMany?: recurring_invoice_itemScalarWhereInput | recurring_invoice_itemScalarWhereInput[]
+  }
+
+  export type invoicesUncheckedUpdateManyWithoutRecurring_invoiceNestedInput = {
+    create?: XOR<invoicesCreateWithoutRecurring_invoiceInput, invoicesUncheckedCreateWithoutRecurring_invoiceInput> | invoicesCreateWithoutRecurring_invoiceInput[] | invoicesUncheckedCreateWithoutRecurring_invoiceInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutRecurring_invoiceInput | invoicesCreateOrConnectWithoutRecurring_invoiceInput[]
+    upsert?: invoicesUpsertWithWhereUniqueWithoutRecurring_invoiceInput | invoicesUpsertWithWhereUniqueWithoutRecurring_invoiceInput[]
+    createMany?: invoicesCreateManyRecurring_invoiceInputEnvelope
+    set?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    disconnect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    delete?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    update?: invoicesUpdateWithWhereUniqueWithoutRecurring_invoiceInput | invoicesUpdateWithWhereUniqueWithoutRecurring_invoiceInput[]
+    updateMany?: invoicesUpdateManyWithWhereWithoutRecurring_invoiceInput | invoicesUpdateManyWithWhereWithoutRecurring_invoiceInput[]
+    deleteMany?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
   }
 
   export type recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput = {
@@ -17478,6 +17678,17 @@ export namespace Prisma {
     not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -17509,17 +17720,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
     in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
@@ -17528,6 +17728,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStatusFilter<$PrismaModel>
     _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumTypeFilter<$PrismaModel = never> = {
@@ -17596,33 +17823,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
     in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
@@ -17670,8 +17870,10 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
+    recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
     transaction?: transactionCreateNestedManyWithoutInvoicesInput
   }
 
@@ -17686,6 +17888,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -17717,6 +17921,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesCreateNestedManyWithoutRecurring_invoiceInput
     users: usersCreateNestedOneWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
   }
@@ -17740,6 +17945,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesUncheckedCreateNestedManyWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
@@ -17818,6 +18024,8 @@ export namespace Prisma {
     total?: IntFilter<"invoices"> | number
     is_deleted?: BoolFilter<"invoices"> | boolean
     payment_method?: EnumPaymentMethodFilter<"invoices"> | $Enums.PaymentMethod
+    created_at?: DateTimeFilter<"invoices"> | Date | string
+    recurrence_invoice_id?: IntNullableFilter<"invoices"> | number | null
   }
 
   export type recurring_invoiceUpsertWithWhereUniqueWithoutClientsInput = {
@@ -17870,8 +18078,10 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
+    recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
     transaction?: transactionCreateNestedManyWithoutInvoicesInput
   }
 
@@ -17887,6 +18097,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
 
@@ -17943,8 +18155,10 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
+    recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
     transaction?: transactionUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -17960,6 +18174,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -18080,6 +18296,56 @@ export namespace Prisma {
     create: XOR<clientsCreateWithoutInvoicesInput, clientsUncheckedCreateWithoutInvoicesInput>
   }
 
+  export type recurring_invoiceCreateWithoutInvoicesInput = {
+    invoice_number: string
+    start_date: Date | string
+    due_date?: Date | string | null
+    notes?: string | null
+    next_run: Date | string
+    is_active?: boolean
+    is_deleted?: boolean
+    total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
+    status?: $Enums.Status
+    payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
+    users: usersCreateNestedOneWithoutRecurring_invoiceInput
+    recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
+  }
+
+  export type recurring_invoiceUncheckedCreateWithoutInvoicesInput = {
+    id?: number
+    user_id: number
+    client_id: number
+    invoice_number: string
+    start_date: Date | string
+    due_date?: Date | string | null
+    notes?: string | null
+    next_run: Date | string
+    is_active?: boolean
+    is_deleted?: boolean
+    total: number
+    duration?: number | null
+    occurrences_done?: number
+    recurrence_interval?: number
+    recurrence_type: $Enums.Recurrence
+    due_in_days: number
+    status?: $Enums.Status
+    payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
+  }
+
+  export type recurring_invoiceCreateOrConnectWithoutInvoicesInput = {
+    where: recurring_invoiceWhereUniqueInput
+    create: XOR<recurring_invoiceCreateWithoutInvoicesInput, recurring_invoiceUncheckedCreateWithoutInvoicesInput>
+  }
+
   export type transactionCreateWithoutInvoicesInput = {
     created_at?: Date | string
     payment_method: $Enums.PaymentMethod
@@ -18198,6 +18464,62 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_ref?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     recurring_invoice?: recurring_invoiceUncheckedUpdateManyWithoutClientsNestedInput
+  }
+
+  export type recurring_invoiceUpsertWithoutInvoicesInput = {
+    update: XOR<recurring_invoiceUpdateWithoutInvoicesInput, recurring_invoiceUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<recurring_invoiceCreateWithoutInvoicesInput, recurring_invoiceUncheckedCreateWithoutInvoicesInput>
+    where?: recurring_invoiceWhereInput
+  }
+
+  export type recurring_invoiceUpdateToOneWithWhereWithoutInvoicesInput = {
+    where?: recurring_invoiceWhereInput
+    data: XOR<recurring_invoiceUpdateWithoutInvoicesInput, recurring_invoiceUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type recurring_invoiceUpdateWithoutInvoicesInput = {
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    next_run?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
+    users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
+    recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
+  }
+
+  export type recurring_invoiceUncheckedUpdateWithoutInvoicesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    client_id?: IntFieldUpdateOperationsInput | number
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    due_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    next_run?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    total?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrences_done?: IntFieldUpdateOperationsInput | number
+    recurrence_interval?: IntFieldUpdateOperationsInput | number
+    recurrence_type?: EnumRecurrenceFieldUpdateOperationsInput | $Enums.Recurrence
+    due_in_days?: IntFieldUpdateOperationsInput | number
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
   export type transactionUpsertWithWhereUniqueWithoutInvoicesInput = {
@@ -18492,8 +18814,10 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
+    recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
     transaction?: transactionCreateNestedManyWithoutInvoicesInput
   }
 
@@ -18508,6 +18832,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -18572,6 +18898,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesCreateNestedManyWithoutRecurring_invoiceInput
     clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemCreateNestedManyWithoutRecurring_invoiceInput
   }
@@ -18595,6 +18922,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesUncheckedCreateNestedManyWithoutRecurring_invoiceInput
     recurring_invoice_item?: recurring_invoice_itemUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
@@ -18809,6 +19137,49 @@ export namespace Prisma {
     profile_img?: StringNullableFilter<"user_profiles"> | string | null
   }
 
+  export type invoicesCreateWithoutRecurring_invoiceInput = {
+    invoice_number: string
+    start_date: Date | string
+    due_date: Date | string
+    notes?: string | null
+    status?: $Enums.Status
+    total: number
+    is_deleted?: boolean
+    payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
+    users: usersCreateNestedOneWithoutInvoicesInput
+    clients: clientsCreateNestedOneWithoutInvoicesInput
+    transaction?: transactionCreateNestedManyWithoutInvoicesInput
+  }
+
+  export type invoicesUncheckedCreateWithoutRecurring_invoiceInput = {
+    id?: number
+    user_id: number
+    client_id: number
+    invoice_number: string
+    start_date: Date | string
+    due_date: Date | string
+    notes?: string | null
+    status?: $Enums.Status
+    total: number
+    is_deleted?: boolean
+    payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
+    transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
+  }
+
+  export type invoicesCreateOrConnectWithoutRecurring_invoiceInput = {
+    where: invoicesWhereUniqueInput
+    create: XOR<invoicesCreateWithoutRecurring_invoiceInput, invoicesUncheckedCreateWithoutRecurring_invoiceInput>
+  }
+
+  export type invoicesCreateManyRecurring_invoiceInputEnvelope = {
+    data: invoicesCreateManyRecurring_invoiceInput | invoicesCreateManyRecurring_invoiceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type clientsCreateWithoutRecurring_invoiceInput = {
     name: string
     email: string
@@ -18890,6 +19261,22 @@ export namespace Prisma {
   export type recurring_invoice_itemCreateManyRecurring_invoiceInputEnvelope = {
     data: recurring_invoice_itemCreateManyRecurring_invoiceInput | recurring_invoice_itemCreateManyRecurring_invoiceInput[]
     skipDuplicates?: boolean
+  }
+
+  export type invoicesUpsertWithWhereUniqueWithoutRecurring_invoiceInput = {
+    where: invoicesWhereUniqueInput
+    update: XOR<invoicesUpdateWithoutRecurring_invoiceInput, invoicesUncheckedUpdateWithoutRecurring_invoiceInput>
+    create: XOR<invoicesCreateWithoutRecurring_invoiceInput, invoicesUncheckedCreateWithoutRecurring_invoiceInput>
+  }
+
+  export type invoicesUpdateWithWhereUniqueWithoutRecurring_invoiceInput = {
+    where: invoicesWhereUniqueInput
+    data: XOR<invoicesUpdateWithoutRecurring_invoiceInput, invoicesUncheckedUpdateWithoutRecurring_invoiceInput>
+  }
+
+  export type invoicesUpdateManyWithWhereWithoutRecurring_invoiceInput = {
+    where: invoicesScalarWhereInput
+    data: XOR<invoicesUpdateManyMutationInput, invoicesUncheckedUpdateManyWithoutRecurring_invoiceInput>
   }
 
   export type clientsUpsertWithoutRecurring_invoiceInput = {
@@ -19021,6 +19408,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesCreateNestedManyWithoutRecurring_invoiceInput
     clients: clientsCreateNestedOneWithoutRecurring_invoiceInput
     users: usersCreateNestedOneWithoutRecurring_invoiceInput
   }
@@ -19045,6 +19433,7 @@ export namespace Prisma {
     status?: $Enums.Status
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
+    invoices?: invoicesUncheckedCreateNestedManyWithoutRecurring_invoiceInput
   }
 
   export type recurring_invoiceCreateOrConnectWithoutRecurring_invoice_itemInput = {
@@ -19114,6 +19503,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUpdateManyWithoutRecurring_invoiceNestedInput
     clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
   }
@@ -19138,6 +19528,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
   export type usersCreateWithoutUser_payment_methodInput = {
@@ -19211,9 +19602,11 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
+    recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
   }
 
   export type invoicesUncheckedCreateWithoutTransactionInput = {
@@ -19228,6 +19621,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
   }
 
@@ -19256,9 +19651,11 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
+    recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
   }
 
   export type invoicesUncheckedUpdateWithoutTransactionInput = {
@@ -19273,6 +19670,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -19287,6 +19686,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
   }
 
   export type recurring_invoiceCreateManyClientsInput = {
@@ -19319,8 +19720,10 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
+    recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
     transaction?: transactionUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -19335,6 +19738,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -19350,6 +19755,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type recurring_invoiceUpdateWithoutClientsInput = {
@@ -19369,6 +19776,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUpdateManyWithoutRecurring_invoiceNestedInput
     users?: usersUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
   }
@@ -19392,6 +19800,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
@@ -19569,6 +19978,8 @@ export namespace Prisma {
     total: number
     is_deleted?: boolean
     payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+    recurrence_invoice_id?: number | null
   }
 
   export type products_servicesCreateManyUsersInput = {
@@ -19661,8 +20072,10 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
+    recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
     transaction?: transactionUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -19677,6 +20090,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -19692,6 +20107,8 @@ export namespace Prisma {
     total?: IntFieldUpdateOperationsInput | number
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type products_servicesUpdateWithoutUsersInput = {
@@ -19744,6 +20161,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUpdateManyWithoutRecurring_invoiceNestedInput
     clients?: clientsUpdateOneRequiredWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUpdateManyWithoutRecurring_invoiceNestedInput
   }
@@ -19767,6 +20185,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: invoicesUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
     recurring_invoice_item?: recurring_invoice_itemUncheckedUpdateManyWithoutRecurring_invoiceNestedInput
   }
 
@@ -19840,6 +20259,21 @@ export namespace Prisma {
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type invoicesCreateManyRecurring_invoiceInput = {
+    id?: number
+    user_id: number
+    client_id: number
+    invoice_number: string
+    start_date: Date | string
+    due_date: Date | string
+    notes?: string | null
+    status?: $Enums.Status
+    total: number
+    is_deleted?: boolean
+    payment_method: $Enums.PaymentMethod
+    created_at?: Date | string
+  }
+
   export type recurring_invoice_itemCreateManyRecurring_invoiceInput = {
     id?: number
     product_id: number
@@ -19847,6 +20281,54 @@ export namespace Prisma {
     quantity: number
     total: number
     price_snapshot: number
+  }
+
+  export type invoicesUpdateWithoutRecurring_invoiceInput = {
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    due_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    total?: IntFieldUpdateOperationsInput | number
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
+    users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
+    clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
+    transaction?: transactionUpdateManyWithoutInvoicesNestedInput
+  }
+
+  export type invoicesUncheckedUpdateWithoutRecurring_invoiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    client_id?: IntFieldUpdateOperationsInput | number
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    due_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    total?: IntFieldUpdateOperationsInput | number
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
+    transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
+  }
+
+  export type invoicesUncheckedUpdateManyWithoutRecurring_invoiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    client_id?: IntFieldUpdateOperationsInput | number
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    due_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    total?: IntFieldUpdateOperationsInput | number
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type recurring_invoice_itemUpdateWithoutRecurring_invoiceInput = {

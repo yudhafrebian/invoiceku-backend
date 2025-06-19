@@ -174,6 +174,93 @@ class RecurringController {
     }
   }
 
+  async getRecurringInvoiceChildren(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const userId = res.locals.data.id;
+      const invoiceNumber = req.params.invoice_number;
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
+      const search = req.query.search as string;
+      const payment = req.query.payment as string;
+      const status = req.query.status as string;
+      const sort = req.query.sort as string;
+
+      let orderByClause: any = { created_at: "asc" };
+      if (sort === "invoice_number_asc")
+        orderByClause = { invoice_number: "asc" };
+      else if (sort === "invoice_number_desc")
+        orderByClause = { invoice_number: "desc" };
+      else if (sort === "client_name_asc")
+        orderByClause = { clients: { name: "asc" } };
+      else if (sort === "client_name_desc")
+        orderByClause = { clients: { name: "desc" } };
+      else if (sort === "start_date_asc") orderByClause = { start_date: "asc" };
+      else if (sort === "start_date_desc")
+        orderByClause = { start_date: "desc" };
+      else if (sort === "due_date_asc") orderByClause = { due_date: "asc" };
+      else if (sort === "due_date_desc") orderByClause = { due_date: "desc" };
+      else if (sort === "total_asc") orderByClause = { total: "asc" };
+      else if (sort === "total_desc") orderByClause = { total: "desc" };
+
+      const whereClause: any = {
+        user_id: userId,
+        invoice_number: invoiceNumber,
+        is_deleted: false,
+        recurrence_invoice_id: null,
+      };
+
+      if (search) {
+        whereClause.OR = [
+          { invoice_number: { contains: search, mode: "insensitive" } },
+          { clients: { name: { contains: search, mode: "insensitive" } } },
+        ];
+      }
+      if (payment) {
+        whereClause.payment_method = payment;
+      }
+      if (status) {
+        whereClause.status = status;
+      }
+
+      const invoice = await prisma.invoices.findMany({
+        where: whereClause,
+        orderBy: orderByClause,
+        take: limit,
+        skip,
+        include: {
+          users: true,
+          clients: true,
+          invoice_items: true,
+        },
+      });
+
+      const total = await prisma.invoices.count({
+        where: whereClause,
+      });
+      successResponse(
+        res,
+        "Success",
+        {
+          invoice,
+          pagination: {
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+            totalItems: total,
+          },
+        },
+        200
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async previewRecurringInvoicePDF(
     req: Request,
     res: Response,

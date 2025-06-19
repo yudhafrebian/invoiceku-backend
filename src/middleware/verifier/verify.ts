@@ -12,7 +12,10 @@ class Verify {
       if (!token) {
         throw "Token not found";
       }
-      const checkToken:string | JwtPayload = verify(token, process.env.TOKEN_KEY || "sercretKey");
+      const checkToken: string | JwtPayload = verify(
+        token,
+        process.env.TOKEN_KEY || "sercretKey"
+      );
       res.locals.data = checkToken;
       next();
     } catch (error) {

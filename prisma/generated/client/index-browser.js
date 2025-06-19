@@ -152,7 +152,9 @@ exports.Prisma.InvoicesScalarFieldEnum = {
   status: 'status',
   total: 'total',
   is_deleted: 'is_deleted',
-  payment_method: 'payment_method'
+  payment_method: 'payment_method',
+  created_at: 'created_at',
+  recurrence_invoice_id: 'recurrence_invoice_id'
 };
 
 exports.Prisma.Products_servicesScalarFieldEnum = {

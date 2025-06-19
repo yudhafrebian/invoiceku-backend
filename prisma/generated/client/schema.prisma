@@ -36,21 +36,24 @@ model invoice_items {
 }
 
 model invoices {
-  id             Int             @id @default(autoincrement())
-  user_id        Int
-  client_id      Int
-  invoice_number String          @unique @db.VarChar(255)
-  start_date     DateTime        @db.Date
-  due_date       DateTime        @db.Date
-  notes          String?         @db.VarChar(255)
-  status         Status          @default(Pending)
-  total          Int
-  is_deleted     Boolean         @default(false)
-  payment_method PaymentMethod
-  invoice_items  invoice_items[]
-  users          users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk1")
-  clients        clients         @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk2")
-  transaction    transaction[]
+  id                    Int                @id @default(autoincrement())
+  user_id               Int
+  client_id             Int
+  invoice_number        String             @unique @db.VarChar(255)
+  start_date            DateTime           @db.Date
+  due_date              DateTime           @db.Date
+  notes                 String?            @db.VarChar(255)
+  status                Status             @default(Pending)
+  total                 Int
+  is_deleted            Boolean            @default(false)
+  payment_method        PaymentMethod
+  created_at            DateTime           @default(now()) @db.Timestamptz(6)
+  recurrence_invoice_id Int?
+  invoice_items         invoice_items[]
+  users                 users              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk1")
+  clients               clients            @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk2")
+  recurring_invoice     recurring_invoice? @relation(fields: [recurrence_invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  transaction           transaction[]
 }
 
 model products_services {
@@ -111,6 +114,7 @@ model recurring_invoice {
   status                 Status                   @default(Pending)
   payment_method         PaymentMethod
   created_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  invoices               invoices[]
   clients                clients                  @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                  users                    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   recurring_invoice_item recurring_invoice_item[]
