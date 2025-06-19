@@ -5,14 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleRecurringInvoice = void 0;
 const date_fns_1 = require("date-fns");
+const date_fns_tz_1 = require("date-fns-tz");
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const sendEmail_1 = require("./email/sendEmail");
 const createToken_1 = require("./createToken");
 const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
 const handleRecurringInvoice = async () => {
     const now = new Date();
-    const formattedDate = now.toISOString().split("T")[0];
-    console.log("formattedDate:", formattedDate);
+    const zone = "Asia/Jakarta";
+    const jakartaToday = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
+    const formattedStart = (0, date_fns_tz_1.zonedTimeToUtc)(`${jakartaToday}T00:00:00`, zone);
+    const formattedEnd = (0, date_fns_tz_1.zonedTimeToUtc)(`${jakartaToday}T23:59:59.999`, zone);
     let createdCount = 0;
     console.log("Memulai handleRecurringInvoice");
     const recurringInvoices = await prisma_1.default.recurring_invoice.findMany({
@@ -20,8 +23,8 @@ const handleRecurringInvoice = async () => {
             is_active: true,
             is_deleted: false,
             next_run: {
-                gte: new Date(formattedDate + "T00:00:00.000Z"),
-                lte: new Date(formattedDate + "T23:59:59.999Z"),
+                gte: new Date(formattedStart + "T00:00:00.000Z"),
+                lte: new Date(formattedEnd + "T23:59:59.999Z"),
             },
         },
         include: {

@@ -1,4 +1,5 @@
 import { addDays, addWeeks, addMonths } from "date-fns";
+import { zonedTimeToUtc } from "date-fns-tz";
 import prisma from "../configs/prisma";
 import { PaymentMethod } from "../../prisma/generated/client";
 import { sendInvoiceEmail } from "./email/sendEmail";
@@ -7,8 +8,10 @@ import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
 
 export const handleRecurringInvoice = async () => {
   const now = new Date();
-  const formattedDate = now.toISOString().split("T")[0];
-  console.log("formattedDate:", formattedDate);
+  const zone = "Asia/Jakarta";
+  const jakartaToday = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
+  const formattedStart = zonedTimeToUtc(`${jakartaToday}T00:00:00`, zone);
+  const formattedEnd = zonedTimeToUtc(`${jakartaToday}T23:59:59.999`, zone);
   let createdCount = 0;
   console.log("Memulai handleRecurringInvoice");
 
@@ -17,8 +20,8 @@ export const handleRecurringInvoice = async () => {
       is_active: true,
       is_deleted: false,
       next_run: {
-        gte: new Date(formattedDate + "T00:00:00.000Z"),
-        lte: new Date(formattedDate + "T23:59:59.999Z"),
+        gte: new Date(formattedStart + "T00:00:00.000Z"),
+        lte: new Date(formattedEnd + "T23:59:59.999Z"),
       },
     },
     include: {
