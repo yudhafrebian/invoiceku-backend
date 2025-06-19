@@ -45,6 +45,7 @@ const handleRecurringInvoice = async () => {
         });
         if (existing) {
             console.warn(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
+            console.log(`Invoice ${invoice_number}-${recurring.occurrences_done + 1} sudah ada, skip`);
             continue;
         }
         let invoice;
