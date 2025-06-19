@@ -10,7 +10,8 @@ const sendEmail_1 = require("./email/sendEmail");
 const createToken_1 = require("./createToken");
 const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
 const handleRecurringInvoice = async () => {
-    const now = new Date();
+    const now = new Date(new Date().toISOString().split("T")[0]);
+    console.log("now:", new Date().toISOString());
     let createdCount = 0;
     console.log("Memulai handleRecurringInvoice");
     const recurringInvoices = await prisma_1.default.recurring_invoice.findMany({
@@ -30,7 +31,6 @@ const handleRecurringInvoice = async () => {
     console.log("Recurring invoices ditemukan:", recurringInvoices.length);
     for (const recurring of recurringInvoices) {
         const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, start_date, } = recurring;
-        console.log("now:", new Date().toISOString());
         console.log("next_run:", recurring.next_run.toISOString());
         if (duration !== null &&
             duration !== undefined &&
