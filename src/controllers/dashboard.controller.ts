@@ -69,6 +69,9 @@ class DashboardController {
         where: {
           user_id: userId,
         },
+        include: {
+            clients: true
+        },
         take: 5,
       });
 

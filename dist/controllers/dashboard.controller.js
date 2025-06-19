@@ -60,6 +60,9 @@ class DashboardController {
                 where: {
                     user_id: userId,
                 },
+                include: {
+                    clients: true
+                },
                 take: 5,
             });
             (0, response_1.successResponse)(res, "Success", {
