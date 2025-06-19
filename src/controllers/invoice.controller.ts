@@ -417,11 +417,13 @@ class InvoiceController {
         include: {
           invoice_items: true,
           clients: true,
+          recurring_invoice: true,
         },
       });
       if (!invoice) {
         throw "Invoice not found";
       }
+      
       generateInvoicePDF(
         {
           invoice_number: invoice.invoice_number,
@@ -431,6 +433,8 @@ class InvoiceController {
           invoice_items: invoice.invoice_items,
           total: invoice.total,
           notes: invoice.notes || undefined,
+          recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
+          recurrence_type: invoice.recurring_invoice?.recurrence_type
         },
         res,
         false
@@ -573,7 +577,7 @@ class InvoiceController {
           client_name: invoice.clients.name,
           invoice_number: invoice.invoice_number,
           token,
-          isRecurring: invoice.recurrence_invoice_id ? true : false
+          isRecurring: invoice.recurrence_invoice_id !== null ? true : false
         },
         pdfBuffer
       );
