@@ -11,7 +11,6 @@ const createToken_1 = require("../utils/createToken");
 const scheduledEmailLogic = async () => {
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0];
-    console.log("formattedDate:", formattedDate);
     const invoices = await prisma_1.default.invoices.findMany({
         where: {
             start_date: {

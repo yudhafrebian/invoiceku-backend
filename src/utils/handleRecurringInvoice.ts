@@ -6,8 +6,9 @@ import { createToken } from "./createToken";
 import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
 
 export const handleRecurringInvoice = async () => {
-  const now = new Date(new Date().toISOString().split("T")[0]);
-  console.log("now:", new Date().toISOString());
+  const now = new Date();
+  const formattedDate = now.toISOString().split("T")[0];
+  console.log("formattedDate:", formattedDate);
   let createdCount = 0;
   console.log("Memulai handleRecurringInvoice");
 
@@ -16,7 +17,8 @@ export const handleRecurringInvoice = async () => {
       is_active: true,
       is_deleted: false,
       next_run: {
-        lte: now,
+        gte: new Date(formattedDate + "T00:00:00.000Z"),
+        lte: new Date(formattedDate + "T23:59:59.999Z"),
       },
     },
     include: {
