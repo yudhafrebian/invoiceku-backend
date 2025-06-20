@@ -20,8 +20,6 @@ const handleRecurringInvoice = async () => {
     const formattedStart = new Date(`${todayString}T00:00:00.000Z`);
     const formattedEnd = new Date(`${todayString}T23:59:59.999Z`);
     let createdCount = 0;
-    console.log("Memulai handleRecurringInvoice");
-    console.log("Tanggal di Jakarta:", todayString);
     const recurringInvoices = await prisma_1.default.recurring_invoice.findMany({
         where: {
             is_active: true,
@@ -37,7 +35,6 @@ const handleRecurringInvoice = async () => {
             users: true,
         },
     });
-    console.log("Recurring invoices ditemukan:", recurringInvoices.length);
     for (const r of recurringInvoices) {
         console.log(`Invoice ${r.invoice_number} | next_run: ${r.next_run.toISOString()}`);
     }
@@ -104,7 +101,7 @@ const handleRecurringInvoice = async () => {
                 newNextRun = (0, date_fns_1.addMonths)(next_run, recurrence_interval);
                 break;
             default:
-                newNextRun = (0, date_fns_1.addDays)(next_run, 7); // fallback
+                newNextRun = (0, date_fns_1.addDays)(next_run, 7);
         }
         await prisma_1.default.recurring_invoice.update({
             where: { id },

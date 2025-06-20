@@ -113,6 +113,7 @@ class InvoiceController {
             const isExist = await prisma_1.default.invoices.findUnique({
                 where: {
                     invoice_number,
+                    user_id: userId,
                     is_deleted: false,
                 },
             });
