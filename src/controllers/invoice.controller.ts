@@ -387,7 +387,7 @@ class InvoiceController {
 
       if (!token) throw "Token not found";
 
-      const decoded = verify(token, process.env.JWT_SECRET!) as {
+      const decoded = verify(token, process.env.TOKEN_KEY!) as {
         id: number;
         email: string;
       };
