@@ -208,7 +208,6 @@ class RecurringController {
     async previewRecurringInvoicePDF(req, res, next) {
         try {
             const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, } = req.body;
-            console.log("Received body for previewRecurringInvoicePDF:", req.body);
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -275,7 +274,6 @@ class RecurringController {
                     clients: true,
                 },
             });
-            console.log(invoiceNumber);
             if (!invoice) {
                 throw "Invoice not found";
             }

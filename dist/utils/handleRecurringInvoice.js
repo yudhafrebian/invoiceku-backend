@@ -35,9 +35,6 @@ const handleRecurringInvoice = async () => {
             users: true,
         },
     });
-    for (const r of recurringInvoices) {
-        console.log(`Invoice ${r.invoice_number} | next_run: ${r.next_run.toISOString()}`);
-    }
     for (const recurring of recurringInvoices) {
         const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, } = recurring;
         if (duration !== null &&

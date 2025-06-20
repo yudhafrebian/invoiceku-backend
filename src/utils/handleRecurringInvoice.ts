@@ -36,11 +36,7 @@ export const handleRecurringInvoice = async () => {
     },
   });
 
-  for (const r of recurringInvoices) {
-    console.log(
-      `Invoice ${r.invoice_number} | next_run: ${r.next_run.toISOString()}`
-    );
-  }
+  
 
   for (const recurring of recurringInvoices) {
     const {

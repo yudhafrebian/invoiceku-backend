@@ -18,7 +18,6 @@ class Verify {
     }
     async verifyStatus(req, res, next) {
         try {
-            console.log("Verify", res.locals.data);
             if (res.locals.data.is_verified) {
                 next();
             }

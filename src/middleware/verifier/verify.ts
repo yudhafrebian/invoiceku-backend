@@ -29,7 +29,6 @@ class Verify {
     next: NextFunction
   ): Promise<any> {
     try {
-      console.log("Verify", res.locals.data);
       if (res.locals.data.is_verified) {
         next();
       } else {

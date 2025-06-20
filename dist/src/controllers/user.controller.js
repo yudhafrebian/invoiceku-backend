@@ -94,7 +94,6 @@ class UserController {
         try {
             const userId = res.locals.data.id;
             const { payment_method, account_name, account_number } = req.body;
-            console.log(req.body);
             const isExist = await prisma_1.default.user_payment_method.findFirst({
                 where: {
                     user_id: userId,

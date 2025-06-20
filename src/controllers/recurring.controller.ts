@@ -278,7 +278,6 @@ class RecurringController {
         recurrence_interval,
         due_in_days,
       } = req.body;
-      console.log("Received body for previewRecurringInvoicePDF:", req.body);
       const startDate = new Date(start_date);
       const dueDate = new Date(startDate);
       dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -366,7 +365,6 @@ class RecurringController {
         },
       });
 
-      console.log(invoiceNumber);
 
       if (!invoice) {
         throw "Invoice not found";
