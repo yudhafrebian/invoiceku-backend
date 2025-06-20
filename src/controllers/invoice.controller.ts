@@ -507,8 +507,13 @@ class InvoiceController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
+      const userId = res.locals.data.id;
       const invoice = await prisma.invoices.findFirst({
-        where: { invoice_number: invoiceNumber, recurring_invoice: null },
+        where: {
+          invoice_number: invoiceNumber,
+          recurring_invoice: null,
+          user_id: userId,
+        },
         include: {
           invoice_items: true,
           clients: true,
