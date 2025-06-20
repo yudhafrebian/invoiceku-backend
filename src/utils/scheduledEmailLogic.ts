@@ -73,11 +73,26 @@ export const scheduledEmailLogic = async () => {
 
 export const markOverdueInvoices = async () => {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+  const zone = "Asia/Jakarta";
+
+  const todayString = new Intl.DateTimeFormat("en-CA", {
+    timeZone: zone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+
+  const formattedStart = new Date(`${todayString}T00:00:00.000Z`);
+  const formattedEnd = new Date(`${todayString}T23:59:59.999Z`);
+
+  console.log("formattedStart", formattedStart);
+  console.log("formattedEnd", formattedEnd);
   console.log("now", now);
   const overdueInvoices = await prisma.invoices.findMany({
     where: {
       due_date: {
-        lt: now,
+        gte: formattedStart,
+        lte: formattedEnd
       },
       status: "Pending",
       is_deleted: false,
