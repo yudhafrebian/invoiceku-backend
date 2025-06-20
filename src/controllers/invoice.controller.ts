@@ -379,8 +379,6 @@ class InvoiceController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const authHeader = req.headers.authorization;
-      if (!authHeader) throw "Token not found";
 
       const token = req.query.tkn as string;
 
