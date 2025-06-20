@@ -98,7 +98,7 @@ model recurring_invoice {
   id                     Int                      @id @default(autoincrement())
   user_id                Int
   client_id              Int
-  invoice_number         String                   @unique @db.VarChar
+  invoice_number         String                   @db.VarChar
   start_date             DateTime                 @db.Date
   due_date               DateTime?                @db.Date
   notes                  String?

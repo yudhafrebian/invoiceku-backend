@@ -316,7 +316,7 @@ class RecurringController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.recurring_invoice.findUnique({
+      const invoice = await prisma.recurring_invoice.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           recurring_invoice_item: true,
@@ -357,7 +357,7 @@ class RecurringController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.recurring_invoice.findUnique({
+      const invoice = await prisma.recurring_invoice.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           recurring_invoice_item: true,
@@ -437,7 +437,7 @@ class RecurringController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.recurring_invoice.findUnique({
+      const invoice = await prisma.recurring_invoice.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           recurring_invoice_item: true,
@@ -473,7 +473,7 @@ class RecurringController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.recurring_invoice.findUnique({
+      const invoice = await prisma.recurring_invoice.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           recurring_invoice_item: true,

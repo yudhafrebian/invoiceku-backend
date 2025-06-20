@@ -235,7 +235,7 @@ class RecurringController {
     async DetailRecurringInvoice(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const invoice = await prisma_1.default.recurring_invoice.findUnique({
+            const invoice = await prisma_1.default.recurring_invoice.findFirst({
                 where: { invoice_number: invoiceNumber },
                 include: {
                     recurring_invoice_item: true,
@@ -267,7 +267,7 @@ class RecurringController {
     async sendRecurringInvoiceEmail(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const invoice = await prisma_1.default.recurring_invoice.findUnique({
+            const invoice = await prisma_1.default.recurring_invoice.findFirst({
                 where: { invoice_number: invoiceNumber },
                 include: {
                     recurring_invoice_item: true,
@@ -324,7 +324,7 @@ class RecurringController {
     async detailPayment(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const invoice = await prisma_1.default.recurring_invoice.findUnique({
+            const invoice = await prisma_1.default.recurring_invoice.findFirst({
                 where: { invoice_number: invoiceNumber },
                 include: {
                     recurring_invoice_item: true,
@@ -353,7 +353,7 @@ class RecurringController {
     async downloadPdf(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const invoice = await prisma_1.default.recurring_invoice.findUnique({
+            const invoice = await prisma_1.default.recurring_invoice.findFirst({
                 where: { invoice_number: invoiceNumber },
                 include: {
                     recurring_invoice_item: true,
