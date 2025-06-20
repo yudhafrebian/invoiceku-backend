@@ -8,6 +8,7 @@ import { sendInvoiceEmail, sendStatusEmail } from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
 import { scheduledEmailLogic } from "../utils/scheduledEmailLogic";
 import dayjs from "dayjs";
+import { JwtPayload, verify } from "jsonwebtoken";
 
 class InvoiceController {
   async getAllInvoice(
@@ -369,34 +370,38 @@ class InvoiceController {
     }
   }
 
-  async detailPayment(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      console.log(req.params.name, req.params.client_name, invoiceNumber);
-      const invoice = await prisma.invoices.findUnique({
-        where: { invoice_number: invoiceNumber },
+      const token = req.query.tkn as string;
+  
+      if (!token) throw "Token not found";
+  
+      const decoded: string | JwtPayload = verify(token, process.env.JWT_SECRET!) as { id: string; email: string };
+  
+      const invoice = await prisma.invoices.findFirst({
+        where: {
+          invoice_number: invoiceNumber,
+          client_id: decoded.id,
+        },
         include: {
           invoice_items: true,
           clients: true,
           users: true,
         },
       });
-
+  
       if (!invoice) {
         throw "Invoice not found";
       }
-
+  
       const userPaymentMethod = await prisma.user_payment_method.findFirst({
         where: {
           user_id: invoice.user_id,
           payment_method: invoice.payment_method,
         },
       });
-
+  
       successResponse(res, "Success", {
         invoice,
         userPaymentMethod,
@@ -424,7 +429,7 @@ class InvoiceController {
       if (!invoice) {
         throw "Invoice not found";
       }
-      
+
       generateInvoicePDF(
         {
           invoice_number: invoice.invoice_number,
@@ -435,7 +440,7 @@ class InvoiceController {
           total: invoice.total,
           notes: invoice.notes || undefined,
           recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
-          recurrence_type: invoice.recurring_invoice?.recurrence_type
+          recurrence_type: invoice.recurring_invoice?.recurrence_type,
         },
         res,
         false
@@ -473,7 +478,7 @@ class InvoiceController {
           total: invoice.total,
           notes: invoice.notes || undefined,
           recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
-          recurrence_type: invoice.recurring_invoice?.recurrence_type
+          recurrence_type: invoice.recurring_invoice?.recurrence_type,
         },
         res,
         true
@@ -483,7 +488,6 @@ class InvoiceController {
     }
   }
 
-
   async sendInvoiceEmail(
     req: Request,
     res: Response,
@@ -492,7 +496,7 @@ class InvoiceController {
     try {
       const invoiceNumber = req.params.invoice_number;
       const invoice = await prisma.invoices.findUnique({
-        where: { invoice_number: invoiceNumber },
+        where: { invoice_number: invoiceNumber, recurring_invoice: null },
         include: {
           invoice_items: true,
           clients: true,
@@ -523,6 +527,7 @@ class InvoiceController {
         {
           id: invoice.client_id,
           email: invoice.clients.email,
+          invoice_number: invoice.invoice_number,
         },
         "30d"
       );
@@ -536,7 +541,7 @@ class InvoiceController {
         total: invoice.total,
         notes: invoice.notes || undefined,
         recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
-        recurrence_type: invoice.recurring_invoice?.recurrence_type
+        recurrence_type: invoice.recurring_invoice?.recurrence_type,
       });
 
       await sendInvoiceEmail(
@@ -548,7 +553,7 @@ class InvoiceController {
           client_name: invoice.clients.name,
           invoice_number: invoice.invoice_number,
           token,
-          isRecurring: invoice.recurrence_invoice_id !== null ? true : false
+          isRecurring: invoice.recurrence_invoice_id !== null ? true : false,
         },
         pdfBuffer
       );

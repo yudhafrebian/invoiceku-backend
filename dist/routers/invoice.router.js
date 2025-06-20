@@ -22,7 +22,7 @@ class InvoiceRouter {
         this.route.get("/detail/:invoice_number", this.InvoiceController.DetailInvoice);
         this.route.use(this.verify.verifyToken);
         this.route.get("/all-invoice", this.InvoiceController.getAllInvoice);
-        this.route.get("/detail-payment/:name/:client_name/:invoice_number", this.InvoiceController.detailPayment);
+        this.route.get("/detail-payment/:invoice_number", this.InvoiceController.detailPayment);
         this.route.post("/send-email-payment/:invoice_number", this.InvoiceController.sendInvoiceEmail);
         this.route.patch("/update-status/:invoice_number", this.InvoiceController.updateInvoiceStatus);
         this.route.use(this.verify.verifyStatus);

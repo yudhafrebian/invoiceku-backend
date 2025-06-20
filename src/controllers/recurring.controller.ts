@@ -395,6 +395,7 @@ class RecurringController {
         {
           id: invoice.client_id,
           email: invoice.clients.email,
+          invoice_number: invoice.invoice_number,
         },
         "30d"
       );

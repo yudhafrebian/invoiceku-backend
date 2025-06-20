@@ -297,6 +297,7 @@ class RecurringController {
             const token = (0, createToken_1.createToken)({
                 id: invoice.client_id,
                 email: invoice.clients.email,
+                invoice_number: invoice.invoice_number,
             }, "30d");
             const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
                 invoice_number: invoice.invoice_number,
