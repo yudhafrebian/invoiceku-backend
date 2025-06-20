@@ -128,13 +128,6 @@ export const handleRecurringInvoice = async () => {
         newNextRun = addDays(next_run, 7);
     }
 
-    await prisma.recurring_invoice.update({
-      where: { id },
-      data: {
-        next_run: newNextRun,
-        occurrences_done: { increment: 1 },
-      },
-    });
 
     const token = createToken(
       {
@@ -175,6 +168,14 @@ export const handleRecurringInvoice = async () => {
       },
       pdfBuffer
     );
+
+    await prisma.recurring_invoice.update({
+      where: { id },
+      data: {
+        next_run: newNextRun,
+        occurrences_done: { increment: 1 },
+      },
+    });
 
     createdCount++;
   }
