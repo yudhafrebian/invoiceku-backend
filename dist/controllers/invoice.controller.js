@@ -271,7 +271,10 @@ class InvoiceController {
     async detailPayment(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const token = req.query.tkn;
+            const authHeader = req.headers.authorization;
+            if (!authHeader)
+                throw "Token not found";
+            const token = req.headers.authorization?.split(" ")[1] || req.query.tkn;
             if (!token)
                 throw "Token not found";
             const decoded = (0, jsonwebtoken_1.verify)(token, process.env.JWT_SECRET);

@@ -372,15 +372,26 @@ class InvoiceController {
     }
   }
 
-  async detailPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detailPayment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const token = req.query.tkn as string;
-  
+      const authHeader = req.headers.authorization;
+      if (!authHeader) throw "Token not found";
+
+      const token =
+        req.headers.authorization?.split(" ")[1] || (req.query.tkn as string);
+
       if (!token) throw "Token not found";
-  
-      const decoded: string | JwtPayload = verify(token, process.env.JWT_SECRET!) as { id: string; email: string };
-  
+
+      const decoded = verify(token, process.env.JWT_SECRET!) as {
+        id: number;
+        email: string;
+      };
+
       const invoice = await prisma.invoices.findFirst({
         where: {
           invoice_number: invoiceNumber,
@@ -392,18 +403,18 @@ class InvoiceController {
           users: true,
         },
       });
-  
+
       if (!invoice) {
         throw "Invoice not found";
       }
-  
+
       const userPaymentMethod = await prisma.user_payment_method.findFirst({
         where: {
           user_id: invoice.user_id,
           payment_method: invoice.payment_method,
         },
       });
-  
+
       successResponse(res, "Success", {
         invoice,
         userPaymentMethod,
