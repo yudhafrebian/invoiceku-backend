@@ -278,6 +278,7 @@ class InvoiceController {
             if (!token)
                 throw "Token not found";
             const decoded = (0, jsonwebtoken_1.verify)(token, process.env.TOKEN_KEY);
+            console.log(decoded);
             const invoice = await prisma_1.default.invoices.findFirst({
                 where: {
                     invoice_number: invoiceNumber,

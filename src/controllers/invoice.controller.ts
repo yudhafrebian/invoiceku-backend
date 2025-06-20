@@ -391,6 +391,7 @@ class InvoiceController {
         id: number;
         email: string;
       };
+      console.log(decoded);
 
       const invoice = await prisma.invoices.findFirst({
         where: {
