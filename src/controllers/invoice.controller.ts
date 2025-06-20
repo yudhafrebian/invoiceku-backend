@@ -148,7 +148,7 @@ class InvoiceController {
         throw "You need to add payment method atleast one to create invoice";
       }
 
-      const isExist = await prisma.invoices.findUnique({
+      const isExist = await prisma.invoices.findFirst({
         where: {
           invoice_number,
           user_id: userId,
@@ -247,7 +247,7 @@ class InvoiceController {
       const invoiceNumber = req.params.invoice_number;
       const status = req.body.status;
 
-      const invoice = await prisma.invoices.findUnique({
+      const invoice = await prisma.invoices.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           clients: true,
@@ -272,6 +272,7 @@ class InvoiceController {
 
       const updateStatus = await prisma.invoices.update({
         where: {
+          id: invoice.id,
           invoice_number: invoiceNumber,
         },
         data: {
@@ -419,7 +420,7 @@ class InvoiceController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.invoices.findUnique({
+      const invoice = await prisma.invoices.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           invoice_items: true,
@@ -496,7 +497,7 @@ class InvoiceController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.invoices.findUnique({
+      const invoice = await prisma.invoices.findFirst({
         where: { invoice_number: invoiceNumber, recurring_invoice: null },
         include: {
           invoice_items: true,

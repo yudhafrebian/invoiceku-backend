@@ -11,7 +11,7 @@ class TransactionController {
     async createTransaction(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const invoice = await prisma_1.default.invoices.findUnique({
+            const invoice = await prisma_1.default.invoices.findFirst({
                 where: { invoice_number: invoiceNumber },
                 include: {
                     invoice_items: true,
@@ -67,7 +67,7 @@ class TransactionController {
     async getPaymentProof(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
-            const invoice = await prisma_1.default.invoices.findUnique({
+            const invoice = await prisma_1.default.invoices.findFirst({
                 where: { invoice_number: invoiceNumber },
                 include: {
                     invoice_items: true,

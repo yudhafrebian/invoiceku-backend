@@ -12,7 +12,7 @@ class TransactionController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
-      const invoice = await prisma.invoices.findUnique({
+      const invoice = await prisma.invoices.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           invoice_items: true,
@@ -87,7 +87,7 @@ class TransactionController {
     try {
       const invoiceNumber = req.params.invoice_number;
 
-      const invoice = await prisma.invoices.findUnique({
+      const invoice = await prisma.invoices.findFirst({
         where: { invoice_number: invoiceNumber },
         include: {
           invoice_items: true,

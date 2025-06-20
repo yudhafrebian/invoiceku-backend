@@ -39,7 +39,7 @@ model invoices {
   id                    Int                @id @default(autoincrement())
   user_id               Int
   client_id             Int
-  invoice_number        String             @unique @db.VarChar(255)
+  invoice_number        String             @db.VarChar(255)
   start_date            DateTime           @db.Date
   due_date              DateTime           @db.Date
   notes                 String?            @db.VarChar(255)

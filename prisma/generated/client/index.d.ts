@@ -14427,12 +14427,12 @@ export namespace Prisma {
 
   export type invoicesWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    invoice_number?: string
     AND?: invoicesWhereInput | invoicesWhereInput[]
     OR?: invoicesWhereInput[]
     NOT?: invoicesWhereInput | invoicesWhereInput[]
     user_id?: IntFilter<"invoices"> | number
     client_id?: IntFilter<"invoices"> | number
+    invoice_number?: StringFilter<"invoices"> | string
     start_date?: DateTimeFilter<"invoices"> | Date | string
     due_date?: DateTimeFilter<"invoices"> | Date | string
     notes?: StringNullableFilter<"invoices"> | string | null
@@ -14447,7 +14447,7 @@ export namespace Prisma {
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
     recurring_invoice?: XOR<Recurring_invoiceNullableScalarRelationFilter, recurring_invoiceWhereInput> | null
     transaction?: TransactionListRelationFilter
-  }, "id" | "invoice_number">
+  }, "id">
 
   export type invoicesOrderByWithAggregationInput = {
     id?: SortOrder
