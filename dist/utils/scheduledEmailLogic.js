@@ -61,6 +61,7 @@ const scheduledEmailLogic = async () => {
 exports.scheduledEmailLogic = scheduledEmailLogic;
 const markOverdueInvoices = async () => {
     const now = new Date();
+    console.log("now", now);
     const overdueInvoices = await prisma_1.default.invoices.findMany({
         where: {
             due_date: {
