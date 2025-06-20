@@ -274,11 +274,11 @@ class InvoiceController {
             const authHeader = req.headers.authorization;
             if (!authHeader)
                 throw "Token not found";
-            const token = req.headers.authorization?.split(" ")[1] || req.query.tkn;
+            const token = req.query.tkn;
             if (!token)
                 throw "Token not found";
             const decoded = (0, jsonwebtoken_1.verify)(token, process.env.TOKEN_KEY);
-            console.log(decoded);
+            console.log("decoded", decoded);
             const invoice = await prisma_1.default.invoices.findFirst({
                 where: {
                     invoice_number: invoiceNumber,
