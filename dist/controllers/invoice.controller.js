@@ -272,6 +272,7 @@ class InvoiceController {
         try {
             const invoiceNumber = req.params.invoice_number;
             const token = req.query.tkn;
+            console.log("token", token);
             if (!token)
                 throw "Token not found";
             const decoded = (0, jsonwebtoken_1.verify)(token, process.env.TOKEN_KEY);

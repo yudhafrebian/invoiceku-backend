@@ -381,6 +381,7 @@ class InvoiceController {
       const invoiceNumber = req.params.invoice_number;
 
       const token = req.query.tkn as string;
+      console.log("token", token);
 
       if (!token) throw "Token not found";
 
