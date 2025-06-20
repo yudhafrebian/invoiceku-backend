@@ -268,6 +268,7 @@ class InvoiceController {
     async detailPayment(req, res, next) {
         try {
             const invoiceNumber = req.params.invoice_number;
+            console.log(req.params.name, req.params.client_name, invoiceNumber);
             const invoice = await prisma_1.default.invoices.findUnique({
                 where: { invoice_number: invoiceNumber },
                 include: {

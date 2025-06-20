@@ -376,6 +376,7 @@ class InvoiceController {
   ): Promise<void> {
     try {
       const invoiceNumber = req.params.invoice_number;
+      console.log(req.params.name, req.params.client_name, invoiceNumber);
       const invoice = await prisma.invoices.findUnique({
         where: { invoice_number: invoiceNumber },
         include: {
