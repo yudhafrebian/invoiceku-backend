@@ -70,9 +70,6 @@ const markOverdueInvoices = async () => {
     }).format(new Date());
     const formattedStart = new Date(`${todayString}T00:00:00.000Z`);
     const formattedEnd = new Date(`${todayString}T23:59:59.999Z`);
-    console.log("formattedStart", formattedStart);
-    console.log("formattedEnd", formattedEnd);
-    console.log("now", now);
     const overdueInvoices = await prisma_1.default.invoices.findMany({
         where: {
             due_date: {

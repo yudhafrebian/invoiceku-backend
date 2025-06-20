@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { scheduledEmailLogic, markOverdueInvoices } from "./utils/scheduledEmailLogic";
 import { handleRecurringInvoice } from "./utils/handleRecurringInvoice";
 
-cron.schedule("51 1 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   try {
     console.log("Cron running: sending scheduled emails, marking overdue, handling recurring...");
     const countEmails = await scheduledEmailLogic();
