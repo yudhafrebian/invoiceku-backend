@@ -60,7 +60,11 @@ export async function generateModernTemplate(
         headerColor: "#222",
         headerOpacity: 1,
         align: "left",
-        divider: true,
+        divider: {
+            horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
+            header: { disabled: false, width: 1, opacity: 1 },
+            vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+          },
       },
       {
         label: "Qty",
@@ -69,7 +73,10 @@ export async function generateModernTemplate(
         headerColor: "#222",
         headerOpacity: 1,
         align: "right",
-        divider: true
+        divider: {
+            horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
+            header: { disabled: false, width: 1, opacity: 1 },
+          },
       },
       {
         label: "Price",
