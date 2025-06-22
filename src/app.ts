@@ -28,7 +28,7 @@ class App {
   private configure(): void {
     this.app.use(
       cors({
-        origin: ["http://localhost:3000", "https://invoiceku.vercel.app"],
+        origin: ["http://localhost:3000", "https://invoiceku-purwadhika.vercel.app"],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         credentials: true,
       })
