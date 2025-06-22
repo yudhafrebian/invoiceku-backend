@@ -47,7 +47,7 @@ export async function generateClassicTemplate(
         160
       );
     }
-  doc.moveDown(1);
+  doc.moveDown(2);
   doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke();
 
   const tableData = {

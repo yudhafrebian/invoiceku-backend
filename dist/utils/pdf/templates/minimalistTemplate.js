@@ -19,13 +19,13 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     doc.font("Helvetica").fontSize(12).fillColor("#000");
     doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 50 });
     doc.moveDown(2);
-    doc.text(`Invoice ${invoice.invoice_number}`, { continued: true }).text(`:#`, 350);
-    doc.text(`Client: ${invoice.client.name}`);
-    doc.text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`);
-    doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
+    doc.text(`Invoice `, { continued: true }).text(`:#${invoice.invoice_number}`, 60);
+    doc.text(`Client `, { continued: true }).text(`:${invoice.client.name}`, 60);
+    doc.text(`Invoice Date `, { continued: true }).text(`${new Date(invoice.start_date).toLocaleDateString("id-ID")}`, 60);
+    doc.text(`Due Date `, { continued: true }).text(`${new Date(invoice.due_date).toLocaleDateString("id-ID")}`, 60);
     if (invoice.recurrence_type && invoice.recurrence_interval) {
-        doc.text(`Recurring Type: ${invoice.recurrence_type}`);
-        doc.text(`Recurring Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
+        doc.text(`Recurring Type `, { continued: true }).text(`:${invoice.recurrence_type}`, 60);
+        doc.text(`Recurring Every `, { continued: true }).text(`${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 60);
     }
     doc.moveDown(1.5);
     // Table
@@ -64,7 +64,7 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     });
     doc.moveDown(2);
     doc.font("Helvetica").fontSize(10).fillColor("#555");
-    doc.text(`Note: ${invoice.notes || "Terima kasih telah bertransaksi."}`);
+    doc.text(`Note: ${invoice.notes || "Thank you for your business!"}`);
     doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
     doc.end();
 }

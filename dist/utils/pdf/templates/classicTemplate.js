@@ -30,7 +30,7 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         doc.text(`Recurring Type: ${invoice.recurrence_type}`, 40, 145);
         doc.text(`Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 40, 160);
     }
-    doc.moveDown(1);
+    doc.moveDown(2);
     doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke();
     const tableData = {
         headers: [
