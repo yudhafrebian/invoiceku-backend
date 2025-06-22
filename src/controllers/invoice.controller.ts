@@ -7,7 +7,6 @@ import {
   TemplateStyle,
 } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
-import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail, sendStatusEmail } from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
 import { scheduledEmailLogic } from "../utils/scheduledEmailLogic";

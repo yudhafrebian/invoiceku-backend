@@ -3,7 +3,6 @@ import prisma from "../configs/prisma";
 import { PaymentMethod } from "../../prisma/generated/client";
 import { sendInvoiceEmail } from "./email/sendEmail";
 import { createToken } from "./createToken";
-import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
 import { generateInvoicePDF } from "./pdf/pdfGenerator";
 
 export const handleRecurringInvoice = async () => {

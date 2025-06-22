@@ -4,7 +4,6 @@ import prisma from "../configs/prisma";
 import { PaymentMethod, Recurrence } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { createToken } from "../utils/createToken";
-import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail } from "../utils/email/sendEmail";
 
 class RecurringController {
