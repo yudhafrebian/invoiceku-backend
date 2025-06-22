@@ -10,14 +10,14 @@ export async function generateMinimalistTemplate(
   const doc = new PDFDocument({ margin: 40, size: "A4" });
   const buffers: Buffer[] = [];
 
-  const labelX = 60;
+  const labelX = 40;
   const valueX = 180;
   let currentY = doc.y;
 
   const addRow = (label: string, value: string) => {
     doc.text(label, labelX, currentY);
     doc.text(`: ${value}`, valueX, currentY);
-    currentY = doc.y + 4; // tambahkan spasi antar baris
+    currentY = doc.y + 4; 
   };
 
   doc.on("data", buffers.push.bind(buffers));
@@ -35,7 +35,7 @@ export async function generateMinimalistTemplate(
 
   // Header clean
   doc.font("Helvetica").fontSize(12).fillColor("#000");
-  doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 80 });
+  doc.image("src/public/invoiceku-logo.png", 450, 50, { width: 80 });
 
   doc.moveDown(2);
   addRow("Invoice", `#${invoice.invoice_number}`);
