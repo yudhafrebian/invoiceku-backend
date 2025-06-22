@@ -15,7 +15,7 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
         res.send(pdfData);
     });
-    doc.rect(50, 50, 495, 90).stroke();
+    doc.rect(30, 30, 550, 90).stroke();
     doc.image("src/public/invoiceku-logo.png", 300, 60, { width: 80 });
     doc.font("Times-Bold").fontSize(16).text("INVOICE", 60, 65);
     doc
@@ -30,8 +30,6 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         doc.text(`Recurring Type: ${invoice.recurrence_type}`, 60, 145);
         doc.text(`Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 60, 160);
     }
-    doc.moveDown();
-    doc.moveDown(5);
     doc.moveDown();
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
     // Tabel invoice
@@ -70,11 +68,9 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, {
         align: "right",
     });
-    doc.moveTo(400, doc.y).lineTo(545, doc.y).stroke();
-    // Footer
     doc.moveDown(2);
     doc.font("Times-Roman").fontSize(10).fillColor("#333");
-    doc.text(`Catatan: ${invoice.notes || "Harap bayar sebelum tanggal jatuh tempo."}`);
+    doc.text(`Catatan: ${invoice.notes || "Thank you for your business!"}`);
     doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
     doc.end();
 }

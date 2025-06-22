@@ -23,7 +23,7 @@ export async function generateClassicTemplate(
     res.send(pdfData);
   });
 
-  doc.rect(50, 50, 495, 90).stroke();
+  doc.rect(30, 30, 550, 90).stroke();
   doc.image("src/public/invoiceku-logo.png", 300, 60, { width: 80 });
   doc.font("Times-Bold").fontSize(16).text("INVOICE", 60, 65);
   doc
@@ -47,10 +47,6 @@ export async function generateClassicTemplate(
         160
       );
     }
-  doc.moveDown();
-  doc.moveDown(5);
-
-
   doc.moveDown();
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
 
@@ -92,12 +88,10 @@ export async function generateClassicTemplate(
     .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, {
       align: "right",
     });
-  doc.moveTo(400, doc.y).lineTo(545, doc.y).stroke();
 
-  // Footer
   doc.moveDown(2);
   doc.font("Times-Roman").fontSize(10).fillColor("#333");
-  doc.text(`Catatan: ${invoice.notes || "Harap bayar sebelum tanggal jatuh tempo."}`);
+  doc.text(`Catatan: ${invoice.notes || "Thank you for your business!"}`);
   doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
 
   doc.end();
