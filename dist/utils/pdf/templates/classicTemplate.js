@@ -15,9 +15,8 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
         res.send(pdfData);
     });
-    // Header area dengan border
     doc.rect(50, 50, 495, 90).stroke();
-    doc.image("src/public/invoiceku-logo.png", 60, 60, { width: 60 });
+    doc.image("src/public/invoiceku-logo.png", 130, 60, { width: 80 });
     doc.font("Times-Bold").fontSize(16).text("INVOICE", 130, 65);
     doc
         .font("Times-Roman")
@@ -25,15 +24,14 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         .text(`Invoice Number: ${invoice.invoice_number}`, 130, 85)
         .text(`Client: ${invoice.client.name}`, 130, 100)
         .text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`, 130, 115);
-    doc.moveDown();
-    doc.moveDown(5);
-    // Detail lainnya
     doc.fontSize(10);
     doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
     if (invoice.recurrence_type && invoice.recurrence_interval) {
         doc.text(`Recurring Type: ${invoice.recurrence_type}`);
         doc.text(`Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
     }
+    doc.moveDown();
+    doc.moveDown(5);
     doc.moveDown();
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
     // Tabel invoice

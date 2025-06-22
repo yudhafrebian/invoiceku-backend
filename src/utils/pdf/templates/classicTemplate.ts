@@ -23,9 +23,8 @@ export async function generateClassicTemplate(
     res.send(pdfData);
   });
 
-  // Header area dengan border
   doc.rect(50, 50, 495, 90).stroke();
-  doc.image("src/public/invoiceku-logo.png", 60, 60, { width: 60 });
+  doc.image("src/public/invoiceku-logo.png", 130, 60, { width: 80 });
   doc.font("Times-Bold").fontSize(16).text("INVOICE", 130, 65);
   doc
     .font("Times-Roman")
@@ -38,18 +37,17 @@ export async function generateClassicTemplate(
       115
     );
 
+    doc.fontSize(10);
+    doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
+    if (invoice.recurrence_type && invoice.recurrence_interval) {
+      doc.text(`Recurring Type: ${invoice.recurrence_type}`);
+      doc.text(
+        `Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`
+      );
+    }
   doc.moveDown();
   doc.moveDown(5);
 
-  // Detail lainnya
-  doc.fontSize(10);
-  doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
-  if (invoice.recurrence_type && invoice.recurrence_interval) {
-    doc.text(`Recurring Type: ${invoice.recurrence_type}`);
-    doc.text(
-      `Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`
-    );
-  }
 
   doc.moveDown();
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
