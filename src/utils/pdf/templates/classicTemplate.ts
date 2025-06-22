@@ -23,29 +23,38 @@ export async function generateClassicTemplate(
     res.send(pdfData);
   });
 
-  doc.font("Times-Roman").fontSize(12).fillColor("#000");
+  // Header area dengan border
+  doc.rect(50, 50, 495, 90).stroke();
+  doc.image("src/public/invoiceku-logo.png", 60, 60, { width: 60 });
+  doc.font("Times-Bold").fontSize(16).text("INVOICE", 130, 65);
+  doc
+    .font("Times-Roman")
+    .fontSize(10)
+    .text(`Invoice Number: ${invoice.invoice_number}`, 130, 85)
+    .text(`Client: ${invoice.client.name}`, 130, 100)
+    .text(
+      `Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`,
+      130,
+      115
+    );
 
-  doc.text("INVOICE", { align: "center" });
   doc.moveDown();
-  doc.text(`Invoice Number : ${invoice.invoice_number}`);
-  doc.text(`Client         : ${invoice.client.name}`);
-  doc.text(
-    `Invoice Date    : ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`
-  );
-  doc.text(
-    `Due Date        : ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`
-  );
+  doc.moveDown(5);
 
+  // Detail lainnya
+  doc.fontSize(10);
+  doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
   if (invoice.recurrence_type && invoice.recurrence_interval) {
-    doc.text(`Recurring Type : ${invoice.recurrence_type}`);
+    doc.text(`Recurring Type: ${invoice.recurrence_type}`);
     doc.text(
-      `Interval        : Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`
+      `Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`
     );
   }
 
   doc.moveDown();
-  doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke(); // garis pemisah
+  doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
 
+  // Tabel invoice
   const tableData = {
     headers: [
       { label: "Item", property: "item", width: 200 },
@@ -54,25 +63,38 @@ export async function generateClassicTemplate(
       { label: "Total", property: "total", width: 125 },
     ],
     rows: invoice.invoice_items.map((item) => [
-        item.name_snapshot,
-        item.quantity.toString(),
-        `Rp ${item.price_snapshot.toLocaleString("id-ID")}`,
-        `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
-      ]),   
+      item.name_snapshot,
+      item.quantity.toString(),
+      `Rp ${item.price_snapshot.toLocaleString("id-ID")}`,
+      `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
+    ]),
   };
 
-  doc.moveDown();
+  doc.moveDown(2);
   doc.table(tableData, {
-    prepareHeader: () => doc.font("Times-Bold").fontSize(11),
-    prepareRow: () => doc.font("Times-Roman").fontSize(10),
+    prepareHeader: () => {
+      return doc
+              .font("Times-Bold")
+              .fillColor("#fff")
+              .fontSize(10)
+              .fillColor("black");
+    },
+    prepareRow: () => doc.font("Times-Roman").fontSize(10).fillColor("black"),
+    columnSpacing: 5,
     padding: [6],
   });
 
+  // Garis dan total
   doc.moveDown();
-  doc.font("Times-Bold").text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, {
-    align: "right",
-  });
+  doc
+    .font("Times-Bold")
+    .fontSize(12)
+    .text(`Total: Rp ${invoice.total.toLocaleString("id-ID")}`, {
+      align: "right",
+    });
+  doc.moveTo(400, doc.y).lineTo(545, doc.y).stroke();
 
+  // Footer
   doc.moveDown(2);
   doc.font("Times-Roman").fontSize(10).fillColor("#333");
   doc.text(`Catatan: ${invoice.notes || "Harap bayar sebelum tanggal jatuh tempo."}`);
