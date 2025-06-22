@@ -56,36 +56,37 @@ export async function generateMinimalistTemplate(
     );
   }
 
-  doc.moveDown(1.5);
+  // setelah info header
+doc.moveDown(1.5);
+doc.x = 40; // kembalikan posisi ke kiri dokumen
 
-  // Table
-  const tableData = {
-    headers: [
-      { label: "Item", property: "item", width: 215 },
-      { label: "Qty", property: "qty", width: 50 },
-      { label: "Price", property: "price", width: 125 },
-      { label: "Total", property: "total", width: 125 },
-    ],
-    rows: invoice.invoice_items.map((item) => [
-      item.name_snapshot,
-      item.quantity.toString(),
-      `Rp ${item.price_snapshot.toLocaleString("id-ID")}`,
-      `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
-    ]),
-  };
+const tableData = {
+  headers: [
+    { label: "Item", property: "item", width: 215 },
+    { label: "Qty", property: "qty", width: 50 },
+    { label: "Price", property: "price", width: 125 },
+    { label: "Total", property: "total", width: 125 },
+  ],
+  rows: invoice.invoice_items.map((item) => [
+    item.name_snapshot,
+    item.quantity.toString(),
+    `Rp ${item.price_snapshot.toLocaleString("id-ID")}`,
+    `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
+  ]),
+};
 
-  doc.table(tableData, {
-    prepareHeader: () => {
-      return doc
-        .font("Helvetica-Bold")
-        .fillColor("#fff")
-        .fontSize(10)
-        .fillColor("black");
-    },
-    prepareRow: () => doc.font("Helvetica").fontSize(10).fillColor("black"),
-    columnSpacing: 5,
-    padding: [6],
-  });
+doc.table(tableData, {
+  prepareHeader: () => {
+    return doc
+      .font("Helvetica-Bold")
+      .fontSize(10)
+      .fillColor("black");
+  },
+  prepareRow: () => doc.font("Helvetica").fontSize(10).fillColor("black"),
+  columnSpacing: 5,
+  padding: [6],
+});
+
 
   doc.moveDown();
   doc

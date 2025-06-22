@@ -35,8 +35,9 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
         addRow("Recurring Type", invoice.recurrence_type);
         addRow("Recurring Every", `${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
     }
+    // setelah info header
     doc.moveDown(1.5);
-    // Table
+    doc.x = 40; // kembalikan posisi ke kiri dokumen
     const tableData = {
         headers: [
             { label: "Item", property: "item", width: 215 },
@@ -55,7 +56,6 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
         prepareHeader: () => {
             return doc
                 .font("Helvetica-Bold")
-                .fillColor("#fff")
                 .fontSize(10)
                 .fillColor("black");
         },
