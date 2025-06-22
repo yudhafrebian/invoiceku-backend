@@ -130,7 +130,7 @@ class RecurringController {
     async getRecurringInvoiceChildren(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const invoiceNumber = req.params.invoice_number;
+            const recurringInvoiceNumber = req.params.recurring_invoice_number;
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const skip = (page - 1) * limit;
@@ -159,11 +159,21 @@ class RecurringController {
                 orderByClause = { total: "asc" };
             else if (sort === "total_desc")
                 orderByClause = { total: "desc" };
+            const recurring = await prisma_1.default.recurring_invoice.findFirst({
+                where: {
+                    invoice_number: recurringInvoiceNumber,
+                    user_id: userId,
+                    is_deleted: false,
+                },
+                select: { id: true },
+            });
+            if (!recurring) {
+                throw "Recurring invoice not found";
+            }
             const whereClause = {
                 user_id: userId,
-                invoice_number: invoiceNumber,
+                recurrence_invoice_id: recurring.id,
                 is_deleted: false,
-                recurrence_invoice_id: null,
             };
             if (search) {
                 whereClause.OR = [
