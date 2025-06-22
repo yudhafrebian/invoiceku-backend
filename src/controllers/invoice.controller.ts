@@ -511,7 +511,6 @@ class InvoiceController {
       const invoice = await prisma.invoices.findFirst({
         where: {
           invoice_number: invoiceNumber,
-          recurring_invoice: null,
           user_id: userId,
         },
         include: {
