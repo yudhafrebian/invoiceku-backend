@@ -23,8 +23,8 @@ export async function generateClassicTemplate(
     res.send(pdfData);
   });
 
-  doc.rect(30, 60, 495, 90).stroke();
-  doc.image("src/public/invoiceku-logo.png", 300, 60, { width: 210 });
+  doc.rect(30, 60, 520, 110).stroke();
+  doc.image("src/public/invoiceku-logo.png", 300, 60, { width: 120 });
   doc.font("Times-Bold").fontSize(16).text("INVOICE", 60, 65);
   doc
     .font("Times-Roman")
