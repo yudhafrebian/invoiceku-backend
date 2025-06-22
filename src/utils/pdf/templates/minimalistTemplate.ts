@@ -28,8 +28,8 @@ export async function generateMinimalistTemplate(
   doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 50 });
 
   doc.moveDown(2);
-  doc.text(`Invoice `, { continued: true }).text(`:#${invoice.invoice_number}`, 60);
-  doc.text(`Client `, { continued: true }).text(`:${invoice.client.name}`, 60);
+  doc.text(`Invoice ` ).text(`:#${invoice.invoice_number}`, 60);
+  doc.text(`Client `).text(`: ${invoice.client.name}`, 60);
   doc.text(
     `Invoice Date `,
     { continued: true },

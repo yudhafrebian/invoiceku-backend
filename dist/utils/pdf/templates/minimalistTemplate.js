@@ -19,8 +19,8 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     doc.font("Helvetica").fontSize(12).fillColor("#000");
     doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 50 });
     doc.moveDown(2);
-    doc.text(`Invoice `, { continued: true }).text(`:#${invoice.invoice_number}`, 60);
-    doc.text(`Client `, { continued: true }).text(`:${invoice.client.name}`, 60);
+    doc.text(`Invoice `).text(`:#${invoice.invoice_number}`, 60);
+    doc.text(`Client `).text(`: ${invoice.client.name}`, 60);
     doc.text(`Invoice Date `, { continued: true }).text(`${new Date(invoice.start_date).toLocaleDateString("id-ID")}`, 60);
     doc.text(`Due Date `, { continued: true }).text(`${new Date(invoice.due_date).toLocaleDateString("id-ID")}`, 60);
     if (invoice.recurrence_type && invoice.recurrence_interval) {
