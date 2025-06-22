@@ -39,7 +39,7 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerOpacity: 1,
                 align: "left",
                 divider: {
-                    horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
+                    horizontal: { disabled: false, width: 1, opacity: 1 },
                     header: { disabled: false, width: 1, opacity: 1 },
                     vertical: { disabled: false, width: 0.5, opacity: 0.5 },
                 },
@@ -52,8 +52,9 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerOpacity: 1,
                 align: "right",
                 divider: {
-                    horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
+                    horizontal: { disabled: false, width: 1, opacity: 1 },
                     header: { disabled: false, width: 1, opacity: 1 },
+                    vertical: { disabled: false, width: 0.5, opacity: 0.5 },
                 },
             },
             {
@@ -63,6 +64,11 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerColor: "#222",
                 headerOpacity: 1,
                 align: "right",
+                divider: {
+                    horizontal: { disabled: false, width: 1, opacity: 1 },
+                    header: { disabled: false, width: 1, opacity: 1 },
+                    vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+                },
             },
             {
                 label: "Total",
@@ -71,6 +77,11 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerColor: "#222",
                 headerOpacity: 1,
                 align: "right",
+                divider: {
+                    horizontal: { disabled: false, width: 1, opacity: 1 },
+                    header: { disabled: false, width: 1, opacity: 1 },
+                    vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+                },
             },
         ],
         datas: invoice.invoice_items.map((item) => ({

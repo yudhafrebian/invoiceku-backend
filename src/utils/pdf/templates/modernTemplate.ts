@@ -61,10 +61,10 @@ export async function generateModernTemplate(
         headerOpacity: 1,
         align: "left",
         divider: {
-            horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
-            header: { disabled: false, width: 1, opacity: 1 },
-            vertical: { disabled: false, width: 0.5, opacity: 0.5 },
-          },
+          horizontal: { disabled: false, width: 1, opacity: 1 },
+          header: { disabled: false, width: 1, opacity: 1 },
+          vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+        },
       },
       {
         label: "Qty",
@@ -74,9 +74,10 @@ export async function generateModernTemplate(
         headerOpacity: 1,
         align: "right",
         divider: {
-            horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
-            header: { disabled: false, width: 1, opacity: 1 },
-          },
+          horizontal: { disabled: false, width: 1, opacity: 1 },
+          header: { disabled: false, width: 1, opacity: 1 },
+          vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+        },
       },
       {
         label: "Price",
@@ -85,6 +86,11 @@ export async function generateModernTemplate(
         headerColor: "#222",
         headerOpacity: 1,
         align: "right",
+        divider: {
+          horizontal: { disabled: false, width: 1, opacity: 1 },
+          header: { disabled: false, width: 1, opacity: 1 },
+          vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+        },
       },
       {
         label: "Total",
@@ -93,6 +99,11 @@ export async function generateModernTemplate(
         headerColor: "#222",
         headerOpacity: 1,
         align: "right",
+        divider: {
+          horizontal: { disabled: false, width: 1, opacity: 1 },
+          header: { disabled: false, width: 1, opacity: 1 },
+          vertical: { disabled: false, width: 0.5, opacity: 0.5 },
+        },
       },
     ],
     datas: invoice.invoice_items.map((item) => ({
@@ -112,7 +123,6 @@ export async function generateModernTemplate(
     padding: 6,
     columnSpacing: 5,
   });
-  
 
   doc.moveDown();
   doc
