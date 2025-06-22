@@ -17,21 +17,21 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
     });
     doc.rect(30, 53, 535, 95).stroke();
     doc.image("src/public/invoiceku-logo.png", 400, 85, { width: 140 });
-    doc.font("Times-Bold").fontSize(16).text("INVOICE", 60, 65);
+    doc.font("Times-Bold").fontSize(16).text("INVOICE", 40, 65);
     doc
         .font("Times-Roman")
         .fontSize(10)
-        .text(`Invoice Number: ${invoice.invoice_number}`, 60, 85)
-        .text(`Client: ${invoice.client.name}`, 60, 100)
-        .text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`, 60, 115);
+        .text(`Invoice Number: ${invoice.invoice_number}`, 40, 85)
+        .text(`Client: ${invoice.client.name}`, 40, 100)
+        .text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`, 40, 115);
     doc.fontSize(10);
-    doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`, 60, 130);
+    doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`, 40, 130);
     if (invoice.recurrence_type && invoice.recurrence_interval) {
-        doc.text(`Recurring Type: ${invoice.recurrence_type}`, 60, 145);
-        doc.text(`Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 60, 160);
+        doc.text(`Recurring Type: ${invoice.recurrence_type}`, 40, 145);
+        doc.text(`Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 40, 160);
     }
     doc.moveDown();
-    doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
+    doc.moveTo(30, doc.y).lineTo(545, doc.y).stroke();
     // Tabel invoice
     const tableData = {
         headers: [
