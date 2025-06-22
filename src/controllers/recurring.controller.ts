@@ -420,16 +420,17 @@ class RecurringController {
         "30d"
       );
 
-      const pdfBuffer = await generateInvoicePDFBuffer({
+      const pdfBuffer = await generateInvoicePDF({
         invoice_number: invoice.invoice_number,
         client: { name: invoice.clients.name },
         due_date: dueDate,
-        start_date: invoice.start_date,
+        start_date: invoice.start_date.toISOString(),
         invoice_items: invoice.recurring_invoice_item,
         total: invoice.total,
         notes: invoice.notes || undefined,
         recurrence_type: invoice.recurrence_type,
         recurrence_interval: invoice.recurrence_interval,
+        template: invoice.template
       });
 
       await sendInvoiceEmail(

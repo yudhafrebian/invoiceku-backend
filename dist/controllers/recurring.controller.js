@@ -8,7 +8,6 @@ const prisma_1 = __importDefault(require("../configs/prisma"));
 const client_1 = require("../../prisma/generated/client");
 const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
 const createToken_1 = require("../utils/createToken");
-const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
 class RecurringController {
     async createRecurringInvoice(req, res, next) {
@@ -321,16 +320,17 @@ class RecurringController {
                 email: invoice.clients.email,
                 invoice_number: invoice.invoice_number,
             }, "30d");
-            const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+            const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: dueDate,
-                start_date: invoice.start_date,
+                start_date: invoice.start_date.toISOString(),
                 invoice_items: invoice.recurring_invoice_item,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
+                template: invoice.template
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                 name: userProfile.first_name,

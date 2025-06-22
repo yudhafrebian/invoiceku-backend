@@ -110,6 +110,7 @@ class InvoiceController {
         is_deleted,
         invoice_items,
         payment_method,
+        template,
       }: {
         client_id: number;
         start_date: Date;
@@ -120,6 +121,7 @@ class InvoiceController {
         total: number;
         is_deleted: boolean;
         payment_method: string;
+        template: string;
         invoice_items: {
           product_id: number;
           name_snapshot: string;
@@ -211,14 +213,15 @@ class InvoiceController {
             "30d"
           );
 
-          const pdfBuffer = await generateInvoicePDFBuffer({
+          const pdfBuffer = await generateInvoicePDF({
             invoice_number: invoice_number,
             client: { name: client.name },
             due_date: due_date,
-            start_date: start_date,
+            start_date: start_date.toISOString(),
             invoice_items,
             total,
             notes: notes || undefined,
+            template,
           });
 
           await sendInvoiceEmail(
@@ -556,16 +559,17 @@ class InvoiceController {
         "30d"
       );
 
-      const pdfBuffer = await generateInvoicePDFBuffer({
+      const pdfBuffer = await generateInvoicePDF({
         invoice_number: invoice.invoice_number,
         client: { name: invoice.clients.name },
         due_date: invoice.due_date,
-        start_date: invoice.start_date,
+        start_date: invoice.start_date.toISOString(),
         invoice_items: invoice.invoice_items,
         total: invoice.total,
         notes: invoice.notes || undefined,
         recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
         recurrence_type: invoice.recurring_invoice?.recurrence_type,
+        template: invoice.template,
       });
 
       await sendInvoiceEmail(

@@ -7,7 +7,6 @@ const prisma_1 = __importDefault(require("../configs/prisma"));
 const response_1 = require("../utils/response");
 const client_1 = require("../../prisma/generated/client");
 const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
-const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
 const createToken_1 = require("../utils/createToken");
 const scheduledEmailLogic_1 = require("../utils/scheduledEmailLogic");
@@ -90,7 +89,7 @@ class InvoiceController {
     async createInvoice(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, } = req.body;
+            const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, template, } = req.body;
             const userPaymentMethod = await prisma_1.default.user_payment_method.count({
                 where: {
                     user_id: userId,
@@ -159,14 +158,15 @@ class InvoiceController {
                         id: client.id,
                         email: client.email,
                     }, "30d");
-                    const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+                    const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
                         invoice_number: invoice_number,
                         client: { name: client.name },
                         due_date: due_date,
-                        start_date: start_date,
+                        start_date: start_date.toISOString(),
                         invoice_items,
                         total,
                         notes: notes || undefined,
+                        template,
                     });
                     await (0, sendEmail_1.sendInvoiceEmail)(client.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                         name: userProfile.first_name,
@@ -404,16 +404,17 @@ class InvoiceController {
                 email: invoice.clients.email,
                 invoice_number: invoice.invoice_number,
             }, "30d");
-            const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+            const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: invoice.due_date,
-                start_date: invoice.start_date,
+                start_date: invoice.start_date.toISOString(),
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
                 recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
                 recurrence_type: invoice.recurring_invoice?.recurrence_type,
+                template: invoice.template,
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                 name: userProfile.first_name,
