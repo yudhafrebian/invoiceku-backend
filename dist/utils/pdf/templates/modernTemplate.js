@@ -31,27 +31,51 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
     doc.moveDown();
     const tableData = {
         headers: [
-            { label: "Item", property: "item", align: "left", width: 200, options: { fillColor: "#2b2b2b" } },
-            { label: "Qty", property: "qty", align: "right", width: 50, options: { fillColor: "#2b2b2b" } },
-            { label: "Price", property: "price", align: "right", width: 125, options: { fillColor: "#2b2b2b" } },
-            { label: "Total", property: "total", align: "right", width: 125, options: { headerColor: "#2b2b2b" } },
+            {
+                label: "Item",
+                property: "item",
+                width: 200,
+                headerColor: "#222",
+                headerOpacity: 1,
+                align: "left",
+            },
+            {
+                label: "Qty",
+                property: "qty",
+                width: 50,
+                headerColor: "#222",
+                headerOpacity: 1,
+                align: "right",
+            },
+            {
+                label: "Price",
+                property: "price",
+                width: 125,
+                headerColor: "#222",
+                headerOpacity: 1,
+                align: "right",
+            },
+            {
+                label: "Total",
+                property: "total",
+                width: 125,
+                headerColor: "#222",
+                headerOpacity: 1,
+                align: "right",
+            },
         ],
         datas: invoice.invoice_items.map((item) => ({
             item: item.name_snapshot,
-            qty: item.quantity,
-            price: `Rp  ${item.price_snapshot.toLocaleString("id-ID")}`,
+            qty: item.quantity.toString(),
+            price: `Rp ${item.price_snapshot.toLocaleString("id-ID")}`,
             total: `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
-            options: { separator: true },
         })),
     };
     doc.table(tableData, {
-        prepareHeader: () => {
-            doc.font("Helvetica-Bold").fontSize(12).fillColor("white"); // text color putih
-        },
-        prepareRow: (row, i) => {
-            doc.font("Helvetica").fontSize(11).fillColor("black"); // reset warna ke hitam
-        },
-        padding: 5,
+        prepareHeader: () => doc.font("Helvetica-Bold").fontSize(12).fillColor("white"),
+        prepareRow: () => doc.font("Helvetica").fontSize(11).fillColor("black"),
+        padding: 6,
+        columnSpacing: 5,
     });
     doc.moveDown();
     doc
