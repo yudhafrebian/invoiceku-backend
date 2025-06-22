@@ -15,8 +15,8 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
         res.send(pdfData);
     });
-    doc.rect(100, 50, 495, 90).stroke();
-    doc.image("src/public/invoiceku-logo.png", 450, 60, { width: 210 });
+    doc.rect(30, 60, 495, 90).stroke();
+    doc.image("src/public/invoiceku-logo.png", 300, 60, { width: 210 });
     doc.font("Times-Bold").fontSize(16).text("INVOICE", 60, 65);
     doc
         .font("Times-Roman")
