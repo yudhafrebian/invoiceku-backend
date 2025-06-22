@@ -246,7 +246,7 @@ class InvoiceController {
     }
     async previewInvoicePDF(req, res, next) {
         try {
-            const { client_id, invoice_date, due_date, invoice_items, notes, start_date, invoice_number, } = req.body;
+            const { client_id, invoice_date, due_date, invoice_items, notes, start_date, invoice_number, template, } = req.body;
             const total = invoice_items.reduce((acc, item) => acc + item.quantity * item.price_snapshot, 0);
             const clientData = await prisma_1.default.clients.findUnique({
                 where: { id: client_id },
@@ -259,6 +259,7 @@ class InvoiceController {
                 start_date,
                 invoice_items,
                 notes,
+                template,
                 client: { name: clientData?.name || "Unknown Client" },
                 total,
             };
@@ -330,6 +331,7 @@ class InvoiceController {
                 notes: invoice.notes || undefined,
                 recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
                 recurrence_type: invoice.recurring_invoice?.recurrence_type,
+                template: invoice.template,
             }, res, false);
         }
         catch (error) {
@@ -360,6 +362,7 @@ class InvoiceController {
                 notes: invoice.notes || undefined,
                 recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
                 recurrence_type: invoice.recurring_invoice?.recurrence_type,
+                template: invoice.template,
             }, res, true);
         }
         catch (error) {
@@ -429,6 +432,15 @@ class InvoiceController {
         try {
             const status = Object.values(client_1.Status);
             (0, response_1.successResponse)(res, "Success", status);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    async getTemplates(req, res, next) {
+        try {
+            const templates = Object.values(client_1.TemplateStyle);
+            (0, response_1.successResponse)(res, "Success", templates);
         }
         catch (error) {
             next(error);

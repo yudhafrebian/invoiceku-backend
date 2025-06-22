@@ -229,7 +229,7 @@ class RecurringController {
     }
     async previewRecurringInvoicePDF(req, res, next) {
         try {
-            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, } = req.body;
+            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, template } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -247,6 +247,7 @@ class RecurringController {
                 notes,
                 recurrence_type,
                 recurrence_interval,
+                template
             };
             (0, pdfGenerator_1.generateInvoicePDF)(invoiceData, res, false);
         }
@@ -280,6 +281,7 @@ class RecurringController {
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
+                template: invoice.template
             }, res, false);
         }
         catch (error) {
@@ -398,6 +400,7 @@ class RecurringController {
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
+                template: invoice.template
             }, res, true);
         }
         catch (error) {

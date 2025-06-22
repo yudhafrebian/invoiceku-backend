@@ -1,33 +1,26 @@
-interface InvoiceItem {
-  name_snapshot: string;
-  quantity: number;
-  price_snapshot: number;
-}
+import { Response } from "express";
+import { Invoice } from "../pdfGenerator";
 
-interface Invoice {
-  invoice_number: string;
-  client: {
-    name: string;
-  };
-  due_date: Date;
-  start_date: Date;
-  invoice_items: InvoiceItem[];
-  total: number;
-  notes?: string;
-  recurrence_type?: string;
-  recurrence_interval?: number;
-}
-export async function generateInvoicePDFBuffer(
-  invoice: Invoice
-): Promise<Buffer> {
+export async function generateModernTemplate(
+  invoice: Invoice,
+  res: Response,
+  isDownload: boolean = false
+) {
   const PDFDocument = require("pdfkit-table");
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
 
   doc.on("data", buffers.push.bind(buffers));
-  doc.on("end", () => {});
-  doc.on("error", (err: any) => {
-    throw err;
+  doc.on("end", () => {
+    const pdfData = Buffer.concat(buffers);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `${isDownload ? "attachment" : "inline"}; filename=invoice-${
+        invoice.client.name
+      }-${invoice.invoice_number}.pdf`
+    );
+    res.send(pdfData);
   });
 
   doc.image("src/public/invoiceku-logo.png", { width: 80 });
@@ -48,12 +41,15 @@ export async function generateInvoicePDFBuffer(
       } ${invoice.recurrence_type.toLowerCase()}(s)`
     );
   }
+
   doc.text(
     `Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`
   );
   doc.moveDown();
+
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
-  doc.moveDown(2);
+  doc.moveDown();
+  doc.moveDown();
 
   const tableData = {
     headers: [
@@ -73,9 +69,11 @@ export async function generateInvoicePDFBuffer(
     })),
   };
 
-  await doc.table(tableData, {
+  doc.table(tableData, {
     prepareHeader: () => doc.font("Helvetica-Bold").fontSize(12),
-    prepareRow: () => doc.font("Helvetica").fontSize(11),
+    prepareRow: (row: any, i: number) => {
+      doc.font("Helvetica").fontSize(11);
+    },
     padding: 5,
   });
 
@@ -93,8 +91,4 @@ export async function generateInvoicePDFBuffer(
   doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
 
   doc.end();
-
-  return new Promise((resolve) => {
-    doc.on("end", () => resolve(Buffer.concat(buffers)));
-  });
 }

@@ -1,14 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateInvoicePDFBuffer = generateInvoicePDFBuffer;
-async function generateInvoicePDFBuffer(invoice) {
+exports.generateModernTemplate = generateModernTemplate;
+async function generateModernTemplate(invoice, res, isDownload = false) {
     const PDFDocument = require("pdfkit-table");
     const doc = new PDFDocument({ margin: 50, size: "A4" });
     const buffers = [];
     doc.on("data", buffers.push.bind(buffers));
-    doc.on("end", () => { });
-    doc.on("error", (err) => {
-        throw err;
+    doc.on("end", () => {
+        const pdfData = Buffer.concat(buffers);
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
+        res.send(pdfData);
     });
     doc.image("src/public/invoiceku-logo.png", { width: 80 });
     doc.moveDown();
@@ -25,7 +27,8 @@ async function generateInvoicePDFBuffer(invoice) {
     doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
     doc.moveDown();
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
-    doc.moveDown(2);
+    doc.moveDown();
+    doc.moveDown();
     const tableData = {
         headers: [
             { label: "Item", property: "item", align: "left", width: 200 },
@@ -41,9 +44,11 @@ async function generateInvoicePDFBuffer(invoice) {
             options: { separator: true },
         })),
     };
-    await doc.table(tableData, {
+    doc.table(tableData, {
         prepareHeader: () => doc.font("Helvetica-Bold").fontSize(12),
-        prepareRow: () => doc.font("Helvetica").fontSize(11),
+        prepareRow: (row, i) => {
+            doc.font("Helvetica").fontSize(11);
+        },
         padding: 5,
     });
     doc.moveDown();
@@ -58,7 +63,4 @@ async function generateInvoicePDFBuffer(invoice) {
     doc.text(`Note: ${invoice.notes || "Thank you for your business!"}`);
     doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
     doc.end();
-    return new Promise((resolve) => {
-        doc.on("end", () => resolve(Buffer.concat(buffers)));
-    });
 }

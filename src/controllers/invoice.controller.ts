@@ -1,7 +1,11 @@
 import { Response, Request, NextFunction } from "express";
 import prisma from "../configs/prisma";
 import { createResponse, successResponse } from "../utils/response";
-import { PaymentMethod, Status } from "../../prisma/generated/client";
+import {
+  PaymentMethod,
+  Status,
+  TemplateStyle,
+} from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail, sendStatusEmail } from "../utils/email/sendEmail";
@@ -343,6 +347,7 @@ class InvoiceController {
         notes,
         start_date,
         invoice_number,
+        template,
       } = req.body;
 
       const total = invoice_items.reduce(
@@ -362,6 +367,7 @@ class InvoiceController {
         start_date,
         invoice_items,
         notes,
+        template,
         client: { name: clientData?.name || "Unknown Client" },
         total,
       };
@@ -453,6 +459,7 @@ class InvoiceController {
           notes: invoice.notes || undefined,
           recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
           recurrence_type: invoice.recurring_invoice?.recurrence_type,
+          template: invoice.template,
         },
         res,
         false
@@ -491,6 +498,7 @@ class InvoiceController {
           notes: invoice.notes || undefined,
           recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
           recurrence_type: invoice.recurring_invoice?.recurrence_type,
+          template: invoice.template,
         },
         res,
         true
@@ -588,6 +596,19 @@ class InvoiceController {
     try {
       const status = Object.values(Status);
       successResponse(res, "Success", status);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getTemplates(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const templates = Object.values(TemplateStyle);
+      successResponse(res, "Success", templates);
     } catch (error) {
       next(error);
     }

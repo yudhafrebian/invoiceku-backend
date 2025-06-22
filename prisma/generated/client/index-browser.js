@@ -154,7 +154,8 @@ exports.Prisma.InvoicesScalarFieldEnum = {
   is_deleted: 'is_deleted',
   payment_method: 'payment_method',
   created_at: 'created_at',
-  recurrence_invoice_id: 'recurrence_invoice_id'
+  recurrence_invoice_id: 'recurrence_invoice_id',
+  template: 'template'
 };
 
 exports.Prisma.Products_servicesScalarFieldEnum = {
@@ -203,7 +204,8 @@ exports.Prisma.Recurring_invoiceScalarFieldEnum = {
   due_in_days: 'due_in_days',
   status: 'status',
   payment_method: 'payment_method',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  template: 'template'
 };
 
 exports.Prisma.Recurring_invoice_itemScalarFieldEnum = {
@@ -262,6 +264,12 @@ exports.Status = exports.$Enums.Status = {
   Overdue: 'Overdue',
   Confirmating: 'Confirmating',
   Rejected: 'Rejected'
+};
+
+exports.TemplateStyle = exports.$Enums.TemplateStyle = {
+  Modern: 'Modern',
+  Minimalist: 'Minimalist',
+  Classic: 'Classic'
 };
 
 exports.Type = exports.$Enums.Type = {

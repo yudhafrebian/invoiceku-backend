@@ -297,6 +297,7 @@ class RecurringController {
         recurrence_type,
         recurrence_interval,
         due_in_days,
+        template
       } = req.body;
       const startDate = new Date(start_date);
       const dueDate = new Date(startDate);
@@ -321,6 +322,7 @@ class RecurringController {
         notes,
         recurrence_type,
         recurrence_interval,
+        template
       };
 
       generateInvoicePDF(invoiceData, res, false);
@@ -361,6 +363,7 @@ class RecurringController {
           notes: invoice.notes || undefined,
           recurrence_type: invoice.recurrence_type,
           recurrence_interval: invoice.recurrence_interval,
+          template: invoice.template
         },
         res,
         false
@@ -519,6 +522,7 @@ class RecurringController {
           notes: invoice.notes || undefined,
           recurrence_type: invoice.recurrence_type,
           recurrence_interval: invoice.recurrence_interval,
+          template: invoice.template
         },
         res,
         true
