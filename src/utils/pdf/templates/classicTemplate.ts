@@ -52,7 +52,7 @@ export async function generateClassicTemplate(
 
   const tableData = {
     headers: [
-      { label: "Item", property: "item", width: 210 },
+      { label: "Item", property: "item", width: 215 },
       { label: "Qty", property: "qty", width: 50 },
       { label: "Price", property: "price", width: 125 },
       { label: "Total", property: "total", width: 125 },

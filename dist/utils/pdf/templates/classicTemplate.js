@@ -34,7 +34,7 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
     doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke();
     const tableData = {
         headers: [
-            { label: "Item", property: "item", width: 210 },
+            { label: "Item", property: "item", width: 215 },
             { label: "Qty", property: "qty", width: 50 },
             { label: "Price", property: "price", width: 125 },
             { label: "Total", property: "total", width: 125 },

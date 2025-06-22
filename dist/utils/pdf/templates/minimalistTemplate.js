@@ -19,7 +19,7 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     doc.font("Helvetica").fontSize(12).fillColor("#000");
     doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 50 });
     doc.moveDown(2);
-    doc.text(`Invoice #: ${invoice.invoice_number}`, { continued: true }).text(``, 350);
+    doc.text(`Invoice ${invoice.invoice_number}`, { continued: true }).text(`:#`, 350);
     doc.text(`Client: ${invoice.client.name}`);
     doc.text(`Invoice Date: ${new Date(invoice.start_date).toLocaleDateString("id-ID")}`);
     doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`);
@@ -30,7 +30,12 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     doc.moveDown(1.5);
     // Table
     const tableData = {
-        headers: ["Item", "Qty", "Price", "Total"],
+        headers: [
+            { label: "Item", property: "item", width: 215 },
+            { label: "Qty", property: "qty", width: 50 },
+            { label: "Price", property: "price", width: 125 },
+            { label: "Total", property: "total", width: 125 },
+        ],
         rows: invoice.invoice_items.map((item) => [
             item.name_snapshot,
             item.quantity.toString(),
@@ -39,15 +44,16 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
         ]),
     };
     doc.table(tableData, {
-        prepareHeader: () => doc.font("Helvetica-Bold").fontSize(11),
-        prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
-            doc.font("Helvetica").fontSize(10).fillColor("#111");
-            return doc;
+        prepareHeader: () => {
+            return doc
+                .font("Helvetica-Bold")
+                .fillColor("#fff")
+                .fontSize(10)
+                .fillColor("black");
         },
-        padding: [4],
-        columnSpacing: 12,
-        hideHeader: false,
-        width: 500,
+        prepareRow: () => doc.font("Helvetica").fontSize(10).fillColor("black"),
+        columnSpacing: 5,
+        padding: [6],
     });
     doc.moveDown();
     doc
