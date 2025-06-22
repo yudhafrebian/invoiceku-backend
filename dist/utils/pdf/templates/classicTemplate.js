@@ -31,10 +31,10 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         doc.text(`Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 40, 160);
     }
     doc.moveDown(1);
-    doc.moveTo(35, doc.y).lineTo(555, doc.y).stroke();
+    doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke();
     const tableData = {
         headers: [
-            { label: "Item", property: "item", width: 220 },
+            { label: "Item", property: "item", width: 210 },
             { label: "Qty", property: "qty", width: 50 },
             { label: "Price", property: "price", width: 125 },
             { label: "Total", property: "total", width: 125 },
