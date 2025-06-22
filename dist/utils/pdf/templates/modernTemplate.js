@@ -31,10 +31,10 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
     doc.moveDown();
     const tableData = {
         headers: [
-            { label: "Item", property: "item", align: "left", width: 200, options: { fillColor: "#333" } },
-            { label: "Qty", property: "qty", align: "right", width: 50, options: { fillColor: "#333" } },
-            { label: "Price", property: "price", align: "right", width: 125, options: { fillColor: "#333" } },
-            { label: "Total", property: "total", align: "right", width: 125, options: { fillColor: "#333" } },
+            { label: "Item", property: "item", align: "left", width: 200, options: { fillColor: "#2b2b2b" } },
+            { label: "Qty", property: "qty", align: "right", width: 50, options: { fillColor: "#2b2b2b" } },
+            { label: "Price", property: "price", align: "right", width: 125, options: { fillColor: "#2b2b2b" } },
+            { label: "Total", property: "total", align: "right", width: 125, options: { headerColor: "#2b2b2b" } },
         ],
         datas: invoice.invoice_items.map((item) => ({
             item: item.name_snapshot,
