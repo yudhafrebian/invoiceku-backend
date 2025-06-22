@@ -1,17 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateModernTemplate = generateModernTemplate;
-async function generateModernTemplate(invoice, res, isDownload = false) {
+async function generateModernTemplate(invoice) {
     const PDFDocument = require("pdfkit-table");
     const doc = new PDFDocument({ margin: 50, size: "A4" });
     const buffers = [];
-    doc.on("data", buffers.push.bind(buffers));
-    doc.on("end", () => {
-        const pdfData = Buffer.concat(buffers);
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
-        res.send(pdfData);
-    });
     doc.image("src/public/invoiceku-logo.png", { width: 80 });
     doc.moveDown();
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
@@ -65,8 +58,8 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerOpacity: 1,
                 align: "right",
                 divider: {
-                    horizontal: { disabled: false, width: 1, opacity: 1 },
-                    header: { disabled: false, width: 1, opacity: 1 },
+                    horizontal: { disabled: false, width: 2, opacity: 1 },
+                    header: { disabled: false, width: 2, opacity: 1 },
                     vertical: { disabled: false, width: 0.5, opacity: 0.5 },
                 },
             },
@@ -109,4 +102,7 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
     doc.text(`Note: ${invoice.notes || "Thank you for your business!"}`);
     doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
     doc.end();
+    return new Promise((resolve) => {
+        doc.on("end", () => resolve(Buffer.concat(buffers)));
+    });
 }

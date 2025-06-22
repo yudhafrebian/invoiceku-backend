@@ -1,27 +1,13 @@
 import PDFDocument from "pdfkit-table";
-import { Response } from "express";
 import { Invoice } from "../pdfGenerator";
 
 export async function generateClassicTemplate(
-  invoice: Invoice,
-  res: Response,
-  isDownload: boolean = false
-) {
+  invoice: Invoice
+): Promise<Buffer> {
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
 
   doc.on("data", buffers.push.bind(buffers));
-  doc.on("end", () => {
-    const pdfData = Buffer.concat(buffers);
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `${isDownload ? "attachment" : "inline"}; filename=invoice-${
-        invoice.client.name
-      }-${invoice.invoice_number}.pdf`
-    );
-    res.send(pdfData);
-  });
 
   doc.rect(30, 53, 535, 95).stroke();
   doc.image("src/public/invoiceku-logo.png", 400, 85, { width: 140 });
@@ -37,16 +23,18 @@ export async function generateClassicTemplate(
       115
     );
 
-    doc.fontSize(10);
-    doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`,40, 130);
-    if (invoice.recurrence_type && invoice.recurrence_interval) {
-      doc.text(`Recurring Type: ${invoice.recurrence_type}`, 40, 145);
-      doc.text(
-        `Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`,
-        40,
-        160
-      );
-    }
+  doc.fontSize(10);
+  doc.text(`Due Date: ${new Date(invoice.due_date).toLocaleDateString("id-ID")}`, 40, 130);
+
+  if (invoice.recurrence_type && invoice.recurrence_interval) {
+    doc.text(`Recurring Type: ${invoice.recurrence_type}`, 40, 145);
+    doc.text(
+      `Interval: Every ${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`,
+      40,
+      160
+    );
+  }
+
   doc.moveDown(2);
   doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke();
 
@@ -69,10 +57,9 @@ export async function generateClassicTemplate(
   doc.table(tableData, {
     prepareHeader: () => {
       return doc
-              .font("Times-Bold")
-              .fillColor("#fff")
-              .fontSize(10)
-              .fillColor("black");
+        .font("Times-Bold")
+        .fillColor("#000")
+        .fontSize(10);
     },
     prepareRow: () => doc.font("Times-Roman").fontSize(10).fillColor("black"),
     columnSpacing: 5,
@@ -93,4 +80,10 @@ export async function generateClassicTemplate(
   doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
 
   doc.end();
+
+  return new Promise((resolve) => {
+    doc.on("end", () => {
+      resolve(Buffer.concat(buffers));
+    });
+  });
 }

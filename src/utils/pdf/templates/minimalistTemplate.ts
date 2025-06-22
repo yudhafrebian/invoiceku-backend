@@ -4,11 +4,10 @@ import { Invoice } from "../pdfGenerator";
 
 export async function generateMinimalistTemplate(
   invoice: Invoice,
-  res: Response,
-  isDownload: boolean = false
 ) {
   const doc = new PDFDocument({ margin: 40, size: "A4" });
   const buffers: Buffer[] = [];
+  doc.on("data", buffers.push.bind(buffers));
 
   const labelX = 40;
   const valueX = 120;
@@ -20,18 +19,7 @@ export async function generateMinimalistTemplate(
     currentY = doc.y + 4; 
   };
 
-  doc.on("data", buffers.push.bind(buffers));
-  doc.on("end", () => {
-    const pdfData = Buffer.concat(buffers);
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `${isDownload ? "attachment" : "inline"}; filename=invoice-${
-        invoice.client.name
-      }-${invoice.invoice_number}.pdf`
-    );
-    res.send(pdfData);
-  });
+  
 
   // Header clean
   doc.font("Helvetica").fontSize(12).fillColor("#000");
@@ -102,4 +90,7 @@ doc.table(tableData, {
   doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
 
   doc.end();
+  return new Promise((resolve) => {
+    doc.on("end", () => resolve(Buffer.concat(buffers)));
+  });
 }

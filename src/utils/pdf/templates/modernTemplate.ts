@@ -3,25 +3,10 @@ import { Invoice } from "../pdfGenerator";
 
 export async function generateModernTemplate(
   invoice: Invoice,
-  res: Response,
-  isDownload: boolean = false
 ) {
   const PDFDocument = require("pdfkit-table");
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
-
-  doc.on("data", buffers.push.bind(buffers));
-  doc.on("end", () => {
-    const pdfData = Buffer.concat(buffers);
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `${isDownload ? "attachment" : "inline"}; filename=invoice-${
-        invoice.client.name
-      }-${invoice.invoice_number}.pdf`
-    );
-    res.send(pdfData);
-  });
 
   doc.image("src/public/invoiceku-logo.png", { width: 80 });
   doc.moveDown();
@@ -87,8 +72,8 @@ export async function generateModernTemplate(
         headerOpacity: 1,
         align: "right",
         divider: {
-          horizontal: { disabled: false, width: 1, opacity: 1 },
-          header: { disabled: false, width: 1, opacity: 1 },
+          horizontal: { disabled: false, width: 2, opacity: 1 },
+          header: { disabled: false, width: 2, opacity: 1 },
           vertical: { disabled: false, width: 0.5, opacity: 0.5 },
         },
       },
@@ -138,4 +123,7 @@ export async function generateModernTemplate(
   doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
 
   doc.end();
+  return new Promise((resolve) => {
+    doc.on("end", () => resolve(Buffer.concat(buffers)));
+  });
 }

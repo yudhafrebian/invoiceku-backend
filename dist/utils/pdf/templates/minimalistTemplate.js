@@ -5,9 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateMinimalistTemplate = generateMinimalistTemplate;
 const pdfkit_table_1 = __importDefault(require("pdfkit-table"));
-async function generateMinimalistTemplate(invoice, res, isDownload = false) {
+async function generateMinimalistTemplate(invoice) {
     const doc = new pdfkit_table_1.default({ margin: 40, size: "A4" });
     const buffers = [];
+    doc.on("data", buffers.push.bind(buffers));
     const labelX = 40;
     const valueX = 120;
     let currentY = doc.y;
@@ -16,13 +17,6 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
         doc.text(`: ${value}`, valueX, currentY);
         currentY = doc.y + 4;
     };
-    doc.on("data", buffers.push.bind(buffers));
-    doc.on("end", () => {
-        const pdfData = Buffer.concat(buffers);
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
-        res.send(pdfData);
-    });
     // Header clean
     doc.font("Helvetica").fontSize(12).fillColor("#000");
     doc.image("src/public/invoiceku-logo.png", 450, 50, { width: 80 });
@@ -75,4 +69,7 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     doc.text(`Note: ${invoice.notes || "Thank you for your business!"}`);
     doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
     doc.end();
+    return new Promise((resolve) => {
+        doc.on("end", () => resolve(Buffer.concat(buffers)));
+    });
 }

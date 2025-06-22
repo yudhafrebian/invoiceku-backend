@@ -5,16 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateClassicTemplate = generateClassicTemplate;
 const pdfkit_table_1 = __importDefault(require("pdfkit-table"));
-async function generateClassicTemplate(invoice, res, isDownload = false) {
+async function generateClassicTemplate(invoice) {
     const doc = new pdfkit_table_1.default({ margin: 50, size: "A4" });
     const buffers = [];
     doc.on("data", buffers.push.bind(buffers));
-    doc.on("end", () => {
-        const pdfData = Buffer.concat(buffers);
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader("Content-Disposition", `${isDownload ? "attachment" : "inline"}; filename=invoice-${invoice.client.name}-${invoice.invoice_number}.pdf`);
-        res.send(pdfData);
-    });
     doc.rect(30, 53, 535, 95).stroke();
     doc.image("src/public/invoiceku-logo.png", 400, 85, { width: 140 });
     doc.font("Times-Bold").fontSize(16).text("INVOICE", 40, 65);
@@ -51,9 +45,8 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
         prepareHeader: () => {
             return doc
                 .font("Times-Bold")
-                .fillColor("#fff")
-                .fontSize(10)
-                .fillColor("black");
+                .fillColor("#000")
+                .fontSize(10);
         },
         prepareRow: () => doc.font("Times-Roman").fontSize(10).fillColor("black"),
         columnSpacing: 5,
@@ -71,4 +64,9 @@ async function generateClassicTemplate(invoice, res, isDownload = false) {
     doc.text(`Catatan: ${invoice.notes || "Thank you for your business!"}`);
     doc.text(`Generated on: ${new Date().toLocaleDateString("id-ID")}`);
     doc.end();
+    return new Promise((resolve) => {
+        doc.on("end", () => {
+            resolve(Buffer.concat(buffers));
+        });
+    });
 }

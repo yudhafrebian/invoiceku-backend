@@ -8,7 +8,7 @@ const date_fns_1 = require("date-fns");
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const sendEmail_1 = require("./email/sendEmail");
 const createToken_1 = require("./createToken");
-const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
+const pdfGenerator_1 = require("./pdf/pdfGenerator");
 const handleRecurringInvoice = async () => {
     const zone = "Asia/Jakarta";
     const todayString = new Intl.DateTimeFormat("en-CA", {
@@ -109,16 +109,17 @@ const handleRecurringInvoice = async () => {
         });
         if (!userProfile)
             continue;
-        const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+        const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
             invoice_number: invoice.invoice_number,
             client: { name: recurring.clients.name },
             due_date: dueDate,
-            start_date: invoice.start_date,
+            start_date: invoice.start_date.toISOString(),
             invoice_items: recurring_invoice_item,
             total: invoice.total,
             notes: invoice.notes || undefined,
             recurrence_interval,
             recurrence_type,
+            template: recurring.template
         });
         await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${invoice.invoice_number}`, null, {
             name: userProfile.first_name,

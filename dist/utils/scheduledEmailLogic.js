@@ -8,6 +8,7 @@ const prisma_1 = __importDefault(require("../configs/prisma"));
 const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
 const createToken_1 = require("../utils/createToken");
+const pdfGenerator_1 = require("./pdf/pdfGenerator");
 const scheduledEmailLogic = async () => {
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0];
@@ -39,14 +40,15 @@ const scheduledEmailLogic = async () => {
             id: invoice.client_id,
             email: invoice.clients.email,
         }, "30d");
-        const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+        const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
             invoice_number: invoice.invoice_number,
             client: { name: invoice.clients.name },
             due_date: invoice.due_date,
-            start_date: invoice.start_date,
+            start_date: invoice.start_date.toISOString(),
             invoice_items: invoice.invoice_items,
             total: invoice.total,
             notes: invoice.notes || undefined,
+            template: invoice.template,
         });
         await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
             name: userProfile.first_name,
