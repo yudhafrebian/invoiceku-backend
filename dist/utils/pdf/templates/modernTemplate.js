@@ -38,6 +38,7 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerColor: "#222",
                 headerOpacity: 1,
                 align: "left",
+                divider: true,
             },
             {
                 label: "Qty",
@@ -46,6 +47,7 @@ async function generateModernTemplate(invoice, res, isDownload = false) {
                 headerColor: "#222",
                 headerOpacity: 1,
                 align: "right",
+                divider: true
             },
             {
                 label: "Price",
