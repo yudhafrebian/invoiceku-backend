@@ -55,7 +55,7 @@ export async function generateModernTemplate(
     headers: [
       { label: "Item", property: "item", align: "left", width: 200 },
       { label: "Qty", property: "qty", align: "right", width: 50 },
-      { label: "Price", property: "price", align: "right", width: 125 },
+      { label: "Price", property: "price", align: "right", width: 125, options: { headerColor: "#BEBEBE" } },
       { label: "Total", property: "total", align: "right", width: 125 },
     ],
     datas: invoice.invoice_items.map((item) => ({

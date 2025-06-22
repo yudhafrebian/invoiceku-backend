@@ -11,7 +11,7 @@ export async function generateMinimalistTemplate(
   const buffers: Buffer[] = [];
 
   const labelX = 40;
-  const valueX = 180;
+  const valueX = 100;
   let currentY = doc.y;
 
   const addRow = (label: string, value: string) => {

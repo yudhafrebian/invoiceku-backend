@@ -9,7 +9,7 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     const doc = new pdfkit_table_1.default({ margin: 40, size: "A4" });
     const buffers = [];
     const labelX = 40;
-    const valueX = 180;
+    const valueX = 100;
     let currentY = doc.y;
     const addRow = (label, value) => {
         doc.text(label, labelX, currentY);
