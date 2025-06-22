@@ -40,7 +40,7 @@ export async function generateInvoicePDF(
     res.send(pdfData);
   });
 
-  doc.fontSize(20).fillColor("#333").text("InvoiceKu", { align: "center" });
+  doc.image("src/public/invoiceku-logo.png", { width: 80 });
   doc.moveDown();
   doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
   doc.moveDown();
