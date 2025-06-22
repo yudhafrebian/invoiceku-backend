@@ -8,6 +8,14 @@ const pdfkit_table_1 = __importDefault(require("pdfkit-table"));
 async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     const doc = new pdfkit_table_1.default({ margin: 40, size: "A4" });
     const buffers = [];
+    const labelX = 60;
+    const valueX = 180;
+    let currentY = doc.y;
+    const addRow = (label, value) => {
+        doc.text(label, labelX, currentY);
+        doc.text(`: ${value}`, valueX, currentY);
+        currentY = doc.y + 4; // tambahkan spasi antar baris
+    };
     doc.on("data", buffers.push.bind(buffers));
     doc.on("end", () => {
         const pdfData = Buffer.concat(buffers);
@@ -17,15 +25,15 @@ async function generateMinimalistTemplate(invoice, res, isDownload = false) {
     });
     // Header clean
     doc.font("Helvetica").fontSize(12).fillColor("#000");
-    doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 50 });
+    doc.image("src/public/invoiceku-logo.png", 40, 40, { width: 80 });
     doc.moveDown(2);
-    doc.text(`Invoice `).text(`:#${invoice.invoice_number}`, 60);
-    doc.text(`Client `).text(`: ${invoice.client.name}`, 60);
-    doc.text(`Invoice Date `, { continued: true }).text(`${new Date(invoice.start_date).toLocaleDateString("id-ID")}`, 60);
-    doc.text(`Due Date `, { continued: true }).text(`${new Date(invoice.due_date).toLocaleDateString("id-ID")}`, 60);
+    addRow("Invoice", `#${invoice.invoice_number}`);
+    addRow("Client", invoice.client.name);
+    addRow("Invoice Date", new Date(invoice.start_date).toLocaleDateString("id-ID"));
+    addRow("Due Date", new Date(invoice.due_date).toLocaleDateString("id-ID"));
     if (invoice.recurrence_type && invoice.recurrence_interval) {
-        doc.text(`Recurring Type `, { continued: true }).text(`:${invoice.recurrence_type}`, 60);
-        doc.text(`Recurring Every `, { continued: true }).text(`${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`, 60);
+        addRow("Recurring Type", invoice.recurrence_type);
+        addRow("Recurring Every", `${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
     }
     doc.moveDown(1.5);
     // Table
