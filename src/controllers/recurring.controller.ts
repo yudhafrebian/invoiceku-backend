@@ -102,6 +102,7 @@ class RecurringController {
       const skip = (page - 1) * limit;
       const search = req.query.search as string;
       const payment = req.query.payment as string;
+      const type = req.query.type as string;
       const status = req.query.status as string;
       const sort = req.query.sort as string;
 
@@ -117,8 +118,12 @@ class RecurringController {
       else if (sort === "start_date_asc") orderByClause = { start_date: "asc" };
       else if (sort === "start_date_desc")
         orderByClause = { start_date: "desc" };
-      else if (sort === "due_date_asc") orderByClause = { due_date: "asc" };
-      else if (sort === "due_date_desc") orderByClause = { due_date: "desc" };
+      else if (sort === "recurrence_interval_asc") orderByClause = { recurrence_interval: "asc" };
+      else if (sort === "recurrence_interval_desc") orderByClause = { recurrence_interval: "desc" };
+      else if (sort === "duration_asc") orderByClause = { duration: "asc" };
+      else if (sort === "duration_desc") orderByClause = { duration: "desc" };
+      else if (sort === "due_in_days_asc") orderByClause = { due_in_days: "asc" };
+      else if (sort === "due_in_days_desc") orderByClause = { due_in_days: "desc" };
       else if (sort === "total_asc") orderByClause = { total: "asc" };
       else if (sort === "total_desc") orderByClause = { total: "desc" };
 
@@ -138,6 +143,9 @@ class RecurringController {
       }
       if (status) {
         whereClause.status = status;
+      }
+      if (type) {
+        whereClause.recurrence_type = type;
       }
 
       const recurringInvoice = await prisma.recurring_invoice.findMany({
