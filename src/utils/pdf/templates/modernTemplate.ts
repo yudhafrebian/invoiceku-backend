@@ -53,29 +53,30 @@ export async function generateModernTemplate(
 
   const tableData = {
     headers: [
-      { label: "Item", property: "item", align: "left", width: 200 },
-      { label: "Qty", property: "qty", align: "right", width: 50 },
-      { label: "Price", property: "price", align: "right", width: 125, options: { headerColor: "#BEBEBE" } },
-      { label: "Total", property: "total", align: "right", width: 125 },
+      { label: "Item", property: "item", align: "left", width: 200, options: { fillColor: "#333" } },
+      { label: "Qty", property: "qty", align: "right", width: 50, options: { fillColor: "#333" } },
+      { label: "Price", property: "price", align: "right", width: 125, options: { fillColor: "#333" } },
+      { label: "Total", property: "total", align: "right", width: 125, options: { fillColor: "#333" } },
     ],
     datas: invoice.invoice_items.map((item) => ({
       item: item.name_snapshot,
       qty: item.quantity,
       price: `Rp  ${item.price_snapshot.toLocaleString("id-ID")}`,
-      total: `Rp ${(item.quantity * item.price_snapshot).toLocaleString(
-        "id-ID"
-      )}`,
+      total: `Rp ${(item.quantity * item.price_snapshot).toLocaleString("id-ID")}`,
       options: { separator: true },
     })),
   };
-
+  
   doc.table(tableData, {
-    prepareHeader: () => doc.font("Helvetica-Bold").fontSize(12),
+    prepareHeader: () => {
+      doc.font("Helvetica-Bold").fontSize(12).fillColor("white"); // text color putih
+    },
     prepareRow: (row: any, i: number) => {
-      doc.font("Helvetica").fontSize(11);
+      doc.font("Helvetica").fontSize(11).fillColor("black"); // reset warna ke hitam
     },
     padding: 5,
   });
+  
 
   doc.moveDown();
   doc
