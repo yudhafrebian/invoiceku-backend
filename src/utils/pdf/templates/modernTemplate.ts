@@ -7,6 +7,7 @@ export async function generateModernTemplate(
   const PDFDocument = require("pdfkit-table");
   const doc = new PDFDocument({ margin: 50, size: "A4" });
   const buffers: Buffer[] = [];
+  doc.on("data", buffers.push.bind(buffers));
 
   doc.image("src/public/invoiceku-logo.png", { width: 80 });
   doc.moveDown();
