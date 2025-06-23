@@ -277,7 +277,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "I:\\Purwadhika\\invoiceku\\invoiceku-backend\\prisma\\generated\\client",
+      "value": "D:\\Final Project\\invoiceku-backend\\prisma\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -291,7 +291,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "I:\\Purwadhika\\invoiceku\\invoiceku-backend\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Final Project\\invoiceku-backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

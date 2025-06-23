@@ -52,7 +52,17 @@ class UserController {
       });
 
       if (!userProfile) {
-        throw new Error("User profile not found");
+        throw "User profile not found";
+      }
+      
+      const checkEmail = await prisma.users.findUnique({
+        where:{
+          email
+        }
+      })
+
+      if(checkEmail){
+        throw `Email ${email} already exist`
       }
 
       const updateUser = await prisma.users.update({
