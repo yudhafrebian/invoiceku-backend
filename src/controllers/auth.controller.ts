@@ -226,7 +226,11 @@ class AuthController {
     }
   }
 
-  async sendVerifyLink(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async sendVerifyLink(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const userId = res.locals.data.id;
       const { email } = req.body;
@@ -236,7 +240,7 @@ class AuthController {
           id: userId,
           is_deleted: false,
         },
-      })
+      });
 
       if (!user) {
         throw "User not found";
@@ -246,15 +250,45 @@ class AuthController {
         id: user.id,
       });
 
-      await sendVerifyEmail(
+      await sendVerifyEmail(email, "Verify Email", null, {
         email,
-        "Verify Email",
-        null,
-        {
-          email,
-          token,
-        }
-      )
+        token,
+      });
+
+      successResponse(res, "Please check your email");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async sendResetLink(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const userId = res.locals.data.id;
+      const { email } = req.body;
+
+      const user = await prisma.users.findFirst({
+        where: {
+          id: userId,
+          is_deleted: false,
+        },
+      });
+
+      if (!user) {
+        throw "User not found";
+      }
+
+      const token = createToken({
+        id: user.id,
+      });
+
+      await sendResetLinkEmail(email, "Reset Password", null, {
+        email,
+        token,
+      });
 
       successResponse(res, "Please check your email");
     } catch (error) {
@@ -276,7 +310,7 @@ class AuthController {
         where: {
           id: userId,
         },
-      })
+      });
 
       if (!user || user.is_deleted) {
         throw "User not found";

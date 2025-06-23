@@ -204,6 +204,32 @@ class AuthController {
             next(error);
         }
     }
+    async sendResetLink(req, res, next) {
+        try {
+            const userId = res.locals.data.id;
+            const { email } = req.body;
+            const user = await prisma_1.default.users.findFirst({
+                where: {
+                    id: userId,
+                    is_deleted: false,
+                },
+            });
+            if (!user) {
+                throw "User not found";
+            }
+            const token = (0, createToken_1.createToken)({
+                id: user.id,
+            });
+            await (0, sendEmail_1.sendResetLinkEmail)(email, "Reset Password", null, {
+                email,
+                token,
+            });
+            (0, response_1.successResponse)(res, "Please check your email");
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     async resetPassword(req, res, next) {
         try {
             const { password } = req.body;

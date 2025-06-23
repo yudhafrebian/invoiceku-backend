@@ -29,6 +29,7 @@ class AuthRouter {
     this.route.use(this.verify.verifyToken);
     this.route.patch("/verify", this.authController.verifyEmail);
     this.route.post("/send-verify-email", this.authController.sendVerifyLink);
+    this.route.post("/send-reset-email", this.authController.sendResetLink);
     this.route.patch("/reset-password", this.authController.resetPassword);
     this.route.get("/keep-login", this.authController.keepLogin);
   }
