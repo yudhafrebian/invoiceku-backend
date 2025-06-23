@@ -113,7 +113,7 @@ const handleRecurringInvoice = async () => {
             invoice_number: invoice.invoice_number,
             client: { name: recurring.clients.name },
             due_date: dueDate,
-            start_date: invoice.start_date.toISOString(),
+            start_date: invoice.start_date,
             invoice_items: recurring_invoice_item,
             total: invoice.total,
             notes: invoice.notes || undefined,

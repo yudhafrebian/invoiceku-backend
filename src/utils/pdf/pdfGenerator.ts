@@ -13,7 +13,7 @@ export interface Invoice {
   invoice_number: string;
   client: { name: string };
   due_date: Date;
-  start_date: string;
+  start_date: Date;
   invoice_items: InvoiceItem[];
   total: number;
   notes?: string;
