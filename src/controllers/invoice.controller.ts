@@ -130,6 +130,8 @@ class InvoiceController {
         }[];
       } = req.body;
 
+      console.log(req.body);
+
       const userPaymentMethod = await prisma.user_payment_method.count({
         where: {
           user_id: userId,
@@ -177,6 +179,7 @@ class InvoiceController {
           total,
           payment_method: payment_method as PaymentMethod,
           is_deleted,
+          template: template as TemplateStyle,
         },
       });
 

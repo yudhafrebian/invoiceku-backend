@@ -36,7 +36,7 @@ const handleRecurringInvoice = async () => {
         },
     });
     for (const recurring of recurringInvoices) {
-        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, } = recurring;
+        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, template, } = recurring;
         if (duration !== null &&
             duration !== undefined &&
             recurring.occurrences_done >= duration) {
@@ -69,6 +69,7 @@ const handleRecurringInvoice = async () => {
                     status,
                     payment_method: payment_method,
                     recurrence_invoice_id: id,
+                    template: template,
                 },
             });
         }

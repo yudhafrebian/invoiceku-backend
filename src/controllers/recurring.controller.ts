@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { createResponse, successResponse } from "../utils/response";
 import prisma from "../configs/prisma";
-import { PaymentMethod, Recurrence } from "../../prisma/generated/client";
+import { PaymentMethod, Recurrence, TemplateStyle } from "../../prisma/generated/client";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { createToken } from "../utils/createToken";
 import { sendInvoiceEmail } from "../utils/email/sendEmail";
@@ -27,6 +27,7 @@ class RecurringController {
         total,
         payment_method,
         recurring_invoice_items,
+        template
       }: {
         client_id: number;
         invoice_number: string;
@@ -38,6 +39,7 @@ class RecurringController {
         due_in_days: number;
         total: number;
         payment_method: string;
+        template: string
         recurring_invoice_items: {
           product_id: number;
           name_snapshot: string;
@@ -65,6 +67,7 @@ class RecurringController {
           recurrence_interval,
           duration,
           payment_method: payment_method as PaymentMethod,
+          template: template as TemplateStyle,
           due_in_days,
           total,
           next_run: nextRun,

@@ -90,6 +90,7 @@ class InvoiceController {
         try {
             const userId = res.locals.data.id;
             const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, template, } = req.body;
+            console.log(req.body);
             const userPaymentMethod = await prisma_1.default.user_payment_method.count({
                 where: {
                     user_id: userId,
@@ -131,6 +132,7 @@ class InvoiceController {
                     total,
                     payment_method: payment_method,
                     is_deleted,
+                    template: template,
                 },
             });
             const createInvoiceItems = await prisma_1.default.invoice_items.createMany({

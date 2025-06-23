@@ -1,6 +1,6 @@
 import { addDays, addWeeks, addMonths } from "date-fns";
 import prisma from "../configs/prisma";
-import { PaymentMethod } from "../../prisma/generated/client";
+import { PaymentMethod, TemplateStyle } from "../../prisma/generated/client";
 import { sendInvoiceEmail } from "./email/sendEmail";
 import { createToken } from "./createToken";
 import { generateInvoicePDF } from "./pdf/pdfGenerator";
@@ -54,6 +54,7 @@ export const handleRecurringInvoice = async () => {
       recurring_invoice_item,
       payment_method,
       notes,
+      template,
     } = recurring;
 
     if (
@@ -95,6 +96,7 @@ export const handleRecurringInvoice = async () => {
           status,
           payment_method: payment_method as PaymentMethod,
           recurrence_invoice_id: id,
+          template: template as TemplateStyle,
         },
       });
     } catch (err) {

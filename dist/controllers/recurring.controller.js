@@ -13,7 +13,7 @@ class RecurringController {
     async createRecurringInvoice(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, } = req.body;
+            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, template } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -30,6 +30,7 @@ class RecurringController {
                     recurrence_interval,
                     duration,
                     payment_method: payment_method,
+                    template: template,
                     due_in_days,
                     total,
                     next_run: nextRun,
