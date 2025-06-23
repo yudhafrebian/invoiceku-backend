@@ -9,7 +9,6 @@ const client_1 = require("../../prisma/generated/client");
 const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
 const sendEmail_1 = require("../utils/email/sendEmail");
 const createToken_1 = require("../utils/createToken");
-const scheduledEmailLogic_1 = require("../utils/scheduledEmailLogic");
 const dayjs_1 = __importDefault(require("dayjs"));
 const jsonwebtoken_1 = require("jsonwebtoken");
 class InvoiceController {
@@ -237,10 +236,21 @@ class InvoiceController {
             next(error);
         }
     }
-    async scheduledEmailInvoice(req, res, next) {
+    async softDeleteInvoice(req, res, next) {
         try {
-            await (0, scheduledEmailLogic_1.scheduledEmailLogic)();
-            (0, response_1.successResponse)(res, "Email has been sent successfully");
+            const userId = res.locals.data.id;
+            const invoiceNumber = req.params.invoice_number;
+            const invoice = await prisma_1.default.invoices.findFirst({
+                where: { user_id: userId, invoice_number: invoiceNumber },
+            });
+            if (!invoice) {
+                throw "Invoice not found";
+            }
+            const deletedInvoice = await prisma_1.default.invoices.update({
+                where: { id: invoice.id },
+                data: { is_deleted: true },
+            });
+            (0, response_1.successResponse)(res, "Invoice has been deleted", { deletedInvoice });
         }
         catch (error) {
             next(error);

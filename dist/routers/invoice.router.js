@@ -16,7 +16,6 @@ class InvoiceRouter {
     }
     initializeRoutes() {
         this.route.post("/preview", this.InvoiceController.previewInvoicePDF);
-        this.route.post("/send-email-auto", this.InvoiceController.scheduledEmailInvoice);
         this.route.get("/status", this.InvoiceController.getInvoiceStatus);
         this.route.get("/template-style", this.InvoiceController.getTemplates);
         this.route.get("/download/:id", this.InvoiceController.downloadPdf);
@@ -26,6 +25,7 @@ class InvoiceRouter {
         this.route.get("/detail-payment/:invoice_number", this.InvoiceController.detailPayment);
         this.route.post("/send-email-payment/:invoice_number", this.InvoiceController.sendInvoiceEmail);
         this.route.patch("/update-status/:invoice_number", this.InvoiceController.updateInvoiceStatus);
+        this.route.patch("/delete-invoice/:invoice_number", this.InvoiceController.softDeleteInvoice);
         this.route.use(this.verify.verifyStatus);
         this.route.post("/create-invoice", invoice_1.invoiceValidation, this.InvoiceController.createInvoice);
     }

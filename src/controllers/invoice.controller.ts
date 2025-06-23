@@ -325,14 +325,29 @@ class InvoiceController {
     }
   }
 
-  async scheduledEmailInvoice(
+  async softDeleteInvoice(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-      await scheduledEmailLogic();
-      successResponse(res, "Email has been sent successfully");
+      const userId = res.locals.data.id;
+      const invoiceNumber = req.params.invoice_number;
+
+      const invoice = await prisma.invoices.findFirst({
+        where: { user_id: userId, invoice_number: invoiceNumber },
+      });
+
+      if (!invoice) {
+        throw "Invoice not found";
+      }
+
+      const deletedInvoice = await prisma.invoices.update({
+        where: { id: invoice.id },
+        data: { is_deleted: true },
+      });
+
+      successResponse(res, "Invoice has been deleted", { deletedInvoice });
     } catch (error) {
       next(error);
     }
