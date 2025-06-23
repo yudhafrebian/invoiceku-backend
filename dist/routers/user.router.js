@@ -24,6 +24,7 @@ class userRouter {
         this.route.patch("/update-profile", (0, uploader_1.uploaderMemory)().single("profile_img"), this.userController.updateUser);
         this.route.patch("/switch-status/:id", this.userController.paymentMethodSwitchStatus);
         this.route.patch("/update-payment-method/:id", (0, uploader_1.uploaderMemory)().single("qris_image_url"), user_1.userPaymentValidation, this.userController.updatePaymentMethod);
+        this.route.patch("/delete-user", this.userController.deleteUser);
     }
     getRouter() {
         return this.route;

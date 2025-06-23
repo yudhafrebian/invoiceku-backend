@@ -44,6 +44,10 @@ class userRouter {
       userPaymentValidation,
       this.userController.updatePaymentMethod
     );
+    this.route.patch(
+      "/delete-user",
+      this.userController.deleteUser
+    );
   }
 
   public getRouter(): Router {
