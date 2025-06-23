@@ -13,9 +13,10 @@ class AuthController {
     async createUser(req, res, next) {
         try {
             const { first_name, last_name, phone, email, password } = req.body;
-            const isExist = await prisma_1.default.users.findUnique({
+            const isExist = await prisma_1.default.users.findFirst({
                 where: {
                     email,
+                    is_deleted: false,
                 },
             });
             if (isExist) {
@@ -60,7 +61,7 @@ class AuthController {
                     email: req.body.email,
                 },
             });
-            if (!account) {
+            if (!account || account.is_deleted) {
                 throw "Invalid email or password";
             }
             const comparePassword = await (0, bcrypt_1.compare)(req.body.password, account.password_hash);
@@ -99,7 +100,7 @@ class AuthController {
                     id: res.locals.data.id,
                 },
             });
-            if (!account) {
+            if (!account || account.is_deleted) {
                 throw "Account not found";
             }
             const user = await prisma_1.default.user_profiles.findFirst({
@@ -130,6 +131,14 @@ class AuthController {
     async verifyEmail(req, res, next) {
         try {
             const userId = res.locals.data.id;
+            const user = await prisma_1.default.users.findUnique({
+                where: {
+                    id: userId,
+                },
+            });
+            if (!user || user.is_deleted) {
+                throw "User not found";
+            }
             const verify = await prisma_1.default.users.update({
                 where: {
                     id: userId,
@@ -152,7 +161,7 @@ class AuthController {
                     email,
                 },
             });
-            if (!account) {
+            if (!account || account.is_deleted) {
                 throw "Account not found";
             }
             const token = (0, createToken_1.createToken)({
@@ -169,11 +178,44 @@ class AuthController {
             next(error);
         }
     }
+    async sendVerifyLink(req, res, next) {
+        try {
+            const userId = res.locals.data.id;
+            const { email } = req.body;
+            const user = await prisma_1.default.users.findFirst({
+                where: {
+                    id: userId,
+                    is_deleted: false,
+                },
+            });
+            if (!user) {
+                throw "User not found";
+            }
+            const token = (0, createToken_1.createToken)({
+                id: user.id,
+            });
+            await (0, sendEmail_1.sendVerifyEmail)(email, "Verify Email", null, {
+                email,
+                token,
+            });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     async resetPassword(req, res, next) {
         try {
             const { password } = req.body;
             const userId = res.locals.data.id;
             const newPassword = await (0, hashPassword_1.hashPassword)(password);
+            const user = await prisma_1.default.users.findUnique({
+                where: {
+                    id: userId,
+                },
+            });
+            if (!user || user.is_deleted) {
+                throw "User not found";
+            }
             const account = await prisma_1.default.users.update({
                 where: {
                     id: userId,

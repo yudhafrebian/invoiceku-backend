@@ -15,15 +15,26 @@
         background-color: #ffffff;
         max-width: 600px;
         margin: 40px auto;
-        padding: 30px;
+        padding-bottom: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         color: #333333;
       }
+      .header {
+        background-color: #3b82f6;
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+        color: #ffffff;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
       .button {
         display: inline-block;
         padding: 12px 24px;
-        margin-top: 20px;
+        margin: 20px 0;
         background-color: #3b82f6;
         color: #ffffff;
         text-decoration: none;
@@ -40,12 +51,27 @@
   </head>
   <body>
     <div class="container">
-      <h2>Welcome, {{email}} 👋</h2>
-      <p>Thank you for registering with us. Please verify your email address by clicking the button below:</p>
+      <div class="header">
+        <h1>Email Verification</h1>
+      </div>
 
-      <a target="_blank" href="https://invoiceku-purwadhika.vercel.app/auth/verify?tkn={{token}}" class="button">Verify Email</a>
+      <div style="padding: 20px;">
+        <p>Hello, {{email}} 👋</p>
+        <p>Please verify your email address by clicking the button below:</p>
+      </div>
 
-      <p>If you didn’t create an account, please ignore this email.</p>
+      <div style="text-align: center">
+        <a
+          target="_blank"
+          href="https://invoiceku-purwadhika.vercel.app/auth/verify?tkn={{token}}"
+          class="button"
+          >Verify Email</a
+        >
+      </div>
+
+      <p style="text-align: center">
+        If you didn’t request a verification, please ignore this email.
+      </p>
 
       <div class="footer">
         <p>&copy; 2025 InvoiceKu. All rights reserved.</p>

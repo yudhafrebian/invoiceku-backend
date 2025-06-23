@@ -314,7 +314,7 @@ class RecurringController {
         try {
             const invoiceNumber = req.params.invoice_number;
             const invoice = await prisma_1.default.recurring_invoice.findFirst({
-                where: { invoice_number: invoiceNumber },
+                where: { invoice_number: invoiceNumber, is_deleted: false },
                 include: {
                     recurring_invoice_item: true,
                     clients: true,
@@ -323,8 +323,8 @@ class RecurringController {
             if (!invoice) {
                 throw "Invoice not found";
             }
-            const user = await prisma_1.default.users.findUnique({
-                where: { id: invoice.user_id },
+            const user = await prisma_1.default.users.findFirst({
+                where: { id: invoice.user_id, is_deleted: false },
             });
             if (!user) {
                 throw "User not found";

@@ -7997,6 +7997,7 @@ export namespace Prisma {
     email: string | null
     password_hash: string | null
     is_verified: boolean | null
+    is_deleted: boolean | null
   }
 
   export type UsersMaxAggregateOutputType = {
@@ -8004,6 +8005,7 @@ export namespace Prisma {
     email: string | null
     password_hash: string | null
     is_verified: boolean | null
+    is_deleted: boolean | null
   }
 
   export type UsersCountAggregateOutputType = {
@@ -8011,6 +8013,7 @@ export namespace Prisma {
     email: number
     password_hash: number
     is_verified: number
+    is_deleted: number
     _all: number
   }
 
@@ -8028,6 +8031,7 @@ export namespace Prisma {
     email?: true
     password_hash?: true
     is_verified?: true
+    is_deleted?: true
   }
 
   export type UsersMaxAggregateInputType = {
@@ -8035,6 +8039,7 @@ export namespace Prisma {
     email?: true
     password_hash?: true
     is_verified?: true
+    is_deleted?: true
   }
 
   export type UsersCountAggregateInputType = {
@@ -8042,6 +8047,7 @@ export namespace Prisma {
     email?: true
     password_hash?: true
     is_verified?: true
+    is_deleted?: true
     _all?: true
   }
 
@@ -8136,6 +8142,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified: boolean
+    is_deleted: boolean
     _count: UsersCountAggregateOutputType | null
     _avg: UsersAvgAggregateOutputType | null
     _sum: UsersSumAggregateOutputType | null
@@ -8162,6 +8169,7 @@ export namespace Prisma {
     email?: boolean
     password_hash?: boolean
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: boolean | users$clientsArgs<ExtArgs>
     invoices?: boolean | users$invoicesArgs<ExtArgs>
     products_services?: boolean | users$products_servicesArgs<ExtArgs>
@@ -8176,6 +8184,7 @@ export namespace Prisma {
     email?: boolean
     password_hash?: boolean
     is_verified?: boolean
+    is_deleted?: boolean
   }, ExtArgs["result"]["users"]>
 
   export type usersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8183,6 +8192,7 @@ export namespace Prisma {
     email?: boolean
     password_hash?: boolean
     is_verified?: boolean
+    is_deleted?: boolean
   }, ExtArgs["result"]["users"]>
 
   export type usersSelectScalar = {
@@ -8190,9 +8200,10 @@ export namespace Prisma {
     email?: boolean
     password_hash?: boolean
     is_verified?: boolean
+    is_deleted?: boolean
   }
 
-  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password_hash" | "is_verified", ExtArgs["result"]["users"]>
+  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password_hash" | "is_verified" | "is_deleted", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     clients?: boolean | users$clientsArgs<ExtArgs>
     invoices?: boolean | users$invoicesArgs<ExtArgs>
@@ -8220,6 +8231,7 @@ export namespace Prisma {
       email: string
       password_hash: string
       is_verified: boolean
+      is_deleted: boolean
     }, ExtArgs["result"]["users"]>
     composites: {}
   }
@@ -8653,6 +8665,7 @@ export namespace Prisma {
     readonly email: FieldRef<"users", 'String'>
     readonly password_hash: FieldRef<"users", 'String'>
     readonly is_verified: FieldRef<"users", 'Boolean'>
+    readonly is_deleted: FieldRef<"users", 'Boolean'>
   }
     
 
@@ -14039,7 +14052,8 @@ export namespace Prisma {
     id: 'id',
     email: 'email',
     password_hash: 'password_hash',
-    is_verified: 'is_verified'
+    is_verified: 'is_verified',
+    is_deleted: 'is_deleted'
   };
 
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
@@ -14697,6 +14711,7 @@ export namespace Prisma {
     email?: StringFilter<"users"> | string
     password_hash?: StringFilter<"users"> | string
     is_verified?: BoolFilter<"users"> | boolean
+    is_deleted?: BoolFilter<"users"> | boolean
     clients?: ClientsListRelationFilter
     invoices?: InvoicesListRelationFilter
     products_services?: Products_servicesListRelationFilter
@@ -14710,6 +14725,7 @@ export namespace Prisma {
     email?: SortOrder
     password_hash?: SortOrder
     is_verified?: SortOrder
+    is_deleted?: SortOrder
     clients?: clientsOrderByRelationAggregateInput
     invoices?: invoicesOrderByRelationAggregateInput
     products_services?: products_servicesOrderByRelationAggregateInput
@@ -14726,6 +14742,7 @@ export namespace Prisma {
     NOT?: usersWhereInput | usersWhereInput[]
     password_hash?: StringFilter<"users"> | string
     is_verified?: BoolFilter<"users"> | boolean
+    is_deleted?: BoolFilter<"users"> | boolean
     clients?: ClientsListRelationFilter
     invoices?: InvoicesListRelationFilter
     products_services?: Products_servicesListRelationFilter
@@ -14739,6 +14756,7 @@ export namespace Prisma {
     email?: SortOrder
     password_hash?: SortOrder
     is_verified?: SortOrder
+    is_deleted?: SortOrder
     _count?: usersCountOrderByAggregateInput
     _avg?: usersAvgOrderByAggregateInput
     _max?: usersMaxOrderByAggregateInput
@@ -14754,6 +14772,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"users"> | string
     password_hash?: StringWithAggregatesFilter<"users"> | string
     is_verified?: BoolWithAggregatesFilter<"users"> | boolean
+    is_deleted?: BoolWithAggregatesFilter<"users"> | boolean
   }
 
   export type recurring_invoiceWhereInput = {
@@ -15502,6 +15521,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     products_services?: products_servicesCreateNestedManyWithoutUsersInput
@@ -15515,6 +15535,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     products_services?: products_servicesUncheckedCreateNestedManyWithoutUsersInput
@@ -15527,6 +15548,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUpdateManyWithoutUsersNestedInput
@@ -15540,6 +15562,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUncheckedUpdateManyWithoutUsersNestedInput
@@ -15553,12 +15576,14 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
   }
 
   export type usersUpdateManyMutationInput = {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type usersUncheckedUpdateManyInput = {
@@ -15566,6 +15591,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type recurring_invoiceCreateInput = {
@@ -16523,6 +16549,7 @@ export namespace Prisma {
     email?: SortOrder
     password_hash?: SortOrder
     is_verified?: SortOrder
+    is_deleted?: SortOrder
   }
 
   export type usersAvgOrderByAggregateInput = {
@@ -16534,6 +16561,7 @@ export namespace Prisma {
     email?: SortOrder
     password_hash?: SortOrder
     is_verified?: SortOrder
+    is_deleted?: SortOrder
   }
 
   export type usersMinOrderByAggregateInput = {
@@ -16541,6 +16569,7 @@ export namespace Prisma {
     email?: SortOrder
     password_hash?: SortOrder
     is_verified?: SortOrder
+    is_deleted?: SortOrder
   }
 
   export type usersSumOrderByAggregateInput = {
@@ -17960,6 +17989,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     products_services?: products_servicesCreateNestedManyWithoutUsersInput
     recurring_invoice?: recurring_invoiceCreateNestedManyWithoutUsersInput
@@ -17972,6 +18002,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     products_services?: products_servicesUncheckedCreateNestedManyWithoutUsersInput
     recurring_invoice?: recurring_invoiceUncheckedCreateNestedManyWithoutUsersInput
@@ -18101,6 +18132,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUpdateManyWithoutUsersNestedInput
     recurring_invoice?: recurring_invoiceUpdateManyWithoutUsersNestedInput
@@ -18113,6 +18145,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUncheckedUpdateManyWithoutUsersNestedInput
     recurring_invoice?: recurring_invoiceUncheckedUpdateManyWithoutUsersNestedInput
@@ -18377,6 +18410,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsCreateNestedManyWithoutUsersInput
     products_services?: products_servicesCreateNestedManyWithoutUsersInput
     recurring_invoice?: recurring_invoiceCreateNestedManyWithoutUsersInput
@@ -18389,6 +18423,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsUncheckedCreateNestedManyWithoutUsersInput
     products_services?: products_servicesUncheckedCreateNestedManyWithoutUsersInput
     recurring_invoice?: recurring_invoiceUncheckedCreateNestedManyWithoutUsersInput
@@ -18548,6 +18583,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUpdateManyWithoutUsersNestedInput
     recurring_invoice?: recurring_invoiceUpdateManyWithoutUsersNestedInput
@@ -18560,6 +18596,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUncheckedUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUncheckedUpdateManyWithoutUsersNestedInput
     recurring_invoice?: recurring_invoiceUncheckedUpdateManyWithoutUsersNestedInput
@@ -18717,6 +18754,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     recurring_invoice?: recurring_invoiceCreateNestedManyWithoutUsersInput
@@ -18729,6 +18767,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     recurring_invoice?: recurring_invoiceUncheckedCreateNestedManyWithoutUsersInput
@@ -18799,6 +18838,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     recurring_invoice?: recurring_invoiceUpdateManyWithoutUsersNestedInput
@@ -18811,6 +18851,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     recurring_invoice?: recurring_invoiceUncheckedUpdateManyWithoutUsersNestedInput
@@ -18851,6 +18892,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     products_services?: products_servicesCreateNestedManyWithoutUsersInput
@@ -18863,6 +18905,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     products_services?: products_servicesUncheckedCreateNestedManyWithoutUsersInput
@@ -18890,6 +18933,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUpdateManyWithoutUsersNestedInput
@@ -18902,6 +18946,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUncheckedUpdateManyWithoutUsersNestedInput
@@ -19355,6 +19400,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     products_services?: products_servicesCreateNestedManyWithoutUsersInput
@@ -19367,6 +19413,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     products_services?: products_servicesUncheckedCreateNestedManyWithoutUsersInput
@@ -19471,6 +19518,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUpdateManyWithoutUsersNestedInput
@@ -19483,6 +19531,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUncheckedUpdateManyWithoutUsersNestedInput
@@ -19682,6 +19731,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     products_services?: products_servicesCreateNestedManyWithoutUsersInput
@@ -19694,6 +19744,7 @@ export namespace Prisma {
     email: string
     password_hash: string
     is_verified?: boolean
+    is_deleted?: boolean
     clients?: clientsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     products_services?: products_servicesUncheckedCreateNestedManyWithoutUsersInput
@@ -19721,6 +19772,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUpdateManyWithoutUsersNestedInput
@@ -19733,6 +19785,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password_hash?: StringFieldUpdateOperationsInput | string
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
     clients?: clientsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     products_services?: products_servicesUncheckedUpdateManyWithoutUsersNestedInput

@@ -18,9 +18,10 @@ class AuthController {
   ): Promise<void> {
     try {
       const { first_name, last_name, phone, email, password } = req.body;
-      const isExist = await prisma.users.findUnique({
+      const isExist = await prisma.users.findFirst({
         where: {
           email,
+          is_deleted: false,
         },
       });
 
@@ -71,7 +72,7 @@ class AuthController {
         },
       });
 
-      if (!account) {
+      if (!account || account.is_deleted) {
         throw "Invalid email or password";
       }
 
@@ -125,7 +126,7 @@ class AuthController {
         },
       });
 
-      if (!account) {
+      if (!account || account.is_deleted) {
         throw "Account not found";
       }
 
@@ -166,6 +167,17 @@ class AuthController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
+
+      const user = await prisma.users.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user || user.is_deleted) {
+        throw "User not found";
+      }
+
       const verify = await prisma.users.update({
         where: {
           id: userId,
@@ -181,7 +193,11 @@ class AuthController {
     }
   }
 
-  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async forgotPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { email } = req.body;
       const account = await prisma.users.findUnique({
@@ -190,7 +206,7 @@ class AuthController {
         },
       });
 
-      if (!account) {
+      if (!account || account.is_deleted) {
         throw "Account not found";
       }
 
@@ -202,20 +218,68 @@ class AuthController {
       await sendResetLinkEmail(email, "Reset Password", null, {
         email,
         token,
-      })
+      });
 
       successResponse(res, "Please check your email");
-
     } catch (error) {
       next(error);
     }
   }
 
-  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async sendVerifyLink(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = res.locals.data.id;
+      const { email } = req.body;
+
+      const user = await prisma.users.findFirst({
+        where: {
+          id: userId,
+          is_deleted: false,
+        },
+      })
+
+      if (!user) {
+        throw "User not found";
+      }
+
+      const token = createToken({
+        id: user.id,
+      });
+
+      await sendVerifyEmail(
+        email,
+        "Verify Email",
+        null,
+        {
+          email,
+          token,
+        }
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { password } = req.body;
       const userId = res.locals.data.id;
       const newPassword = await hashPassword(password);
+
+      const user = await prisma.users.findUnique({
+        where: {
+          id: userId,
+        },
+      })
+
+      if (!user || user.is_deleted) {
+        throw "User not found";
+      }
+
       const account = await prisma.users.update({
         where: {
           id: userId,

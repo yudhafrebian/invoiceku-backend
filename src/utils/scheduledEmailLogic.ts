@@ -22,8 +22,8 @@ export const scheduledEmailLogic = async () => {
   });
 
   for (const invoice of invoices) {
-    const user = await prisma.users.findUnique({
-      where: { id: invoice.user_id },
+    const user = await prisma.users.findFirst({
+      where: { id: invoice.user_id, is_deleted: false },
     });
 
     if (!user) continue;
@@ -110,8 +110,8 @@ export const markOverdueInvoices = async () => {
       },
     });
 
-    const user = await prisma.users.findUnique({
-      where: { id: invoice.user_id },
+    const user = await prisma.users.findFirst({
+      where: { id: invoice.user_id, is_deleted: false },
     });
 
     if (!user) continue;

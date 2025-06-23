@@ -86,6 +86,7 @@ model users {
   email               String                @unique @db.VarChar(255)
   password_hash       String                @db.VarChar(255)
   is_verified         Boolean               @default(false)
+  is_deleted          Boolean               @default(false)
   clients             clients[]
   invoices            invoices[]
   products_services   products_services[]

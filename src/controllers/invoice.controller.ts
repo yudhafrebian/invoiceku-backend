@@ -106,7 +106,6 @@ class InvoiceController {
         status,
         notes,
         total,
-        is_deleted,
         invoice_items,
         payment_method,
         template,
@@ -118,7 +117,6 @@ class InvoiceController {
         status: string;
         notes: string;
         total: number;
-        is_deleted: boolean;
         payment_method: string;
         template: string;
         invoice_items: {
@@ -178,7 +176,7 @@ class InvoiceController {
           notes,
           total,
           payment_method: payment_method as PaymentMethod,
-          is_deleted,
+          is_deleted: false,
           template: template as TemplateStyle,
         },
       });
@@ -199,6 +197,7 @@ class InvoiceController {
 
       if (today === startDateFormatted) {
         const user = await prisma.users.findUnique({ where: { id: userId } });
+        if(!user || user.is_deleted) throw "User not found";
         const userProfile = await prisma.user_profiles.findFirst({
           where: { user_id: userId },
         });
@@ -540,6 +539,7 @@ class InvoiceController {
         where: {
           invoice_number: invoiceNumber,
           user_id: userId,
+          is_deleted: false,
         },
         include: {
           invoice_items: true,
@@ -552,8 +552,8 @@ class InvoiceController {
         throw "Invoice not found";
       }
 
-      const user = await prisma.users.findUnique({
-        where: { id: invoice.user_id },
+      const user = await prisma.users.findFirst({
+        where: { id: invoice.user_id, is_deleted: false },
       });
 
       if (!user) {

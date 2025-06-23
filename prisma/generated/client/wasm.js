@@ -182,7 +182,8 @@ exports.Prisma.UsersScalarFieldEnum = {
   id: 'id',
   email: 'email',
   password_hash: 'password_hash',
-  is_verified: 'is_verified'
+  is_verified: 'is_verified',
+  is_deleted: 'is_deleted'
 };
 
 exports.Prisma.Recurring_invoiceScalarFieldEnum = {

@@ -11,9 +11,10 @@ class UserController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
-      const user = await prisma.users.findUnique({
+      const user = await prisma.users.findFirst({
         where: {
           id: userId,
+          is_deleted: false,
         },
         select: {
           email: true,
@@ -55,8 +56,8 @@ class UserController {
         throw "User profile not found";
       }
   
-      const currentUser = await prisma.users.findUnique({
-        where: { id: userId },
+      const currentUser = await prisma.users.findFirst({
+        where: { id: userId, is_deleted: false },
       });
   
       if (!currentUser) {
@@ -64,8 +65,8 @@ class UserController {
       }
   
       if (email !== currentUser.email) {
-        const checkEmail = await prisma.users.findUnique({
-          where: { email },
+        const checkEmail = await prisma.users.findFirst({
+          where: { email, is_deleted: false },
         });
   
         if (checkEmail) {
@@ -264,6 +265,35 @@ class UserController {
       next(error);
     }
   }
+
+  async deleteUser(req: Request, res: Response, next: NextFunction):Promise<void> {
+    try {
+      const userId = res.locals.data.id;
+      const user = await prisma.users.findFirst({
+        where: {
+          id: userId,
+          is_deleted: false,
+        },
+      });
+
+      if (!user) {
+        throw "User not found";
+      }
+
+      const deleted = await prisma.users.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          is_deleted: true,
+        },
+      });
+
+      successResponse(res, "User has been deleted", deleted);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UserController;

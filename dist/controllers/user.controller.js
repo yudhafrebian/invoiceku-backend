@@ -10,9 +10,10 @@ class UserController {
     async getUser(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const user = await prisma_1.default.users.findUnique({
+            const user = await prisma_1.default.users.findFirst({
                 where: {
                     id: userId,
+                    is_deleted: false,
                 },
                 select: {
                     email: true,
@@ -45,15 +46,15 @@ class UserController {
             if (!userProfile) {
                 throw "User profile not found";
             }
-            const currentUser = await prisma_1.default.users.findUnique({
-                where: { id: userId },
+            const currentUser = await prisma_1.default.users.findFirst({
+                where: { id: userId, is_deleted: false },
             });
             if (!currentUser) {
                 throw "User not found";
             }
             if (email !== currentUser.email) {
-                const checkEmail = await prisma_1.default.users.findUnique({
-                    where: { email },
+                const checkEmail = await prisma_1.default.users.findFirst({
+                    where: { email, is_deleted: false },
                 });
                 if (checkEmail) {
                     throw `Email ${email} already exists`;
@@ -207,5 +208,32 @@ class UserController {
             next(error);
         }
     }
+    async deleteUser(req, res, next) {
+        try {
+            const userId = res.locals.data.id;
+            const user = await prisma_1.default.users.findFirst({
+                where: {
+                    id: userId,
+                    is_deleted: false,
+                },
+            });
+            if (!user) {
+                throw "User not found";
+            }
+            const deleted = await prisma_1.default.users.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    is_deleted: true,
+                },
+            });
+            (0, response_1.successResponse)(res, "User has been deleted", deleted);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    ;
 }
 exports.default = UserController;
