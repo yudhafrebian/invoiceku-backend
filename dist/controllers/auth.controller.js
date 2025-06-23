@@ -198,6 +198,7 @@ class AuthController {
                 email,
                 token,
             });
+            (0, response_1.successResponse)(res, "Please check your email");
         }
         catch (error) {
             next(error);
