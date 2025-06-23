@@ -24,6 +24,7 @@ class RecurringRouter {
     this.route.get("/all/children/:recurring_invoice_number", this.RecurringController.getRecurringInvoiceChildren);
     this.route.get("/detail-payment/:invoice_number", this.RecurringController.detailPayment);
     this.route.post("/send-email/:invoice_number", this.RecurringController.sendRecurringInvoiceEmail);
+    this.route.patch("/delete-recurring-invoice/:invoice_number", this.RecurringController.softDeleteRecurringInvoice);
     this.route.use(this.verify.verifyStatus);
     this.route.post(
       "/create",

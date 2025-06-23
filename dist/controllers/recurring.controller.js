@@ -10,10 +10,32 @@ const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
 const createToken_1 = require("../utils/createToken");
 const sendEmail_1 = require("../utils/email/sendEmail");
 class RecurringController {
+    constructor() {
+        this.softDeleteRecurringInvoice = async (req, res, next) => {
+            try {
+                const userId = res.locals.data.id;
+                const invoiceNumber = req.params.invoice_number;
+                const invoice = await prisma_1.default.recurring_invoice.findFirst({
+                    where: { user_id: userId, invoice_number: invoiceNumber },
+                });
+                if (!invoice) {
+                    throw "Invoice not found";
+                }
+                const deletedInvoice = await prisma_1.default.recurring_invoice.update({
+                    where: { id: invoice.id },
+                    data: { is_deleted: true },
+                });
+                (0, response_1.successResponse)(res, "Invoice has been deleted", { deletedInvoice });
+            }
+            catch (error) {
+                next(error);
+            }
+        };
+    }
     async createRecurringInvoice(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, template } = req.body;
+            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, template, } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -229,7 +251,7 @@ class RecurringController {
     }
     async previewRecurringInvoicePDF(req, res, next) {
         try {
-            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, template } = req.body;
+            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, template, } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -247,7 +269,7 @@ class RecurringController {
                 notes,
                 recurrence_type,
                 recurrence_interval,
-                template
+                template,
             };
             (0, pdfGenerator_1.generateInvoicePDF)(invoiceData, res, false);
         }
@@ -281,7 +303,7 @@ class RecurringController {
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
-                template: invoice.template
+                template: invoice.template,
             }, res, false);
         }
         catch (error) {
@@ -331,7 +353,7 @@ class RecurringController {
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
-                template: invoice.template
+                template: invoice.template,
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                 name: userProfile.first_name,
@@ -401,7 +423,7 @@ class RecurringController {
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
-                template: invoice.template
+                template: invoice.template,
             }, res, true);
         }
         catch (error) {
