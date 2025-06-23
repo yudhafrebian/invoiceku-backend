@@ -79,17 +79,17 @@ class App {
   public async start(): Promise<void> {
     try {
       await prisma.$connect();
-      console.log("✅ Connected to DB");
+      console.log("Connected to DB");
 
       this.app.listen(PORT, () => {
-        console.log(`🚀 Server is running on port ${PORT}`);
+        console.log(`Server is running on port ${PORT}`);
       });
 
       await import("./cronJob")
-        .then(() => console.log("✅ CronJob started"))
-        .catch((err) => console.error("❌ Failed to start CronJob:", err));
+        .then(() => console.log("CronJob started"))
+        .catch((err) => console.error("Failed to start CronJob:", err));
     } catch (error) {
-      console.error("❌ Server failed to start:", error);
+      console.error("Server failed to start:", error);
       process.exit(1);
     }
   }
