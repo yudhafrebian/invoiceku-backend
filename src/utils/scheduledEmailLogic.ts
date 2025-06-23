@@ -1,7 +1,7 @@
 import prisma from "../configs/prisma";
-import { generateInvoicePDFBuffer } from "../utils/pdf/pdfGeneratorBuffer";
 import { sendInvoiceEmail, sendOverdueInvoiceEmail } from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
+import { generateInvoicePDF } from "./pdf/pdfGenerator";
 
 export const scheduledEmailLogic = async () => {
   const today = new Date();
@@ -42,7 +42,7 @@ export const scheduledEmailLogic = async () => {
       "30d"
     );
 
-    const pdfBuffer = await generateInvoicePDFBuffer({
+    const pdfBuffer = await generateInvoicePDF({
       invoice_number: invoice.invoice_number,
       client: { name: invoice.clients.name },
       due_date: invoice.due_date,
@@ -50,6 +50,7 @@ export const scheduledEmailLogic = async () => {
       invoice_items: invoice.invoice_items,
       total: invoice.total,
       notes: invoice.notes || undefined,
+      template: invoice.template,
     });
 
     await sendInvoiceEmail(
@@ -124,7 +125,7 @@ export const markOverdueInvoices = async () => {
 
     const token = createToken({ id: invoice.clients.id, email: invoice.clients.email }, "30d");
 
-    const pdfBuffer = await generateInvoicePDFBuffer({
+    const pdfBuffer = await generateInvoicePDF({
       invoice_number: invoice.invoice_number,
       client: { name: invoice.clients.name },
       due_date: invoice.due_date,
@@ -132,6 +133,7 @@ export const markOverdueInvoices = async () => {
       invoice_items: invoice.invoice_items,
       total: invoice.total,
       notes: invoice.notes || undefined,
+      template: invoice.template
     });
 
     await sendOverdueInvoiceEmail(

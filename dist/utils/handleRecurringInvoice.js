@@ -8,7 +8,7 @@ const date_fns_1 = require("date-fns");
 const prisma_1 = __importDefault(require("../configs/prisma"));
 const sendEmail_1 = require("./email/sendEmail");
 const createToken_1 = require("./createToken");
-const pdfGeneratorBuffer_1 = require("./pdf/pdfGeneratorBuffer");
+const pdfGenerator_1 = require("./pdf/pdfGenerator");
 const handleRecurringInvoice = async () => {
     const zone = "Asia/Jakarta";
     const todayString = new Intl.DateTimeFormat("en-CA", {
@@ -36,7 +36,7 @@ const handleRecurringInvoice = async () => {
         },
     });
     for (const recurring of recurringInvoices) {
-        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, } = recurring;
+        const { id, user_id, client_id, invoice_number, next_run, recurrence_type, recurrence_interval, duration, due_in_days, status, total, recurring_invoice_item, payment_method, notes, template, } = recurring;
         if (duration !== null &&
             duration !== undefined &&
             recurring.occurrences_done >= duration) {
@@ -69,6 +69,7 @@ const handleRecurringInvoice = async () => {
                     status,
                     payment_method: payment_method,
                     recurrence_invoice_id: id,
+                    template: template,
                 },
             });
         }
@@ -109,7 +110,7 @@ const handleRecurringInvoice = async () => {
         });
         if (!userProfile)
             continue;
-        const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+        const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
             invoice_number: invoice.invoice_number,
             client: { name: recurring.clients.name },
             due_date: dueDate,
@@ -119,6 +120,7 @@ const handleRecurringInvoice = async () => {
             notes: invoice.notes || undefined,
             recurrence_interval,
             recurrence_type,
+            template: recurring.template
         });
         await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${invoice.invoice_number}`, null, {
             name: userProfile.first_name,

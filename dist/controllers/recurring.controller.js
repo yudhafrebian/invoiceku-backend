@@ -8,13 +8,12 @@ const prisma_1 = __importDefault(require("../configs/prisma"));
 const client_1 = require("../../prisma/generated/client");
 const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
 const createToken_1 = require("../utils/createToken");
-const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
 class RecurringController {
     async createRecurringInvoice(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, } = req.body;
+            const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, template } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -31,6 +30,7 @@ class RecurringController {
                     recurrence_interval,
                     duration,
                     payment_method: payment_method,
+                    template: template,
                     due_in_days,
                     total,
                     next_run: nextRun,
@@ -60,6 +60,7 @@ class RecurringController {
             const skip = (page - 1) * limit;
             const search = req.query.search;
             const payment = req.query.payment;
+            const type = req.query.type;
             const status = req.query.status;
             const sort = req.query.sort;
             let orderByClause = { created_at: "asc" };
@@ -75,10 +76,18 @@ class RecurringController {
                 orderByClause = { start_date: "asc" };
             else if (sort === "start_date_desc")
                 orderByClause = { start_date: "desc" };
-            else if (sort === "due_date_asc")
-                orderByClause = { due_date: "asc" };
-            else if (sort === "due_date_desc")
-                orderByClause = { due_date: "desc" };
+            else if (sort === "recurrence_interval_asc")
+                orderByClause = { recurrence_interval: "asc" };
+            else if (sort === "recurrence_interval_desc")
+                orderByClause = { recurrence_interval: "desc" };
+            else if (sort === "duration_asc")
+                orderByClause = { duration: "asc" };
+            else if (sort === "duration_desc")
+                orderByClause = { duration: "desc" };
+            else if (sort === "due_in_days_asc")
+                orderByClause = { due_in_days: "asc" };
+            else if (sort === "due_in_days_desc")
+                orderByClause = { due_in_days: "desc" };
             else if (sort === "total_asc")
                 orderByClause = { total: "asc" };
             else if (sort === "total_desc")
@@ -98,6 +107,9 @@ class RecurringController {
             }
             if (status) {
                 whereClause.status = status;
+            }
+            if (type) {
+                whereClause.recurrence_type = type;
             }
             const recurringInvoice = await prisma_1.default.recurring_invoice.findMany({
                 where: whereClause,
@@ -130,7 +142,7 @@ class RecurringController {
     async getRecurringInvoiceChildren(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const invoiceNumber = req.params.invoice_number;
+            const recurringInvoiceNumber = req.params.recurring_invoice_number;
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const skip = (page - 1) * limit;
@@ -159,11 +171,21 @@ class RecurringController {
                 orderByClause = { total: "asc" };
             else if (sort === "total_desc")
                 orderByClause = { total: "desc" };
+            const recurring = await prisma_1.default.recurring_invoice.findFirst({
+                where: {
+                    invoice_number: recurringInvoiceNumber,
+                    user_id: userId,
+                    is_deleted: false,
+                },
+                select: { id: true },
+            });
+            if (!recurring) {
+                throw "Recurring invoice not found";
+            }
             const whereClause = {
                 user_id: userId,
-                invoice_number: invoiceNumber,
+                recurrence_invoice_id: recurring.id,
                 is_deleted: false,
-                recurrence_invoice_id: null,
             };
             if (search) {
                 whereClause.OR = [
@@ -207,7 +229,7 @@ class RecurringController {
     }
     async previewRecurringInvoicePDF(req, res, next) {
         try {
-            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, } = req.body;
+            const { client_id, invoice_number, start_date, due_date, recurring_invoice_items, notes, recurrence_type, recurrence_interval, due_in_days, template } = req.body;
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
@@ -225,6 +247,7 @@ class RecurringController {
                 notes,
                 recurrence_type,
                 recurrence_interval,
+                template
             };
             (0, pdfGenerator_1.generateInvoicePDF)(invoiceData, res, false);
         }
@@ -252,12 +275,13 @@ class RecurringController {
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: dueDate,
-                start_date: invoice.start_date.toISOString(),
+                start_date: invoice.start_date,
                 invoice_items: invoice.recurring_invoice_item,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
+                template: invoice.template
             }, res, false);
         }
         catch (error) {
@@ -297,7 +321,7 @@ class RecurringController {
                 email: invoice.clients.email,
                 invoice_number: invoice.invoice_number,
             }, "30d");
-            const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+            const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: dueDate,
@@ -307,6 +331,7 @@ class RecurringController {
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
+                template: invoice.template
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                 name: userProfile.first_name,
@@ -370,12 +395,13 @@ class RecurringController {
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: dueDate,
-                start_date: invoice.start_date.toISOString(),
+                start_date: invoice.start_date,
                 invoice_items: invoice.recurring_invoice_item,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
                 recurrence_type: invoice.recurrence_type,
                 recurrence_interval: invoice.recurrence_interval,
+                template: invoice.template
             }, res, true);
         }
         catch (error) {

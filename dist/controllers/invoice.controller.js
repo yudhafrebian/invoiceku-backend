@@ -7,7 +7,6 @@ const prisma_1 = __importDefault(require("../configs/prisma"));
 const response_1 = require("../utils/response");
 const client_1 = require("../../prisma/generated/client");
 const pdfGenerator_1 = require("../utils/pdf/pdfGenerator");
-const pdfGeneratorBuffer_1 = require("../utils/pdf/pdfGeneratorBuffer");
 const sendEmail_1 = require("../utils/email/sendEmail");
 const createToken_1 = require("../utils/createToken");
 const scheduledEmailLogic_1 = require("../utils/scheduledEmailLogic");
@@ -90,7 +89,8 @@ class InvoiceController {
     async createInvoice(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, } = req.body;
+            const { client_id, start_date, due_date, invoice_number, status, notes, total, is_deleted, invoice_items, payment_method, template, } = req.body;
+            console.log(req.body);
             const userPaymentMethod = await prisma_1.default.user_payment_method.count({
                 where: {
                     user_id: userId,
@@ -132,6 +132,7 @@ class InvoiceController {
                     total,
                     payment_method: payment_method,
                     is_deleted,
+                    template: template,
                 },
             });
             const createInvoiceItems = await prisma_1.default.invoice_items.createMany({
@@ -159,7 +160,7 @@ class InvoiceController {
                         id: client.id,
                         email: client.email,
                     }, "30d");
-                    const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+                    const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
                         invoice_number: invoice_number,
                         client: { name: client.name },
                         due_date: due_date,
@@ -167,6 +168,7 @@ class InvoiceController {
                         invoice_items,
                         total,
                         notes: notes || undefined,
+                        template,
                     });
                     await (0, sendEmail_1.sendInvoiceEmail)(client.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                         name: userProfile.first_name,
@@ -246,7 +248,7 @@ class InvoiceController {
     }
     async previewInvoicePDF(req, res, next) {
         try {
-            const { client_id, invoice_date, due_date, invoice_items, notes, start_date, invoice_number, } = req.body;
+            const { client_id, invoice_date, due_date, invoice_items, notes, start_date, invoice_number, template, } = req.body;
             const total = invoice_items.reduce((acc, item) => acc + item.quantity * item.price_snapshot, 0);
             const clientData = await prisma_1.default.clients.findUnique({
                 where: { id: client_id },
@@ -259,6 +261,7 @@ class InvoiceController {
                 start_date,
                 invoice_items,
                 notes,
+                template,
                 client: { name: clientData?.name || "Unknown Client" },
                 total,
             };
@@ -324,12 +327,13 @@ class InvoiceController {
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: invoice.due_date,
-                start_date: invoice.start_date.toISOString(),
+                start_date: invoice.start_date,
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
                 recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
                 recurrence_type: invoice.recurring_invoice?.recurrence_type,
+                template: invoice.template,
             }, res, false);
         }
         catch (error) {
@@ -354,12 +358,13 @@ class InvoiceController {
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: invoice.due_date,
-                start_date: invoice.start_date.toISOString(),
+                start_date: invoice.start_date,
                 invoice_items: invoice.invoice_items,
                 total: invoice.total,
                 notes: invoice.notes || undefined,
                 recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
                 recurrence_type: invoice.recurring_invoice?.recurrence_type,
+                template: invoice.template,
             }, res, true);
         }
         catch (error) {
@@ -373,7 +378,6 @@ class InvoiceController {
             const invoice = await prisma_1.default.invoices.findFirst({
                 where: {
                     invoice_number: invoiceNumber,
-                    recurring_invoice: null,
                     user_id: userId,
                 },
                 include: {
@@ -402,7 +406,7 @@ class InvoiceController {
                 email: invoice.clients.email,
                 invoice_number: invoice.invoice_number,
             }, "30d");
-            const pdfBuffer = await (0, pdfGeneratorBuffer_1.generateInvoicePDFBuffer)({
+            const pdfBuffer = await (0, pdfGenerator_1.generateInvoicePDF)({
                 invoice_number: invoice.invoice_number,
                 client: { name: invoice.clients.name },
                 due_date: invoice.due_date,
@@ -412,6 +416,7 @@ class InvoiceController {
                 notes: invoice.notes || undefined,
                 recurrence_interval: invoice.recurring_invoice?.recurrence_interval,
                 recurrence_type: invoice.recurring_invoice?.recurrence_type,
+                template: invoice.template,
             });
             await (0, sendEmail_1.sendInvoiceEmail)(invoice.clients.email, `Invoice Payment - ${userProfile.first_name} ${userProfile.last_name}`, null, {
                 name: userProfile.first_name,
@@ -430,6 +435,15 @@ class InvoiceController {
         try {
             const status = Object.values(client_1.Status);
             (0, response_1.successResponse)(res, "Success", status);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    async getTemplates(req, res, next) {
+        try {
+            const templates = Object.values(client_1.TemplateStyle);
+            (0, response_1.successResponse)(res, "Success", templates);
         }
         catch (error) {
             next(error);

@@ -49,6 +49,7 @@ model invoices {
   payment_method        PaymentMethod
   created_at            DateTime           @default(now()) @db.Timestamptz(6)
   recurrence_invoice_id Int?
+  template              TemplateStyle      @default(Modern)
   invoice_items         invoice_items[]
   users                 users              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk1")
   clients               clients            @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoices_fk2")
@@ -114,6 +115,7 @@ model recurring_invoice {
   status                 Status                   @default(Pending)
   payment_method         PaymentMethod
   created_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  template               TemplateStyle            @default(Modern)
   invoices               invoices[]
   clients                clients                  @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                  users                    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -186,4 +188,10 @@ enum PaymentMethod {
   Gopay
   Shopeepay
   Qris
+}
+
+enum TemplateStyle {
+  Modern
+  Minimalist
+  Classic
 }

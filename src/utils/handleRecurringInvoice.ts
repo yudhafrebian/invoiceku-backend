@@ -1,9 +1,9 @@
 import { addDays, addWeeks, addMonths } from "date-fns";
 import prisma from "../configs/prisma";
-import { PaymentMethod } from "../../prisma/generated/client";
+import { PaymentMethod, TemplateStyle } from "../../prisma/generated/client";
 import { sendInvoiceEmail } from "./email/sendEmail";
 import { createToken } from "./createToken";
-import { generateInvoicePDFBuffer } from "./pdf/pdfGeneratorBuffer";
+import { generateInvoicePDF } from "./pdf/pdfGenerator";
 
 export const handleRecurringInvoice = async () => {
   const zone = "Asia/Jakarta";
@@ -54,6 +54,7 @@ export const handleRecurringInvoice = async () => {
       recurring_invoice_item,
       payment_method,
       notes,
+      template,
     } = recurring;
 
     if (
@@ -95,6 +96,7 @@ export const handleRecurringInvoice = async () => {
           status,
           payment_method: payment_method as PaymentMethod,
           recurrence_invoice_id: id,
+          template: template as TemplateStyle,
         },
       });
     } catch (err) {
@@ -143,7 +145,7 @@ export const handleRecurringInvoice = async () => {
 
     if (!userProfile) continue;
 
-    const pdfBuffer = await generateInvoicePDFBuffer({
+    const pdfBuffer = await generateInvoicePDF({
       invoice_number: invoice.invoice_number,
       client: { name: recurring.clients.name },
       due_date: dueDate,
@@ -153,6 +155,7 @@ export const handleRecurringInvoice = async () => {
       notes: invoice.notes || undefined,
       recurrence_interval,
       recurrence_type,
+      template: recurring.template
     });
 
     await sendInvoiceEmail(

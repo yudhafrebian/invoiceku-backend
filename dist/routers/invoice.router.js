@@ -18,6 +18,7 @@ class InvoiceRouter {
         this.route.post("/preview", this.InvoiceController.previewInvoicePDF);
         this.route.post("/send-email-auto", this.InvoiceController.scheduledEmailInvoice);
         this.route.get("/status", this.InvoiceController.getInvoiceStatus);
+        this.route.get("/template-style", this.InvoiceController.getTemplates);
         this.route.get("/download/:id", this.InvoiceController.downloadPdf);
         this.route.get("/detail/:invoice_number", this.InvoiceController.DetailInvoice);
         this.route.use(this.verify.verifyToken);

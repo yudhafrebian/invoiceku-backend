@@ -11,7 +11,6 @@ import TransactionRouter from "./routers/transaction.router";
 import prisma from "./configs/prisma";
 import RecurringRouter from "./routers/recurring.router";
 import DashboardRouter from "./routers/dashboard.router";
-// import "./cronJob";
 
 const PORT = process.env.PORT || 4000;
 
@@ -28,7 +27,10 @@ class App {
   private configure(): void {
     this.app.use(
       cors({
-        origin: ["http://localhost:3000", "https://invoiceku.vercel.app"],
+        origin: [
+          "http://localhost:3000",
+          "https://invoiceku-purwadhika.vercel.app",
+        ],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         credentials: true,
       })
@@ -37,26 +39,6 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
 
     this.app.use(express.json());
-
-    this.app.use((req: Request, res: Response, next: NextFunction): void => {
-      res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
-      res.header(
-        "Access-Control-Allow-Methods",
-        "GET,POST,PUT,DELETE,PATCH,OPTIONS"
-      );
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-      );
-      res.header("Access-Control-Allow-Credentials", "true");
-
-      if (req.method === "OPTIONS") {
-        res.sendStatus(200);
-        return;
-      }
-
-      next();
-    });
   }
 
   private route(): void {
