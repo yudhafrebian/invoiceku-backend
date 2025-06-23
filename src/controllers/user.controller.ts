@@ -39,44 +39,54 @@ class UserController {
     try {
       const userId = res.locals.data.id;
       const { first_name, last_name, phone, email } = req.body;
-
+  
       let profileImage: string | undefined;
-
+  
       if (req.file) {
         const upload = await cloudUpload(req.file);
         profileImage = upload.secure_url;
       }
-
+  
       const userProfile = await prisma.user_profiles.findFirst({
         where: { user_id: userId },
       });
-
+  
       if (!userProfile) {
         throw "User profile not found";
       }
-      
-      const checkEmail = await prisma.users.findUnique({
-        where:{
-          email
-        }
-      })
-
-      if(checkEmail){
-        throw `Email ${email} already exist`
+  
+      const currentUser = await prisma.users.findUnique({
+        where: { id: userId },
+      });
+  
+      if (!currentUser) {
+        throw "User not found";
       }
-
+  
+      if (email !== currentUser.email) {
+        const checkEmail = await prisma.users.findUnique({
+          where: { email },
+        });
+  
+        if (checkEmail) {
+          throw `Email ${email} already exists`;
+        }
+      }
+  
       const updateUser = await prisma.users.update({
         where: {
           id: userId,
         },
         data: {
           email,
+          ...(email !== currentUser.email && { is_verified: false }),
         },
         select: {
           email: true,
+          is_verified: true,
         },
       });
-
+  
       const updateUserProfile = await prisma.user_profiles.update({
         where: {
           id: userProfile.id,
@@ -88,6 +98,7 @@ class UserController {
           ...(profileImage && { profile_img: profileImage }),
         },
       });
+  
       successResponse(res, "Profile has been updated", {
         updateUser,
         updateUserProfile,
@@ -96,6 +107,7 @@ class UserController {
       next(error);
     }
   }
+  
 
   async userPaymentMethod(
     req: Request,
