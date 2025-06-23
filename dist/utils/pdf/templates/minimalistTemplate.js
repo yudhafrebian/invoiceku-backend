@@ -10,7 +10,7 @@ async function generateMinimalistTemplate(invoice) {
     const buffers = [];
     doc.on("data", buffers.push.bind(buffers));
     const labelX = 40;
-    const valueX = 120;
+    const valueX = 130;
     let currentY = doc.y;
     const addRow = (label, value) => {
         doc.text(label, labelX, currentY);
@@ -29,9 +29,8 @@ async function generateMinimalistTemplate(invoice) {
         addRow("Recurring Type", invoice.recurrence_type);
         addRow("Recurring Every", `${invoice.recurrence_interval} ${invoice.recurrence_type.toLowerCase()}(s)`);
     }
-    // setelah info header
     doc.moveDown(1.5);
-    doc.x = 40; // kembalikan posisi ke kiri dokumen
+    doc.x = 40;
     const tableData = {
         headers: [
             { label: "Item", property: "item", width: 215 },

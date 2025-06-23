@@ -10,7 +10,7 @@ export async function generateMinimalistTemplate(
   doc.on("data", buffers.push.bind(buffers));
 
   const labelX = 40;
-  const valueX = 120;
+  const valueX = 130;
   let currentY = doc.y;
 
   const addRow = (label: string, value: string) => {
@@ -44,9 +44,8 @@ export async function generateMinimalistTemplate(
     );
   }
 
-  // setelah info header
 doc.moveDown(1.5);
-doc.x = 40; // kembalikan posisi ke kiri dokumen
+doc.x = 40; 
 
 const tableData = {
   headers: [
