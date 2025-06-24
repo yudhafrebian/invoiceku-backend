@@ -10,7 +10,7 @@ export async function generateClassicTemplate(
   doc.on("data", buffers.push.bind(buffers));
 
   if (invoice.recurrence_type && invoice.recurrence_interval) {
-    doc.rect(30, 53, 535, 130).stroke();
+    doc.rect(30, 53, 535, 200).stroke();
   } else {
     doc.rect(30, 53, 535, 95).stroke();
   }
