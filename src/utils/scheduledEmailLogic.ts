@@ -1,18 +1,24 @@
 import prisma from "../configs/prisma";
-import { sendInvoiceEmail, sendOverdueInvoiceEmail } from "../utils/email/sendEmail";
+import {
+  sendInvoiceEmail,
+  sendOverdueInvoiceEmail,
+} from "../utils/email/sendEmail";
 import { createToken } from "../utils/createToken";
 import { generateInvoicePDF } from "./pdf/pdfGenerator";
+import { startOfDay, endOfDay, isAfter } from "date-fns";
 
 export const scheduledEmailLogic = async () => {
-  const today = new Date();
-  const formattedDate = today.toISOString().split("T")[0];
+  const now = new Date();
+  const todayStart = startOfDay(now);
+  const todayEnd = endOfDay(now);
 
   const invoices = await prisma.invoices.findMany({
     where: {
       start_date: {
-        gte: new Date(formattedDate + "T00:00:00.000Z"),
-        lte: new Date(formattedDate + "T23:59:59.999Z"),
+        gte: todayStart,
+        lte: todayEnd,
       },
+      status: "Pending",
       is_deleted: false,
     },
     include: {
@@ -22,16 +28,16 @@ export const scheduledEmailLogic = async () => {
   });
 
   for (const invoice of invoices) {
+    if (isAfter(now, invoice.due_date)) continue;
+
     const user = await prisma.users.findFirst({
       where: { id: invoice.user_id, is_deleted: false },
     });
-
     if (!user) continue;
 
     const userProfile = await prisma.user_profiles.findFirst({
       where: { user_id: user.id },
     });
-
     if (!userProfile) continue;
 
     const token = createToken(
@@ -62,7 +68,7 @@ export const scheduledEmailLogic = async () => {
         client_name: invoice.clients.name,
         invoice_number: invoice.invoice_number,
         token,
-        isRecurring: false
+        isRecurring: false,
       },
       pdfBuffer
     );
@@ -71,9 +77,10 @@ export const scheduledEmailLogic = async () => {
   return invoices.length;
 };
 
-
 export const markOverdueInvoices = async () => {
-  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+  const now = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+  );
   const zone = "Asia/Jakarta";
 
   const todayString = new Intl.DateTimeFormat("en-CA", {
@@ -85,12 +92,12 @@ export const markOverdueInvoices = async () => {
 
   const formattedStart = new Date(`${todayString}T00:00:00.000Z`);
   const formattedEnd = new Date(`${todayString}T23:59:59.999Z`);
-  
+
   const overdueInvoices = await prisma.invoices.findMany({
     where: {
       due_date: {
         gte: formattedStart,
-        lte: formattedEnd
+        lte: formattedEnd,
       },
       status: "Pending",
       is_deleted: false,
@@ -98,7 +105,7 @@ export const markOverdueInvoices = async () => {
     include: {
       clients: true,
       invoice_items: true,
-      users: true
+      users: true,
     },
   });
 
@@ -122,8 +129,10 @@ export const markOverdueInvoices = async () => {
 
     if (!userProfile) continue;
 
-
-    const token = createToken({ id: invoice.clients.id, email: invoice.clients.email }, "30d");
+    const token = createToken(
+      { id: invoice.clients.id, email: invoice.clients.email },
+      "30d"
+    );
 
     const pdfBuffer = await generateInvoicePDF({
       invoice_number: invoice.invoice_number,
@@ -133,7 +142,7 @@ export const markOverdueInvoices = async () => {
       invoice_items: invoice.invoice_items,
       total: invoice.total,
       notes: invoice.notes || undefined,
-      template: invoice.template
+      template: invoice.template,
     });
 
     await sendOverdueInvoiceEmail(
