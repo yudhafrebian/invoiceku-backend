@@ -8,15 +8,18 @@ const prisma_1 = __importDefault(require("../configs/prisma"));
 const sendEmail_1 = require("../utils/email/sendEmail");
 const createToken_1 = require("../utils/createToken");
 const pdfGenerator_1 = require("./pdf/pdfGenerator");
+const date_fns_1 = require("date-fns");
 const scheduledEmailLogic = async () => {
-    const today = new Date();
-    const formattedDate = today.toISOString().split("T")[0];
+    const now = new Date();
+    const todayStart = (0, date_fns_1.startOfDay)(now);
+    const todayEnd = (0, date_fns_1.endOfDay)(now);
     const invoices = await prisma_1.default.invoices.findMany({
         where: {
             start_date: {
-                gte: new Date(formattedDate + "T00:00:00.000Z"),
-                lte: new Date(formattedDate + "T23:59:59.999Z"),
+                gte: todayStart,
+                lte: todayEnd,
             },
+            status: "Pending",
             is_deleted: false,
         },
         include: {
@@ -25,6 +28,8 @@ const scheduledEmailLogic = async () => {
         },
     });
     for (const invoice of invoices) {
+        if ((0, date_fns_1.isAfter)(now, invoice.due_date))
+            continue;
         const user = await prisma_1.default.users.findFirst({
             where: { id: invoice.user_id, is_deleted: false },
         });
@@ -54,7 +59,7 @@ const scheduledEmailLogic = async () => {
             client_name: invoice.clients.name,
             invoice_number: invoice.invoice_number,
             token,
-            isRecurring: false
+            isRecurring: false,
         }, pdfBuffer);
     }
     return invoices.length;
@@ -75,7 +80,7 @@ const markOverdueInvoices = async () => {
         where: {
             due_date: {
                 gte: formattedStart,
-                lte: formattedEnd
+                lte: formattedEnd,
             },
             status: "Pending",
             is_deleted: false,
@@ -83,7 +88,7 @@ const markOverdueInvoices = async () => {
         include: {
             clients: true,
             invoice_items: true,
-            users: true
+            users: true,
         },
     });
     for (const invoice of overdueInvoices) {
@@ -112,7 +117,7 @@ const markOverdueInvoices = async () => {
             invoice_items: invoice.invoice_items,
             total: invoice.total,
             notes: invoice.notes || undefined,
-            template: invoice.template
+            template: invoice.template,
         });
         await (0, sendEmail_1.sendOverdueInvoiceEmail)(invoice.clients.email, `Overdue Invoice - ${userProfile.first_name} ${userProfile.last_name}`, null, {
             name: userProfile.first_name,
