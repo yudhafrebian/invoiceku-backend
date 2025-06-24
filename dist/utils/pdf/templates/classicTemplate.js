@@ -10,12 +10,13 @@ async function generateClassicTemplate(invoice) {
     const buffers = [];
     doc.on("data", buffers.push.bind(buffers));
     if (invoice.recurrence_type && invoice.recurrence_interval) {
-        doc.rect(30, 53, 535, 130).stroke();
+        doc.rect(30, 53, 535, 195).stroke();
+        doc.image("src/public/invoiceku-logo.png", 400, 85, { width: 140 });
     }
     else {
         doc.rect(30, 53, 535, 95).stroke();
+        doc.image("src/public/invoiceku-logo.png", 400, 100, { width: 140 });
     }
-    doc.image("src/public/invoiceku-logo.png", 400, 85, { width: 140 });
     doc.font("Times-Bold").fontSize(16).text("INVOICE", 40, 65);
     doc
         .font("Times-Roman")
