@@ -11,7 +11,7 @@ async function generateClassicTemplate(invoice) {
     doc.on("data", buffers.push.bind(buffers));
     if (invoice.recurrence_type && invoice.recurrence_interval) {
         doc.rect(30, 53, 535, 125).stroke();
-        doc.image("src/public/invoiceku-logo.png", 400, 110, { width: 140 });
+        doc.image("src/public/invoiceku-logo.png", 400, 100, { width: 140 });
     }
     else {
         doc.rect(30, 53, 535, 95).stroke();
