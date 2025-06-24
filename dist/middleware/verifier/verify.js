@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = require("jsonwebtoken");
+const prisma_1 = __importDefault(require("../../configs/prisma"));
 class Verify {
     async verifyToken(req, res, next) {
         try {
@@ -18,7 +22,16 @@ class Verify {
     }
     async verifyStatus(req, res, next) {
         try {
-            if (res.locals.data.is_verified) {
+            const userId = res.locals.data.id;
+            const user = await prisma_1.default.users.findUnique({
+                where: {
+                    id: userId,
+                },
+            });
+            if (!user) {
+                throw "User not found";
+            }
+            if (res.locals.data.is_verified || user.is_verified) {
                 next();
             }
             else {

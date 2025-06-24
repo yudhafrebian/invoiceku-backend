@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload, verify } from "jsonwebtoken";
+import prisma from "../../configs/prisma";
 
 class Verify {
   async verifyToken(
@@ -29,7 +30,18 @@ class Verify {
     next: NextFunction
   ): Promise<any> {
     try {
-      if (res.locals.data.is_verified) {
+      const userId = res.locals.data.id;
+      const user = await prisma.users.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        throw "User not found";
+      }
+
+      if (res.locals.data.is_verified || user.is_verified) {
         next();
       } else {
         throw "Please Verify Your Account First";
