@@ -9,7 +9,12 @@ async function generateClassicTemplate(invoice) {
     const doc = new pdfkit_table_1.default({ margin: 50, size: "A4" });
     const buffers = [];
     doc.on("data", buffers.push.bind(buffers));
-    doc.rect(30, 53, 535, 95).stroke();
+    if (invoice.recurrence_type && invoice.recurrence_interval) {
+        doc.rect(30, 53, 535, 130).stroke();
+    }
+    else {
+        doc.rect(30, 53, 535, 95).stroke();
+    }
     doc.image("src/public/invoiceku-logo.png", 400, 85, { width: 140 });
     doc.font("Times-Bold").fontSize(16).text("INVOICE", 40, 65);
     doc
@@ -43,10 +48,7 @@ async function generateClassicTemplate(invoice) {
     doc.moveDown(2);
     doc.table(tableData, {
         prepareHeader: () => {
-            return doc
-                .font("Times-Bold")
-                .fillColor("#000")
-                .fontSize(10);
+            return doc.font("Times-Bold").fillColor("#000").fontSize(10);
         },
         prepareRow: () => doc.font("Times-Roman").fontSize(10).fillColor("black"),
         columnSpacing: 5,
