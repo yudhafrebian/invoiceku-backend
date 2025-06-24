@@ -169,8 +169,8 @@ class InvoiceController {
         data: {
           user_id: userId,
           client_id,
-          start_date,
-          due_date,
+          start_date: new Date(start_date),
+          due_date: new Date(due_date),
           invoice_number,
           status: status as Status,
           notes,
