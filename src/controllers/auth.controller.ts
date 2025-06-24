@@ -36,11 +36,16 @@ class AuthController {
           password_hash: newPassword,
         },
       });
+
+      const rawPhone = String(req.body.phone);
+      const normalizedPhone = rawPhone.startsWith("62")
+        ? rawPhone
+        : `62${rawPhone}`;
       const createUser = await prisma.user_profiles.create({
         data: {
           first_name,
           last_name,
-          phone,
+          phone: normalizedPhone,
           user_id: createAuth.id,
         },
       });
