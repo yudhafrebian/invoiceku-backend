@@ -36,6 +36,15 @@ class RecurringController {
         try {
             const userId = res.locals.data.id;
             const { client_id, invoice_number, start_date, notes, recurrence_type, recurrence_interval, duration, due_in_days, total, payment_method, recurring_invoice_items, template, } = req.body;
+            const isExist = await prisma_1.default.recurring_invoice.findFirst({
+                where: {
+                    user_id: userId,
+                    invoice_number,
+                },
+            });
+            if (isExist) {
+                throw `Recurring invoice with invoice number ${invoice_number} already exist`;
+            }
             const startDate = new Date(start_date);
             const dueDate = new Date(startDate);
             dueDate.setDate(dueDate.getDate() + due_in_days);
