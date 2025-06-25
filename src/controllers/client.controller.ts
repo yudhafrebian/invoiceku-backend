@@ -1,7 +1,8 @@
 import { Response, Request, NextFunction } from "express";
 import prisma from "../configs/prisma";
-import { createResponse, successResponse } from "../utils/response";
+import { createResponse, errorResponse, successResponse } from "../utils/response";
 import { PaymentMethod } from "../../prisma/generated/client";
+import { createClientService, deleteClientService, getAllClientService, getSingleClientService, updateClientService } from "../services/client.service";
 
 class ClientController {
   async getAllClient(
@@ -13,80 +14,20 @@ class ClientController {
       const userId = res.locals.data.id;
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
-      const skip = (page - 1) * limit;
       const search = req.query.search as string;
       const payment = req.query.payment as string;
       const sort = req.query.sort as string;
-
-      let orderByClause: any = { name: "asc" };
-
-      if (sort === "name_asc") orderByClause = { name: "asc" };
-      else if (sort === "name_desc") orderByClause = { name: "desc" };
-      else if (sort === "email_asc") orderByClause = { email: "asc" };
-      else if (sort === "email_desc") orderByClause = { email: "desc" };
-      else if (sort === "phone_asc") orderByClause = { phone: "asc" };
-      else if (sort === "phone_desc") orderByClause = { phone: "desc" };
-      else if (sort === "address_asc") orderByClause = { address: "asc" };
-      else if (sort === "address_desc") orderByClause = { address: "desc" };
-
-      const whereClause: any = {
-        user_id: userId,
-        is_deleted: false,
-      };
-
-      if (search) {
-        whereClause.OR = [
-          {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            email: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            phone: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            address: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        ];
-      }
-
-      if (payment) {
-        whereClause.payment_ref = payment;
-      }
-
-      const [clients, total] = await Promise.all([
-        prisma.clients.findMany({
-          where: whereClause,
-          skip,
-          take: limit,
-          orderBy: orderByClause,
-        }),
-        prisma.clients.count({
-          where: whereClause,
-        }),
-      ]);
-      successResponse(res, "Success", {
-        clients,
-        pagination: {
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
-          totalItems: total,
-        },
+  
+      const result = await getAllClientService({
+        userId,
+        page,
+        limit,
+        search,
+        payment,
+        sort,
       });
+  
+      successResponse(res, "Success", result);
     } catch (error) {
       next(error);
     }
@@ -99,14 +40,16 @@ class ClientController {
   ): Promise<void> {
     try {
       const clientId = parseInt(req.params.id);
-      const client = await prisma.clients.findUnique({
-        where: {
-          id: clientId,
-        },
-      });
+  
+      const client = await getSingleClientService(clientId);
+  
       successResponse(res, "Success", { client });
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      if (error.message === "Client not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
@@ -116,22 +59,19 @@ class ClientController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const rawPhone = String(req.body.phone);
-      const normalizedPhone = rawPhone.startsWith("62")
-        ? rawPhone
-        : `62${rawPhone}`;
       const userId = res.locals.data.id;
-      const createClient = await prisma.clients.create({
-        data: {
-          user_id: userId,
-          name: req.body.name,
-          email: req.body.email,
-          phone: normalizedPhone,
-          address: req.body.address,
-          payment_ref: req.body.payment_ref,
-        },
+      const { name, email, phone, address, payment_ref } = req.body;
+  
+      const result = await createClientService({
+        userId,
+        name,
+        email,
+        phone,
+        address,
+        payment_ref,
       });
-      createResponse(res, "Client has been created", createClient);
+  
+      createResponse(res, "Client has been created", result);
     } catch (error) {
       next(error);
     }
@@ -143,25 +83,24 @@ class ClientController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const rawPhone = String(req.body.phone);
-      const normalizedPhone = rawPhone.startsWith("62")
-        ? rawPhone
-        : `62${rawPhone}`;
       const clientId = parseInt(req.params.id);
-      const updateClient = await prisma.clients.update({
-        where: {
-          id: clientId,
-        },
-        data: {
-          name: req.body.name,
-          email: req.body.email,
-          phone: normalizedPhone,
-          address: req.body.address,
-        },
+      const { name, email, phone, address } = req.body;
+  
+      const result = await updateClientService({
+        clientId,
+        name,
+        email,
+        phone,
+        address,
       });
-      successResponse(res, "Client has been updated", updateClient);
-    } catch (error) {
-      next(error);
+  
+      successResponse(res, "Client has been updated", result);
+    } catch (error: any) {
+      if (error.message === "Client not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
@@ -172,17 +111,16 @@ class ClientController {
   ): Promise<void> {
     try {
       const clientId = parseInt(req.params.id);
-      const deleteClient = await prisma.clients.update({
-        where: {
-          id: clientId,
-        },
-        data: {
-          is_deleted: true,
-        },
-      });
-      successResponse(res, "Client has been deleted", deleteClient);
-    } catch (error) {
-      next(error);
+  
+      const result = await deleteClientService(clientId);
+  
+      successResponse(res, "Client has been deleted", result);
+    } catch (error: any) {
+      if (error.message === "Client not found or already deleted") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
