@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import prisma from "../configs/prisma";
 import { createResponse, successResponse } from "../utils/response";
 import { Type, Unit } from "../../prisma/generated/client";
+import { createProductService, getAllProductsService, getSingleProductService, updateProductService } from "../services/product.service";
 
 class ProductController {
   async getAllProduct(
@@ -11,76 +12,29 @@ class ProductController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      const skip = (page - 1) * limit;
-
-      const search = req.query.search as string;
-      const type = req.query.type as string;
-      const unit = req.query.unit as string;
-      const sort = req.query.sort as string;
-
-      let orderByClause: any = { name: "asc" };
-
-      if (sort === "name_asc") orderByClause = { name: "asc" };
-      else if (sort === "name_desc") orderByClause = { name: "desc" };
-      else if (sort === "price_asc") orderByClause = { price: "asc" };
-      else if (sort === "price_desc") orderByClause = { price: "desc" };
-      else if (sort === "type_asc") orderByClause = { type: "asc" };
-      else if (sort === "type_desc") orderByClause = { type: "desc" };
-      else if (sort === "unit_asc") orderByClause = { unit: "asc" };
-      else if (sort === "unit_desc") orderByClause = { unit: "desc" };
-
-      const whereClause: any = {
-        user_id: userId,
-        is_deleted: false,
-      };
-
-      if (search) {
-        whereClause.OR = [
-          {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        ];
-      }
-
-      if (type) {
-        whereClause.type = type;
-      }
-      if (unit) {
-        whereClause.unit = unit;
-      }
-
-      const [products, total] = await Promise.all([
-        prisma.products_services.findMany({
-          where: whereClause,
-          skip,
-          take: limit,
-          orderBy: orderByClause,
-        }),
-        prisma.products_services.count({
-          where: whereClause,
-        }),
-      ]);
-
-      successResponse(res, "Success", {
-        products,
-        pagination: {
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
-          totalItems: total,
-        },
+      const {
+        page = "1",
+        limit = "10",
+        search,
+        type,
+        unit,
+        sort,
+      } = req.query;
+  
+      const pageNum = parseInt(page as string);
+      const limitNum = parseInt(limit as string);
+  
+      const result = await getAllProductsService({
+        userId,
+        page: pageNum,
+        limit: limitNum,
+        search: search as string,
+        type: type as string,
+        unit: unit as string,
+        sort: sort as string,
       });
+  
+      successResponse(res, "Success", result);
     } catch (error) {
       next(error);
     }
@@ -92,12 +46,15 @@ class ProductController {
   ): Promise<void> {
     try {
       const productId = parseInt(req.params.id);
-      const product = await prisma.products_services.findUnique({
-        where: {
-          id: productId,
-        },
-      });
-
+      if (isNaN(productId)) {
+        throw "Invalid product ID";
+      }
+  
+      const product = await getSingleProductService(productId);
+      if (!product) {
+        throw "Product not found";
+      }
+  
       successResponse(res, "Success", { product });
     } catch (error) {
       next(error);
@@ -111,14 +68,18 @@ class ProductController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
-      const createProduct = await prisma.products_services.create({
-        data: {
-          user_id: userId,
-          ...req.body,
-        },
+      const { name, price, type, unit, description } = req.body;
+  
+      const product = await createProductService({
+        user_id: userId,
+        name,
+        price,
+        type: type as Type,
+        unit: unit as Unit,
+        description,
       });
-
-      createResponse(res, "Product & Service has been created", createProduct);
+  
+      createResponse(res, "Product & Service has been created", product);
     } catch (error) {
       next(error);
     }
@@ -130,16 +91,18 @@ class ProductController {
   ): Promise<void> {
     try {
       const productId = parseInt(req.params.id);
-      const updateProduct = await prisma.products_services.update({
-        where: {
-          id: productId,
-        },
-        data: {
-          ...req.body,
-        },
+      const { name, price, type, unit, description } = req.body;
+  
+      const updatedProduct = await updateProductService({
+        id: productId,
+        name,
+        price,
+        type: type as Type,
+        unit: unit as Unit,
+        description,
       });
-
-      successResponse(res, "Product & Service has been updated", updateProduct);
+  
+      successResponse(res, "Product & Service has been updated", updatedProduct);
     } catch (error) {
       next(error);
     }

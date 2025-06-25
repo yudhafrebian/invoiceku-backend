@@ -15,7 +15,7 @@
         background-color: #ffffff;
         max-width: 600px;
         margin: 40px auto;
-        padding: 30px;
+        padding-bottom: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         color: #333333;
@@ -55,12 +55,23 @@
         <h1>Reset Your Password</h1>
       </div>
 
-      <p>Hello, {{email}} 👋</p>
-      <p>We received a request to reset your password. Click the button below to set a new password for your account:</p>
+      <div style="padding: 20px;">
+        <p>Hello, {{email}} 👋</p>
+        <p>We received a request to reset your password. Click the button below to set a new password for your account:</p>
+      </div>
 
-      <a target="_blank" href="https://invoiceku-purwadhika.vercel.app/auth/reset-password?tkn={{token}}" class="button">Reset Password</a>
+      <div style="text-align: center">
+        <a
+          target="_blank"
+          href="https://invoiceku-purwadhika.vercel.app/auth/reset-password?tkn={{token}}"
+          class="button"
+        >Reset Password</a>
+      </div>
 
-      <p>If you didn’t request a password reset, please ignore this email. This link will expire in 1 hour for your security.</p>
+      <p style="text-align: center">
+        If you didn’t request a password reset, please ignore this email.<br />
+        This link will expire in 1 hour for your security.
+      </p>
 
       <div class="footer">
         <p>&copy; 2025 InvoiceKu. All rights reserved.</p>
