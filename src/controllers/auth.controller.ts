@@ -9,6 +9,7 @@ import { hashPassword } from "../utils/hashPassword";
 import { createToken } from "../utils/createToken";
 import { sendResetLinkEmail, sendVerifyEmail } from "../utils/email/sendEmail";
 import { compare } from "bcrypt";
+import { createUserService, forgotPasswordService, keepLoginService, loginService, resetPasswordService, sendResetLinkService, sendVerifyLinkService, verifyEmailService } from "../services/auth.service";
 
 class AuthController {
   async createUser(
@@ -18,104 +19,41 @@ class AuthController {
   ): Promise<void> {
     try {
       const { first_name, last_name, phone, email, password } = req.body;
-      const isExist = await prisma.users.findFirst({
-        where: {
-          email,
-          is_deleted: false,
-        },
-      });
 
-      if (isExist) {
-        errorResponse(res, `User with email ${email} already exist`, 400);
-      }
-
-      const newPassword = await hashPassword(password);
-      const createAuth = await prisma.users.create({
-        data: {
-          email,
-          password_hash: newPassword,
-        },
-      });
-
-      const rawPhone = String(req.body.phone);
-      const normalizedPhone = rawPhone.startsWith("62")
-        ? rawPhone
-        : `62${rawPhone}`;
-      const createUser = await prisma.user_profiles.create({
-        data: {
-          first_name,
-          last_name,
-          phone: normalizedPhone,
-          user_id: createAuth.id,
-        },
-      });
-
-      const token = createToken({
-        id: createAuth.id,
-        password: createAuth.password_hash,
-      });
-
-      await sendVerifyEmail(email, "Verify Email", null, {
+      const result = await createUserService({
+        first_name,
+        last_name,
+        phone,
         email,
-        token,
+        password,
       });
 
-      createResponse(res, "Account created successfully", {
-        user: createUser,
-        auth: createAuth,
-      });
-    } catch (error) {
-      next(error);
+      createResponse(res, "Account created successfully", result);
+    } catch (error: any) {
+      if (error.message.includes("already exist")) {
+        errorResponse(res, error.message, 400);
+      } else {
+        next(error);
+      }
     }
   }
 
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const account = await prisma.users.findUnique({
-        where: {
-          email: req.body.email,
-        },
-      });
+      const { email, password } = req.body;
 
-      if (!account || account.is_deleted) {
-        throw "Invalid email or password";
+      const result = await loginService(email, password);
+
+      successResponse(res, "Login success", result);
+    } catch (error: any) {
+      if (
+        error.message === "Invalid email or password" ||
+        error.message === "User not found"
+      ) {
+        errorResponse(res, error.message, 401);
+      } else {
+        next(error);
       }
-
-      const comparePassword = await compare(
-        req.body.password,
-        account.password_hash
-      );
-      if (!comparePassword) {
-        throw "Invalid email or password";
-      }
-
-      const user = await prisma.user_profiles.findFirst({
-        where: {
-          user_id: account.id,
-        },
-      });
-
-      if (!user) {
-        throw "User not found";
-      }
-
-      successResponse(res, "Login success", {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: account.email,
-        is_verified: account.is_verified,
-        phone: user.phone,
-        profile_img: user.profile_img,
-        token: createToken(
-          {
-            id: account.id,
-            is_verified: account.is_verified,
-          },
-          "24h"
-        ),
-      });
-    } catch (error) {
-      next(error);
     }
   }
 
@@ -125,43 +63,20 @@ class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const account = await prisma.users.findUnique({
-        where: {
-          id: res.locals.data.id,
-        },
-      });
-
-      if (!account || account.is_deleted) {
-        throw "Account not found";
+      const userId = res.locals.data.id;
+  
+      const result = await keepLoginService(userId);
+  
+      successResponse(res, "Keep login success", result);
+    } catch (error: any) {
+      if (
+        error.message === "Account not found" ||
+        error.message === "User not found"
+      ) {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
       }
-
-      const user = await prisma.user_profiles.findFirst({
-        where: {
-          user_id: account.id,
-        },
-      });
-
-      if (!user) {
-        throw "User not found";
-      }
-
-      successResponse(res, "Keep login success", {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: account.email,
-        is_verified: account.is_verified,
-        phone: user.phone,
-        profile_img: user.profile_img,
-        token: createToken(
-          {
-            id: account.id,
-            is_verified: account.is_verified,
-          },
-          "1h"
-        ),
-      });
-    } catch (error) {
-      next(error);
     }
   }
 
@@ -172,29 +87,16 @@ class AuthController {
   ): Promise<void> {
     try {
       const userId = res.locals.data.id;
-
-      const user = await prisma.users.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-
-      if (!user || user.is_deleted) {
-        throw "User not found";
-      }
-
-      const verify = await prisma.users.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          is_verified: true,
-        },
-      });
-
+  
+      await verifyEmailService(userId);
+  
       successResponse(res, "Your email has been verified");
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      if (error.message === "User not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
@@ -205,29 +107,16 @@ class AuthController {
   ): Promise<void> {
     try {
       const { email } = req.body;
-      const account = await prisma.users.findUnique({
-        where: {
-          email,
-        },
-      });
-
-      if (!account || account.is_deleted) {
-        throw "Account not found";
-      }
-
-      const token = createToken({
-        id: account.id,
-        password: account.password_hash,
-      });
-
-      await sendResetLinkEmail(email, "Reset Password", null, {
-        email,
-        token,
-      });
-
+  
+      await forgotPasswordService(email);
+  
       successResponse(res, "Please check your email");
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      if (error.message === "Account not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
@@ -239,30 +128,16 @@ class AuthController {
     try {
       const userId = res.locals.data.id;
       const { email } = req.body;
-
-      const user = await prisma.users.findFirst({
-        where: {
-          id: userId,
-          is_deleted: false,
-        },
-      });
-
-      if (!user) {
-        throw "User not found";
-      }
-
-      const token = createToken({
-        id: user.id,
-      });
-
-      await sendVerifyEmail(email, "Verify Email", null, {
-        email,
-        token,
-      });
-
+  
+      await sendVerifyLinkService(userId, email);
+  
       successResponse(res, "Please check your email");
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      if (error.message === "User not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
@@ -274,30 +149,16 @@ class AuthController {
     try {
       const userId = res.locals.data.id;
       const { email } = req.body;
-
-      const user = await prisma.users.findFirst({
-        where: {
-          id: userId,
-          is_deleted: false,
-        },
-      });
-
-      if (!user) {
-        throw "User not found";
-      }
-
-      const token = createToken({
-        id: user.id,
-      });
-
-      await sendResetLinkEmail(email, "Reset Password", null, {
-        email,
-        token,
-      });
-
+  
+      await sendResetLinkService(userId, email);
+  
       successResponse(res, "Please check your email");
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      if (error.message === "User not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 
@@ -307,32 +168,18 @@ class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { password } = req.body;
       const userId = res.locals.data.id;
-      const newPassword = await hashPassword(password);
-
-      const user = await prisma.users.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-
-      if (!user || user.is_deleted) {
-        throw "User not found";
-      }
-
-      const account = await prisma.users.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          password_hash: newPassword,
-        },
-      });
-
+      const { password } = req.body;
+  
+      await resetPasswordService(userId, password);
+  
       successResponse(res, "Password has been reset");
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      if (error.message === "User not found") {
+        errorResponse(res, error.message, 404);
+      } else {
+        next(error);
+      }
     }
   }
 }

@@ -1,264 +1,137 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../configs/prisma"));
 const response_1 = require("../utils/response");
-const hashPassword_1 = require("../utils/hashPassword");
-const createToken_1 = require("../utils/createToken");
-const sendEmail_1 = require("../utils/email/sendEmail");
-const bcrypt_1 = require("bcrypt");
+const auth_service_1 = require("../services/auth.service");
 class AuthController {
     async createUser(req, res, next) {
         try {
             const { first_name, last_name, phone, email, password } = req.body;
-            const isExist = await prisma_1.default.users.findFirst({
-                where: {
-                    email,
-                    is_deleted: false,
-                },
-            });
-            if (isExist) {
-                (0, response_1.errorResponse)(res, `User with email ${email} already exist`, 400);
-            }
-            const newPassword = await (0, hashPassword_1.hashPassword)(password);
-            const createAuth = await prisma_1.default.users.create({
-                data: {
-                    email,
-                    password_hash: newPassword,
-                },
-            });
-            const rawPhone = String(req.body.phone);
-            const normalizedPhone = rawPhone.startsWith("62")
-                ? rawPhone
-                : `62${rawPhone}`;
-            const createUser = await prisma_1.default.user_profiles.create({
-                data: {
-                    first_name,
-                    last_name,
-                    phone: normalizedPhone,
-                    user_id: createAuth.id,
-                },
-            });
-            const token = (0, createToken_1.createToken)({
-                id: createAuth.id,
-                password: createAuth.password_hash,
-            });
-            await (0, sendEmail_1.sendVerifyEmail)(email, "Verify Email", null, {
+            const result = await (0, auth_service_1.createUserService)({
+                first_name,
+                last_name,
+                phone,
                 email,
-                token,
+                password,
             });
-            (0, response_1.createResponse)(res, "Account created successfully", {
-                user: createUser,
-                auth: createAuth,
-            });
+            (0, response_1.createResponse)(res, "Account created successfully", result);
         }
         catch (error) {
-            next(error);
+            if (error.message.includes("already exist")) {
+                (0, response_1.errorResponse)(res, error.message, 400);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async login(req, res, next) {
         try {
-            const account = await prisma_1.default.users.findUnique({
-                where: {
-                    email: req.body.email,
-                },
-            });
-            if (!account || account.is_deleted) {
-                throw "Invalid email or password";
-            }
-            const comparePassword = await (0, bcrypt_1.compare)(req.body.password, account.password_hash);
-            if (!comparePassword) {
-                throw "Invalid email or password";
-            }
-            const user = await prisma_1.default.user_profiles.findFirst({
-                where: {
-                    user_id: account.id,
-                },
-            });
-            if (!user) {
-                throw "User not found";
-            }
-            (0, response_1.successResponse)(res, "Login success", {
-                first_name: user.first_name,
-                last_name: user.last_name,
-                email: account.email,
-                is_verified: account.is_verified,
-                phone: user.phone,
-                profile_img: user.profile_img,
-                token: (0, createToken_1.createToken)({
-                    id: account.id,
-                    is_verified: account.is_verified,
-                }, "24h"),
-            });
+            const { email, password } = req.body;
+            const result = await (0, auth_service_1.loginService)(email, password);
+            (0, response_1.successResponse)(res, "Login success", result);
         }
         catch (error) {
-            next(error);
+            if (error.message === "Invalid email or password" ||
+                error.message === "User not found") {
+                (0, response_1.errorResponse)(res, error.message, 401);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async keepLogin(req, res, next) {
         try {
-            const account = await prisma_1.default.users.findUnique({
-                where: {
-                    id: res.locals.data.id,
-                },
-            });
-            if (!account || account.is_deleted) {
-                throw "Account not found";
-            }
-            const user = await prisma_1.default.user_profiles.findFirst({
-                where: {
-                    user_id: account.id,
-                },
-            });
-            if (!user) {
-                throw "User not found";
-            }
-            (0, response_1.successResponse)(res, "Keep login success", {
-                first_name: user.first_name,
-                last_name: user.last_name,
-                email: account.email,
-                is_verified: account.is_verified,
-                phone: user.phone,
-                profile_img: user.profile_img,
-                token: (0, createToken_1.createToken)({
-                    id: account.id,
-                    is_verified: account.is_verified,
-                }, "1h"),
-            });
+            const userId = res.locals.data.id;
+            const result = await (0, auth_service_1.keepLoginService)(userId);
+            (0, response_1.successResponse)(res, "Keep login success", result);
         }
         catch (error) {
-            next(error);
+            if (error.message === "Account not found" ||
+                error.message === "User not found") {
+                (0, response_1.errorResponse)(res, error.message, 404);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async verifyEmail(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const user = await prisma_1.default.users.findUnique({
-                where: {
-                    id: userId,
-                },
-            });
-            if (!user || user.is_deleted) {
-                throw "User not found";
-            }
-            const verify = await prisma_1.default.users.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    is_verified: true,
-                },
-            });
+            await (0, auth_service_1.verifyEmailService)(userId);
             (0, response_1.successResponse)(res, "Your email has been verified");
         }
         catch (error) {
-            next(error);
+            if (error.message === "User not found") {
+                (0, response_1.errorResponse)(res, error.message, 404);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async forgotPassword(req, res, next) {
         try {
             const { email } = req.body;
-            const account = await prisma_1.default.users.findUnique({
-                where: {
-                    email,
-                },
-            });
-            if (!account || account.is_deleted) {
-                throw "Account not found";
-            }
-            const token = (0, createToken_1.createToken)({
-                id: account.id,
-                password: account.password_hash,
-            });
-            await (0, sendEmail_1.sendResetLinkEmail)(email, "Reset Password", null, {
-                email,
-                token,
-            });
+            await (0, auth_service_1.forgotPasswordService)(email);
             (0, response_1.successResponse)(res, "Please check your email");
         }
         catch (error) {
-            next(error);
+            if (error.message === "Account not found") {
+                (0, response_1.errorResponse)(res, error.message, 404);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async sendVerifyLink(req, res, next) {
         try {
             const userId = res.locals.data.id;
             const { email } = req.body;
-            const user = await prisma_1.default.users.findFirst({
-                where: {
-                    id: userId,
-                    is_deleted: false,
-                },
-            });
-            if (!user) {
-                throw "User not found";
-            }
-            const token = (0, createToken_1.createToken)({
-                id: user.id,
-            });
-            await (0, sendEmail_1.sendVerifyEmail)(email, "Verify Email", null, {
-                email,
-                token,
-            });
+            await (0, auth_service_1.sendVerifyLinkService)(userId, email);
             (0, response_1.successResponse)(res, "Please check your email");
         }
         catch (error) {
-            next(error);
+            if (error.message === "User not found") {
+                (0, response_1.errorResponse)(res, error.message, 404);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async sendResetLink(req, res, next) {
         try {
             const userId = res.locals.data.id;
             const { email } = req.body;
-            const user = await prisma_1.default.users.findFirst({
-                where: {
-                    id: userId,
-                    is_deleted: false,
-                },
-            });
-            if (!user) {
-                throw "User not found";
-            }
-            const token = (0, createToken_1.createToken)({
-                id: user.id,
-            });
-            await (0, sendEmail_1.sendResetLinkEmail)(email, "Reset Password", null, {
-                email,
-                token,
-            });
+            await (0, auth_service_1.sendResetLinkService)(userId, email);
             (0, response_1.successResponse)(res, "Please check your email");
         }
         catch (error) {
-            next(error);
+            if (error.message === "User not found") {
+                (0, response_1.errorResponse)(res, error.message, 404);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async resetPassword(req, res, next) {
         try {
-            const { password } = req.body;
             const userId = res.locals.data.id;
-            const newPassword = await (0, hashPassword_1.hashPassword)(password);
-            const user = await prisma_1.default.users.findUnique({
-                where: {
-                    id: userId,
-                },
-            });
-            if (!user || user.is_deleted) {
-                throw "User not found";
-            }
-            const account = await prisma_1.default.users.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    password_hash: newPassword,
-                },
-            });
+            const { password } = req.body;
+            await (0, auth_service_1.resetPasswordService)(userId, password);
             (0, response_1.successResponse)(res, "Password has been reset");
         }
         catch (error) {
-            next(error);
+            if (error.message === "User not found") {
+                (0, response_1.errorResponse)(res, error.message, 404);
+            }
+            else {
+                next(error);
+            }
         }
     }
 }
