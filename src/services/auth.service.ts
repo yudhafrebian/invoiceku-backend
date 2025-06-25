@@ -4,14 +4,7 @@ import { createToken } from "../utils/createToken";
 import { sendVerifyEmail } from "../utils/email/sendEmail";
 import { hashPassword } from "../utils/hashPassword";
 import { sendResetLinkEmail } from "../utils/email/sendEmail";
-
-interface CreateUserInput {
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
-  password: string;
-}
+import { CreateUserInput } from "../types/auth.type";
 
 export const createUserService = async ({
   first_name,
