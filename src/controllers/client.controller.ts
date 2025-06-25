@@ -1,5 +1,4 @@
 import { Response, Request, NextFunction } from "express";
-import prisma from "../configs/prisma";
 import { createResponse, errorResponse, successResponse } from "../utils/response";
 import { PaymentMethod } from "../../prisma/generated/client";
 import { createClientService, deleteClientService, getAllClientService, getSingleClientService, updateClientService } from "../services/client.service";

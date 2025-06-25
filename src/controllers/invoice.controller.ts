@@ -1,20 +1,13 @@
 import { Response, Request, NextFunction } from "express";
-import prisma from "../configs/prisma";
 import {
   createResponse,
   errorResponse,
   successResponse,
 } from "../utils/response";
 import {
-  PaymentMethod,
   Status,
   TemplateStyle,
 } from "../../prisma/generated/client";
-import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
-import { sendInvoiceEmail, sendStatusEmail } from "../utils/email/sendEmail";
-import { createToken } from "../utils/createToken";
-import dayjs from "dayjs";
-import { verify } from "jsonwebtoken";
 import {
   createInvoiceService,
   downloadInvoicePDFService,

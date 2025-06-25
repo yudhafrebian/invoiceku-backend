@@ -1,14 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from "../configs/prisma";
 import {
   createResponse,
   errorResponse,
   successResponse,
 } from "../utils/response";
-import { hashPassword } from "../utils/hashPassword";
-import { createToken } from "../utils/createToken";
-import { sendResetLinkEmail, sendVerifyEmail } from "../utils/email/sendEmail";
-import { compare } from "bcrypt";
 import { createUserService, forgotPasswordService, keepLoginService, loginService, resetPasswordService, sendResetLinkService, sendVerifyLinkService, verifyEmailService } from "../services/auth.service";
 
 class AuthController {

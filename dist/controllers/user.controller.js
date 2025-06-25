@@ -1,31 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../configs/prisma"));
 const response_1 = require("../utils/response");
-const cloudinary_1 = require("../configs/cloudinary");
+const user_service_1 = require("../services/user.service");
 class UserController {
     async getUser(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const user = await prisma_1.default.users.findFirst({
-                where: {
-                    id: userId,
-                    is_deleted: false,
-                },
-                select: {
-                    email: true,
-                    is_verified: true,
-                },
-            });
-            const user_profile = await prisma_1.default.user_profiles.findFirst({
-                where: {
-                    user_id: userId,
-                },
-            });
-            (0, response_1.successResponse)(res, "Success", { user, user_profile });
+            const data = await (0, user_service_1.getUserService)(userId);
+            (0, response_1.successResponse)(res, "Success", data);
         }
         catch (error) {
             next(error);
@@ -35,59 +17,14 @@ class UserController {
         try {
             const userId = res.locals.data.id;
             const { first_name, last_name, phone, email } = req.body;
-            let profileImage;
-            if (req.file) {
-                const upload = await (0, cloudinary_1.cloudUpload)(req.file);
-                profileImage = upload.secure_url;
-            }
-            const userProfile = await prisma_1.default.user_profiles.findFirst({
-                where: { user_id: userId },
+            const result = await (0, user_service_1.updateUserService)(userId, {
+                first_name,
+                last_name,
+                phone,
+                email,
+                file: req.file,
             });
-            if (!userProfile) {
-                throw "User profile not found";
-            }
-            const currentUser = await prisma_1.default.users.findFirst({
-                where: { id: userId, is_deleted: false },
-            });
-            if (!currentUser) {
-                throw "User not found";
-            }
-            if (email !== currentUser.email) {
-                const checkEmail = await prisma_1.default.users.findFirst({
-                    where: { email, is_deleted: false },
-                });
-                if (checkEmail) {
-                    throw `Email ${email} already exists`;
-                }
-            }
-            const updateUser = await prisma_1.default.users.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    email,
-                    ...(email !== currentUser.email && { is_verified: false }),
-                },
-                select: {
-                    email: true,
-                    is_verified: true,
-                },
-            });
-            const updateUserProfile = await prisma_1.default.user_profiles.update({
-                where: {
-                    id: userProfile.id,
-                },
-                data: {
-                    first_name,
-                    last_name,
-                    phone,
-                    ...(profileImage && { profile_img: profileImage }),
-                },
-            });
-            (0, response_1.successResponse)(res, "Profile has been updated", {
-                updateUser,
-                updateUserProfile,
-            });
+            (0, response_1.successResponse)(res, "Profile has been updated", result);
         }
         catch (error) {
             next(error);
@@ -96,12 +33,8 @@ class UserController {
     async userPaymentMethod(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const userPaymentMethod = await prisma_1.default.user_payment_method.findMany({
-                where: {
-                    user_id: userId,
-                },
-            });
-            (0, response_1.successResponse)(res, "Success", userPaymentMethod);
+            const methods = await (0, user_service_1.getUserPaymentMethodsService)(userId);
+            (0, response_1.successResponse)(res, "Success", methods);
         }
         catch (error) {
             next(error);
@@ -110,32 +43,15 @@ class UserController {
     async createPaymentMethod(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const { payment_method, account_name, account_number } = req.body;
-            console.log(req.body);
-            const isExist = await prisma_1.default.user_payment_method.findFirst({
-                where: {
-                    user_id: userId,
-                    payment_method,
-                },
+            const { account_name, account_number, payment_method } = req.body;
+            const created = await (0, user_service_1.createPaymentMethodService)({
+                user_id: userId,
+                account_name,
+                account_number,
+                payment_method,
+                file: req.file,
             });
-            if (isExist) {
-                throw `Payment method ${req.body.payment_method} already exist`;
-            }
-            let paymentMethodImage;
-            if (req.file) {
-                const upload = await (0, cloudinary_1.cloudUpload)(req.file);
-                paymentMethodImage = upload.secure_url;
-            }
-            const create = await prisma_1.default.user_payment_method.create({
-                data: {
-                    user_id: userId,
-                    account_name,
-                    account_number,
-                    payment_method,
-                    ...(paymentMethodImage && { qris_image_url: paymentMethodImage }),
-                },
-            });
-            (0, response_1.createResponse)(res, "Your payment method has been created", create);
+            (0, response_1.createResponse)(res, "Your payment method has been created", created);
         }
         catch (error) {
             next(error);
@@ -144,12 +60,7 @@ class UserController {
     async getSinglePaymentMethod(req, res, next) {
         try {
             const id = parseInt(req.params.id);
-            const paymentMethod = await prisma_1.default.user_payment_method.findUnique({
-                where: { id },
-            });
-            if (!paymentMethod) {
-                throw "Payment method not found";
-            }
+            const paymentMethod = await (0, user_service_1.getSinglePaymentMethodService)(id);
             (0, response_1.successResponse)(res, "Success", paymentMethod);
         }
         catch (error) {
@@ -159,28 +70,14 @@ class UserController {
     async updatePaymentMethod(req, res, next) {
         try {
             const id = parseInt(req.params.id);
-            const current = await prisma_1.default.user_payment_method.findUnique({
-                where: { id },
-            });
-            if (!current) {
-                throw "Payment method not found";
-            }
             const { payment_method, account_name, account_number } = req.body;
-            let paymentMethodImage;
-            if (req.file) {
-                const upload = await (0, cloudinary_1.cloudUpload)(req.file);
-                paymentMethodImage = upload.secure_url;
-            }
-            const update = await prisma_1.default.user_payment_method.update({
-                where: { id },
-                data: {
-                    account_name,
-                    account_number,
-                    payment_method,
-                    ...(paymentMethodImage && { qris_image_url: paymentMethodImage }),
-                },
+            const updated = await (0, user_service_1.updatePaymentMethodService)(id, {
+                payment_method,
+                account_name,
+                account_number,
+                file: req.file,
             });
-            (0, response_1.successResponse)(res, "Payment method has been updated", update);
+            (0, response_1.successResponse)(res, "Payment method has been updated", updated);
         }
         catch (error) {
             next(error);
@@ -189,46 +86,23 @@ class UserController {
     async paymentMethodSwitchStatus(req, res, next) {
         try {
             const id = parseInt(req.params.id);
-            const current = await prisma_1.default.user_payment_method.findUnique({
-                where: { id },
-            });
-            if (!current) {
-                res.status(404).json({ message: "Payment method not found" });
-                return;
-            }
-            const switchStatus = await prisma_1.default.user_payment_method.update({
-                where: { id },
-                data: {
-                    is_active: !current.is_active,
-                },
-            });
-            (0, response_1.successResponse)(res, "Payment method has been updated", switchStatus);
+            const updated = await (0, user_service_1.switchPaymentMethodStatusService)(id);
+            (0, response_1.successResponse)(res, "Payment method has been updated", updated);
         }
         catch (error) {
-            next(error);
+            if (error === "Payment method not found") {
+                (0, response_1.errorResponse)(res, error);
+            }
+            else {
+                next(error);
+            }
         }
     }
     async deleteUser(req, res, next) {
         try {
             const userId = res.locals.data.id;
-            const user = await prisma_1.default.users.findFirst({
-                where: {
-                    id: userId,
-                    is_deleted: false,
-                },
-            });
-            if (!user) {
-                throw "User not found";
-            }
-            const deleted = await prisma_1.default.users.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    is_deleted: true,
-                },
-            });
-            (0, response_1.successResponse)(res, "User has been deleted", deleted);
+            const deletedUser = await (0, user_service_1.deleteUserService)(userId);
+            (0, response_1.successResponse)(res, "User has been deleted", deletedUser);
         }
         catch (error) {
             next(error);

@@ -1,6 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import prisma from "../configs/prisma";
-import { createResponse, successResponse } from "../utils/response";
+import { successResponse } from "../utils/response";
 import { getSummaryService } from "../services/dashboard.service";
 
 class DashboardController {
