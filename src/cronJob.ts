@@ -5,8 +5,8 @@ import { handleRecurringInvoice } from "./utils/handleRecurringInvoice";
 cron.schedule("0 0 * * *", async () => {
   try {
     console.log("Cron running: sending scheduled emails, marking overdue, handling recurring...");
-    const countEmails = await scheduledEmailLogic();
     const countOverdue = await markOverdueInvoices();
+    const countEmails = await scheduledEmailLogic();
     const countRecurring = await handleRecurringInvoice();
 
     console.log(`Emails sent: ${countEmails}`);

@@ -9,8 +9,8 @@ const handleRecurringInvoice_1 = require("./utils/handleRecurringInvoice");
 node_cron_1.default.schedule("0 0 * * *", async () => {
     try {
         console.log("Cron running: sending scheduled emails, marking overdue, handling recurring...");
-        const countEmails = await (0, scheduledEmailLogic_1.scheduledEmailLogic)();
         const countOverdue = await (0, scheduledEmailLogic_1.markOverdueInvoices)();
+        const countEmails = await (0, scheduledEmailLogic_1.scheduledEmailLogic)();
         const countRecurring = await (0, handleRecurringInvoice_1.handleRecurringInvoice)();
         console.log(`Emails sent: ${countEmails}`);
         console.log(`Overdue marked: ${countOverdue}`);
