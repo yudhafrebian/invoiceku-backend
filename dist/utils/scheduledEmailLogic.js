@@ -21,6 +21,7 @@ const scheduledEmailLogic = async () => {
             },
             status: "Pending",
             is_deleted: false,
+            email_sent_at: null,
         },
         include: {
             invoice_items: true,
@@ -61,6 +62,12 @@ const scheduledEmailLogic = async () => {
             token,
             isRecurring: false,
         }, pdfBuffer);
+        await prisma_1.default.invoices.update({
+            where: { id: invoice.id },
+            data: {
+                email_sent_at: now,
+            },
+        });
     }
     return invoices.length;
 };

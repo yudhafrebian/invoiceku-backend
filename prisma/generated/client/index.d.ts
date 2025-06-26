@@ -4391,6 +4391,7 @@ export namespace Prisma {
     created_at: Date | null
     recurrence_invoice_id: number | null
     template: $Enums.TemplateStyle | null
+    email_sent_at: Date | null
   }
 
   export type InvoicesMaxAggregateOutputType = {
@@ -4408,6 +4409,7 @@ export namespace Prisma {
     created_at: Date | null
     recurrence_invoice_id: number | null
     template: $Enums.TemplateStyle | null
+    email_sent_at: Date | null
   }
 
   export type InvoicesCountAggregateOutputType = {
@@ -4425,6 +4427,7 @@ export namespace Prisma {
     created_at: number
     recurrence_invoice_id: number
     template: number
+    email_sent_at: number
     _all: number
   }
 
@@ -4460,6 +4463,7 @@ export namespace Prisma {
     created_at?: true
     recurrence_invoice_id?: true
     template?: true
+    email_sent_at?: true
   }
 
   export type InvoicesMaxAggregateInputType = {
@@ -4477,6 +4481,7 @@ export namespace Prisma {
     created_at?: true
     recurrence_invoice_id?: true
     template?: true
+    email_sent_at?: true
   }
 
   export type InvoicesCountAggregateInputType = {
@@ -4494,6 +4499,7 @@ export namespace Prisma {
     created_at?: true
     recurrence_invoice_id?: true
     template?: true
+    email_sent_at?: true
     _all?: true
   }
 
@@ -4598,6 +4604,7 @@ export namespace Prisma {
     created_at: Date
     recurrence_invoice_id: number | null
     template: $Enums.TemplateStyle
+    email_sent_at: Date | null
     _count: InvoicesCountAggregateOutputType | null
     _avg: InvoicesAvgAggregateOutputType | null
     _sum: InvoicesSumAggregateOutputType | null
@@ -4634,6 +4641,7 @@ export namespace Prisma {
     created_at?: boolean
     recurrence_invoice_id?: boolean
     template?: boolean
+    email_sent_at?: boolean
     invoice_items?: boolean | invoices$invoice_itemsArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
@@ -4657,6 +4665,7 @@ export namespace Prisma {
     created_at?: boolean
     recurrence_invoice_id?: boolean
     template?: boolean
+    email_sent_at?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
@@ -4677,6 +4686,7 @@ export namespace Prisma {
     created_at?: boolean
     recurrence_invoice_id?: boolean
     template?: boolean
+    email_sent_at?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
     clients?: boolean | clientsDefaultArgs<ExtArgs>
     recurring_invoice?: boolean | invoices$recurring_invoiceArgs<ExtArgs>
@@ -4697,9 +4707,10 @@ export namespace Prisma {
     created_at?: boolean
     recurrence_invoice_id?: boolean
     template?: boolean
+    email_sent_at?: boolean
   }
 
-  export type invoicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "notes" | "status" | "total" | "is_deleted" | "payment_method" | "created_at" | "recurrence_invoice_id" | "template", ExtArgs["result"]["invoices"]>
+  export type invoicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "client_id" | "invoice_number" | "start_date" | "due_date" | "notes" | "status" | "total" | "is_deleted" | "payment_method" | "created_at" | "recurrence_invoice_id" | "template" | "email_sent_at", ExtArgs["result"]["invoices"]>
   export type invoicesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoice_items?: boolean | invoices$invoice_itemsArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
@@ -4743,6 +4754,7 @@ export namespace Prisma {
       created_at: Date
       recurrence_invoice_id: number | null
       template: $Enums.TemplateStyle
+      email_sent_at: Date | null
     }, ExtArgs["result"]["invoices"]>
     composites: {}
   }
@@ -5185,6 +5197,7 @@ export namespace Prisma {
     readonly created_at: FieldRef<"invoices", 'DateTime'>
     readonly recurrence_invoice_id: FieldRef<"invoices", 'Int'>
     readonly template: FieldRef<"invoices", 'TemplateStyle'>
+    readonly email_sent_at: FieldRef<"invoices", 'DateTime'>
   }
     
 
@@ -14016,7 +14029,8 @@ export namespace Prisma {
     payment_method: 'payment_method',
     created_at: 'created_at',
     recurrence_invoice_id: 'recurrence_invoice_id',
-    template: 'template'
+    template: 'template',
+    email_sent_at: 'email_sent_at'
   };
 
   export type InvoicesScalarFieldEnum = (typeof InvoicesScalarFieldEnum)[keyof typeof InvoicesScalarFieldEnum]
@@ -14467,6 +14481,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"invoices"> | Date | string
     recurrence_invoice_id?: IntNullableFilter<"invoices"> | number | null
     template?: EnumTemplateStyleFilter<"invoices"> | $Enums.TemplateStyle
+    email_sent_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
     invoice_items?: Invoice_itemsListRelationFilter
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
@@ -14489,6 +14504,7 @@ export namespace Prisma {
     created_at?: SortOrder
     recurrence_invoice_id?: SortOrderInput | SortOrder
     template?: SortOrder
+    email_sent_at?: SortOrderInput | SortOrder
     invoice_items?: invoice_itemsOrderByRelationAggregateInput
     users?: usersOrderByWithRelationInput
     clients?: clientsOrderByWithRelationInput
@@ -14514,6 +14530,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"invoices"> | Date | string
     recurrence_invoice_id?: IntNullableFilter<"invoices"> | number | null
     template?: EnumTemplateStyleFilter<"invoices"> | $Enums.TemplateStyle
+    email_sent_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
     invoice_items?: Invoice_itemsListRelationFilter
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     clients?: XOR<ClientsScalarRelationFilter, clientsWhereInput>
@@ -14536,6 +14553,7 @@ export namespace Prisma {
     created_at?: SortOrder
     recurrence_invoice_id?: SortOrderInput | SortOrder
     template?: SortOrder
+    email_sent_at?: SortOrderInput | SortOrder
     _count?: invoicesCountOrderByAggregateInput
     _avg?: invoicesAvgOrderByAggregateInput
     _max?: invoicesMaxOrderByAggregateInput
@@ -14561,6 +14579,7 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"invoices"> | Date | string
     recurrence_invoice_id?: IntNullableWithAggregatesFilter<"invoices"> | number | null
     template?: EnumTemplateStyleWithAggregatesFilter<"invoices"> | $Enums.TemplateStyle
+    email_sent_at?: DateTimeNullableWithAggregatesFilter<"invoices"> | Date | string | null
   }
 
   export type products_servicesWhereInput = {
@@ -15267,6 +15286,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
@@ -15289,6 +15309,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -15304,6 +15325,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
@@ -15326,6 +15348,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -15345,6 +15368,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
   }
 
   export type invoicesUpdateManyMutationInput = {
@@ -15358,6 +15382,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type invoicesUncheckedUpdateManyInput = {
@@ -15375,6 +15400,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type products_servicesCreateInput = {
@@ -16208,6 +16234,17 @@ export namespace Prisma {
     not?: NestedEnumTemplateStyleFilter<$PrismaModel> | $Enums.TemplateStyle
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type Invoice_itemsListRelationFilter = {
     every?: invoice_itemsWhereInput
     some?: invoice_itemsWhereInput
@@ -16258,6 +16295,7 @@ export namespace Prisma {
     created_at?: SortOrder
     recurrence_invoice_id?: SortOrder
     template?: SortOrder
+    email_sent_at?: SortOrder
   }
 
   export type invoicesAvgOrderByAggregateInput = {
@@ -16283,6 +16321,7 @@ export namespace Prisma {
     created_at?: SortOrder
     recurrence_invoice_id?: SortOrder
     template?: SortOrder
+    email_sent_at?: SortOrder
   }
 
   export type invoicesMinOrderByAggregateInput = {
@@ -16300,6 +16339,7 @@ export namespace Prisma {
     created_at?: SortOrder
     recurrence_invoice_id?: SortOrder
     template?: SortOrder
+    email_sent_at?: SortOrder
   }
 
   export type invoicesSumOrderByAggregateInput = {
@@ -16376,6 +16416,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTemplateStyleFilter<$PrismaModel>
     _max?: NestedEnumTemplateStyleFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumTypeFilter<$PrismaModel = never> = {
@@ -16576,17 +16630,6 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EnumRecurrenceFilter<$PrismaModel = never> = {
     equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
     in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
@@ -16683,20 +16726,6 @@ export namespace Prisma {
     occurrences_done?: SortOrder
     recurrence_interval?: SortOrder
     due_in_days?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
@@ -17042,6 +17071,10 @@ export namespace Prisma {
 
   export type EnumTemplateStyleFieldUpdateOperationsInput = {
     set?: $Enums.TemplateStyle
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type invoice_itemsUpdateManyWithoutInvoicesNestedInput = {
@@ -17546,10 +17579,6 @@ export namespace Prisma {
     connect?: recurring_invoice_itemWhereUniqueInput | recurring_invoice_itemWhereUniqueInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type EnumRecurrenceFieldUpdateOperationsInput = {
     set?: $Enums.Recurrence
   }
@@ -17831,6 +17860,17 @@ export namespace Prisma {
     not?: NestedEnumTemplateStyleFilter<$PrismaModel> | $Enums.TemplateStyle
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -17909,6 +17949,20 @@ export namespace Prisma {
     _max?: NestedEnumTemplateStyleFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.Type | EnumTypeFieldRefInput<$PrismaModel>
     in?: $Enums.Type[] | ListEnumTypeFieldRefInput<$PrismaModel>
@@ -17943,36 +17997,11 @@ export namespace Prisma {
     _max?: NestedEnumUnitFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumRecurrenceFilter<$PrismaModel = never> = {
     equals?: $Enums.Recurrence | EnumRecurrenceFieldRefInput<$PrismaModel>
     in?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
     notIn?: $Enums.Recurrence[] | ListEnumRecurrenceFieldRefInput<$PrismaModel>
     not?: NestedEnumRecurrenceFilter<$PrismaModel> | $Enums.Recurrence
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumRecurrenceWithAggregatesFilter<$PrismaModel = never> = {
@@ -18026,6 +18055,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
     recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
@@ -18046,6 +18076,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -18187,6 +18218,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"invoices"> | Date | string
     recurrence_invoice_id?: IntNullableFilter<"invoices"> | number | null
     template?: EnumTemplateStyleFilter<"invoices"> | $Enums.TemplateStyle
+    email_sent_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
   }
 
   export type recurring_invoiceUpsertWithWhereUniqueWithoutClientsInput = {
@@ -18242,6 +18274,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
     recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
@@ -18263,6 +18296,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
 
@@ -18321,6 +18355,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
     recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
@@ -18342,6 +18377,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -18998,6 +19034,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
     recurring_invoice?: recurring_invoiceCreateNestedOneWithoutInvoicesInput
@@ -19018,6 +19055,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -19334,6 +19372,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
@@ -19354,6 +19393,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
     transaction?: transactionUncheckedCreateNestedManyWithoutInvoicesInput
   }
@@ -19804,6 +19844,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsCreateNestedManyWithoutInvoicesInput
     users: usersCreateNestedOneWithoutInvoicesInput
     clients: clientsCreateNestedOneWithoutInvoicesInput
@@ -19825,6 +19866,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
     invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoicesInput
   }
 
@@ -19855,6 +19897,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
@@ -19876,6 +19919,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
   }
 
@@ -19893,6 +19937,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
   }
 
   export type recurring_invoiceCreateManyClientsInput = {
@@ -19928,6 +19973,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
@@ -19948,6 +19994,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -19966,6 +20013,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type recurring_invoiceUpdateWithoutClientsInput = {
@@ -20193,6 +20241,7 @@ export namespace Prisma {
     created_at?: Date | string
     recurrence_invoice_id?: number | null
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
   }
 
   export type products_servicesCreateManyUsersInput = {
@@ -20288,6 +20337,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
     recurring_invoice?: recurring_invoiceUpdateOneWithoutInvoicesNestedInput
@@ -20308,6 +20358,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -20326,6 +20377,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     recurrence_invoice_id?: NullableIntFieldUpdateOperationsInput | number | null
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type products_servicesUpdateWithoutUsersInput = {
@@ -20493,6 +20545,7 @@ export namespace Prisma {
     payment_method: $Enums.PaymentMethod
     created_at?: Date | string
     template?: $Enums.TemplateStyle
+    email_sent_at?: Date | string | null
   }
 
   export type recurring_invoice_itemCreateManyRecurring_invoiceInput = {
@@ -20515,6 +20568,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUpdateManyWithoutInvoicesNestedInput
     users?: usersUpdateOneRequiredWithoutInvoicesNestedInput
     clients?: clientsUpdateOneRequiredWithoutInvoicesNestedInput
@@ -20535,6 +20589,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoicesNestedInput
     transaction?: transactionUncheckedUpdateManyWithoutInvoicesNestedInput
   }
@@ -20553,6 +20608,7 @@ export namespace Prisma {
     payment_method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EnumTemplateStyleFieldUpdateOperationsInput | $Enums.TemplateStyle
+    email_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type recurring_invoice_itemUpdateWithoutRecurring_invoiceInput = {
