@@ -70,6 +70,7 @@ const handleRecurringInvoice = async () => {
                     payment_method: payment_method,
                     recurrence_invoice_id: id,
                     template: template,
+                    email_sent_at: new Date(),
                 },
             });
         }
@@ -120,7 +121,7 @@ const handleRecurringInvoice = async () => {
             notes: invoice.notes || undefined,
             recurrence_interval,
             recurrence_type,
-            template: recurring.template
+            template: recurring.template,
         });
         await (0, sendEmail_1.sendInvoiceEmail)(recurring.clients.email, `Invoice ${invoice.invoice_number}`, null, {
             name: userProfile.first_name,
