@@ -36,8 +36,6 @@ export const handleRecurringInvoice = async () => {
     },
   });
 
-  
-
   for (const recurring of recurringInvoices) {
     const {
       id,
@@ -71,7 +69,9 @@ export const handleRecurringInvoice = async () => {
 
     const dueDate = addDays(new Date(next_run), due_in_days);
 
-    const newInvoiceNumber = `${invoice_number}-${recurring.occurrences_done + 1}`;
+    const newInvoiceNumber = `${invoice_number}-${
+      recurring.occurrences_done + 1
+    }`;
 
     const existing = await prisma.invoices.findFirst({
       where: { invoice_number: newInvoiceNumber },
@@ -97,6 +97,7 @@ export const handleRecurringInvoice = async () => {
           payment_method: payment_method as PaymentMethod,
           recurrence_invoice_id: id,
           template: template as TemplateStyle,
+          email_sent_at: new Date(),
         },
       });
     } catch (err) {
@@ -130,7 +131,6 @@ export const handleRecurringInvoice = async () => {
         newNextRun = addDays(next_run, 7);
     }
 
-
     const token = createToken(
       {
         id: recurring.clients.id,
@@ -155,7 +155,7 @@ export const handleRecurringInvoice = async () => {
       notes: invoice.notes || undefined,
       recurrence_interval,
       recurrence_type,
-      template: recurring.template
+      template: recurring.template,
     });
 
     await sendInvoiceEmail(
