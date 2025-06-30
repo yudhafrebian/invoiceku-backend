@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_cron_1 = __importDefault(require("node-cron"));
 const scheduledEmailLogic_1 = require("./utils/scheduledEmailLogic");
 const handleRecurringInvoice_1 = require("./utils/handleRecurringInvoice");
-node_cron_1.default.schedule("11 1 * * *", async () => {
+node_cron_1.default.schedule("0 0 * * *", async () => {
     try {
         console.log("Cron running: sending scheduled emails, marking overdue, handling recurring...");
         const countOverdue = await (0, scheduledEmailLogic_1.markOverdueInvoices)();
