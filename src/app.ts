@@ -27,14 +27,11 @@ class App {
   private configure(): void {
     this.app.use(
       cors({
-        origin: [
-          "http://localhost:3000",
-          "https://invoiceku-purwadhika.vercel.app",
-        ],
+        origin: "*",
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-        credentials: true,
       })
     );
+    
 
     this.app.use(express.urlencoded({ extended: true }));
 
