@@ -12,7 +12,7 @@ import {prisma} from "./configs/prisma";
 import RecurringRouter from "./routers/recurring.router";
 import DashboardRouter from "./routers/dashboard.router";
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 class App {
   app: Application;
@@ -27,7 +27,7 @@ class App {
   private configure(): void {
     this.app.use(
       cors({
-        origin: "*",
+        origin: "https://anandayudha.my.id",
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       })
     );
