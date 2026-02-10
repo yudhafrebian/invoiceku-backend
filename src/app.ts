@@ -27,7 +27,7 @@ class App {
   private configure(): void {
     this.app.use(
       cors({
-        origin: "https://anandayudha.my.id",
+        origin: ["https://anandayudha.my.id","https://invoiceku-purwadhika.vercel.app"],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       })
     );
