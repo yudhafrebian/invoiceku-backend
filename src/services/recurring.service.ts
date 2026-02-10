@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { PaymentMethod, TemplateStyle } from "../../prisma/generated/client";
-import prisma from "../configs/prisma";
+import { PaymentMethod, TemplateStyle } from "../generated/prisma/enums";
+import {prisma} from "../configs/prisma";
 import { CreateRecurringInvoiceInput } from "../types/recurring.type";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { createToken } from "../utils/createToken";

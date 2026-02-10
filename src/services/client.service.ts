@@ -1,5 +1,6 @@
-import { PaymentMethod } from "../../prisma/generated/client";
-import prisma from "../configs/prisma";
+
+import {prisma} from "../configs/prisma";
+import { PaymentMethod } from "../generated/prisma/enums";
 import { CreateClientInput, GetAllClientParams, UpdateClientInput } from "../types/client.type";
   
   export const createClientService = async ({

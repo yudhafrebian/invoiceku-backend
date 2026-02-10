@@ -1,8 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import prisma from "../configs/prisma";
 import { createResponse, successResponse } from "../utils/response";
-import { cloudUpload } from "../configs/cloudinary";
-import { sendStatusEmail } from "../utils/email/sendEmail";
 import { createTransactionService, getPaymentProofService } from "../services/transaction.service";
 
 class TransactionController {

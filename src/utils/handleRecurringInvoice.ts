@@ -1,6 +1,6 @@
 import { addDays, addWeeks, addMonths } from "date-fns";
-import prisma from "../configs/prisma";
-import { PaymentMethod, TemplateStyle } from "../../prisma/generated/client";
+import {prisma} from "../configs/prisma";
+import { PaymentMethod, TemplateStyle } from "../generated/prisma/enums";
 import { sendInvoiceEmail } from "./email/sendEmail";
 import { createToken } from "./createToken";
 import { generateInvoicePDF } from "./pdf/pdfGenerator";

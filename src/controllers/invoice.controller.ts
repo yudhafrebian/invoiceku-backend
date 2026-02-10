@@ -7,7 +7,7 @@ import {
 import {
   Status,
   TemplateStyle,
-} from "../../prisma/generated/client";
+} from "../generated/prisma/enums";
 import {
   createInvoiceService,
   downloadInvoicePDFService,

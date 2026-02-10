@@ -1,4 +1,4 @@
-import { Recurrence } from "../../prisma/generated/client";
+import { Recurrence } from "../generated/prisma/enums";
 
 export interface CreateRecurringInvoiceInput {
     userId: number;

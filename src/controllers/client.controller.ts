@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import { createResponse, errorResponse, successResponse } from "../utils/response";
-import { PaymentMethod } from "../../prisma/generated/client";
+import { PaymentMethod } from "../generated/prisma/enums";
 import { createClientService, deleteClientService, getAllClientService, getSingleClientService, updateClientService } from "../services/client.service";
 
 class ClientController {

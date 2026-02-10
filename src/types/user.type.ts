@@ -1,4 +1,4 @@
-import { PaymentMethod } from "../../prisma/generated/client";
+import { PaymentMethod } from "../generated/prisma/enums";
 
 export interface CreatePaymentMethodInput {
     user_id: number;

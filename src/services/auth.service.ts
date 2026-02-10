@@ -1,5 +1,5 @@
 import { compare } from "bcrypt";
-import prisma from "../configs/prisma";
+import {prisma} from "../configs/prisma";
 import { createToken } from "../utils/createToken";
 import { sendVerifyEmail } from "../utils/email/sendEmail";
 import { hashPassword } from "../utils/hashPassword";

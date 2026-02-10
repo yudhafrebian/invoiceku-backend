@@ -1,4 +1,4 @@
-import { Type, Unit } from "../../prisma/generated/client";
+import { Type, Unit } from "../generated/prisma/enums";
 
 export interface GetAllProductsInput {
     userId: number;

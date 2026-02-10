@@ -1,5 +1,4 @@
 import { Response, Request, NextFunction } from "express";
-import prisma from "../configs/prisma";
 import { createResponse, errorResponse, successResponse } from "../utils/response";
 import { cloudUpload } from "../configs/cloudinary";
 import { createPaymentMethodService, deleteUserService, getSinglePaymentMethodService, getUserPaymentMethodsService, getUserService, switchPaymentMethodStatusService, updatePaymentMethodService, updateUserService } from "../services/user.service";

@@ -1,4 +1,4 @@
-import prisma from "../configs/prisma";
+import {prisma} from "../configs/prisma";
 import { CreateProductInput, GetAllProductsInput, UpdateProductInput } from "../types/product.type";
   
   export const getAllProductsService = async ({

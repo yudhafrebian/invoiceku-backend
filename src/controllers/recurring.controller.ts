@@ -1,11 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { createResponse, successResponse } from "../utils/response";
-import prisma from "../configs/prisma";
 import {
-  PaymentMethod,
-  Recurrence,
-  TemplateStyle,
-} from "../../prisma/generated/client";
+  Recurrence
+} from "../generated/prisma/enums";
 import { generateInvoicePDF } from "../utils/pdf/pdfGenerator";
 import { createToken } from "../utils/createToken";
 import { sendInvoiceEmail } from "../utils/email/sendEmail";

@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
-import prisma from "../configs/prisma";
+import {prisma} from "../configs/prisma";
 import { createResponse, successResponse } from "../utils/response";
-import { Type, Unit } from "../../prisma/generated/client";
+import { Type, Unit } from "../generated/prisma/enums";
 import { createProductService, getAllProductsService, getSingleProductService, updateProductService } from "../services/product.service";
 
 class ProductController {

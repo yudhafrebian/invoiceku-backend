@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import prisma from "../configs/prisma";
+import {prisma} from "../configs/prisma";
 import {
   CreateInvoiceInput,
   GetAllInvoiceParams,
@@ -12,7 +12,7 @@ import {
   PaymentMethod,
   Status,
   TemplateStyle,
-} from "../../prisma/generated/client";
+} from "../generated/prisma/enums";
 import { Response } from "express";
 import { verify } from "jsonwebtoken";
 

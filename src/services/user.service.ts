@@ -1,6 +1,6 @@
-import { PaymentMethod } from "../../prisma/generated/client";
+import { PaymentMethod } from "../generated/prisma/enums";
 import { cloudUpload } from "../configs/cloudinary";
-import prisma from "../configs/prisma";
+import {prisma} from "../configs/prisma";
 import { CreatePaymentMethodInput } from "../types/user.type";
 
 export const getUserService = async (userId: number) => {

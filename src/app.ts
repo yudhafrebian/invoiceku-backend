@@ -8,7 +8,7 @@ import ProductRouter from "./routers/product.router";
 import ClientRouter from "./routers/client.router";
 import InvoiceRouter from "./routers/invoice.router";
 import TransactionRouter from "./routers/transaction.router";
-import prisma from "./configs/prisma";
+import {prisma} from "./configs/prisma";
 import RecurringRouter from "./routers/recurring.router";
 import DashboardRouter from "./routers/dashboard.router";
 

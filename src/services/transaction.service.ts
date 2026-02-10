@@ -1,5 +1,5 @@
 import { cloudUpload } from "../configs/cloudinary";
-import prisma from "../configs/prisma";
+import {prisma} from "../configs/prisma";
 import { sendStatusEmail } from "../utils/email/sendEmail";
 
 
